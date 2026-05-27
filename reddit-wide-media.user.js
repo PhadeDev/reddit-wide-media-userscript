@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.19
+// @version      0.3.20
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -1195,7 +1195,7 @@
         display: flow-root !important;
         max-width: none !important;
         min-height: 0 !important;
-        margin: 12px 0 18px !important;
+        margin: 10px 0 14px !important;
         padding: 12px 14px 12px 52px !important;
         border: 1px solid #2f3d4a !important;
         border-radius: 8px !important;
@@ -1224,8 +1224,34 @@
       html.${SCRIPT_CLASS}.rwm-wide .message-page .message .entry,
       html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .entry,
       html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .entry {
+        padding: 0 !important;
+        border: 0 !important;
+        background: transparent !important;
         overflow: visible !important;
         color: #d7dde3 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .thing,
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .comment,
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .noncollapsed,
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .usertext,
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .usertext-body,
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .md,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .thing,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .comment,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .noncollapsed,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .usertext,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .usertext-body,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .md,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .thing,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .comment,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .noncollapsed,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .usertext,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .usertext-body,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .md {
+        border: 0 !important;
+        background: transparent !important;
+        color: #dce4ed !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .message-page .message .subject,
@@ -1268,7 +1294,7 @@
       html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .usertext-body,
       html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .md,
       html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .usertext-body {
-        margin: 8px 0 !important;
+        margin: 7px 0 !important;
         padding: 0 !important;
         background: transparent !important;
         color: #dce4ed !important;
@@ -1287,8 +1313,8 @@
       html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .flat-list {
         display: flex !important;
         flex-wrap: wrap !important;
-        gap: 6px !important;
-        margin-top: 9px !important;
+        gap: 5px !important;
+        margin-top: 8px !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .message-page .message .flat-list li,
@@ -1307,10 +1333,10 @@
       html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .flat-list span {
         display: inline-flex !important;
         align-items: center !important;
-        min-height: 25px !important;
-        padding: 4px 8px !important;
+        min-height: 23px !important;
+        padding: 3px 7px !important;
         border: 1px solid #334455 !important;
-        border-radius: 7px !important;
+        border-radius: 6px !important;
         background: #202934 !important;
         color: #d6e1ec !important;
         font-size: 12px !important;
