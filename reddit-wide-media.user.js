@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.1.6
+// @version      0.1.7
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -317,13 +317,80 @@
         line-height: 1.55 !important;
       }
 
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 7px !important;
+        margin-top: 8px !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li {
+        display: inline-flex !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li a,
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li span,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li span.option,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li form.toggle button,
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline a,
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .domain a,
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .subreddit {
         font-size: 14px !important;
         color: #b9c8d8 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li a,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li span.option,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li form.toggle button {
+        display: inline-flex !important;
+        align-items: center !important;
+        min-height: 28px !important;
+        padding: 5px 10px !important;
+        border: 1px solid #3a4b5d !important;
+        border-radius: 999px !important;
+        background: #202934 !important;
+        color: #d6e1ec !important;
+        font-size: 13px !important;
+        font-weight: 800 !important;
+        line-height: 1 !important;
+        text-decoration: none !important;
+        box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset !important;
+        transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease, transform 120ms ease !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li a:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li span.option:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li form.toggle button:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li a:focus-visible,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li form.toggle button:focus-visible {
+        background: #2a3948 !important;
+        border-color: #5d7a99 !important;
+        color: #ffffff !important;
+        transform: translateY(-1px);
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.first a.comments {
+        background: #244263 !important;
+        border-color: #4d86bd !important;
+        color: #e5f3ff !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.first a.comments:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.first a.comments:focus-visible {
+        background: #2f5680 !important;
+        border-color: #73afe4 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons form.toggle,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons form.toggle span {
+        display: inline-flex !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons form.toggle input[type="checkbox"] {
+        display: none !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .subreddit {
