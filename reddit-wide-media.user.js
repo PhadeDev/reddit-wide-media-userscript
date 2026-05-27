@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.1.5
+// @version      0.1.6
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -11,6 +11,7 @@
 // @supportURL   https://github.com/PhadeDev/reddit-wide-media-userscript/issues
 // @downloadURL  https://raw.githubusercontent.com/PhadeDev/reddit-wide-media-userscript/main/reddit-wide-media.user.js
 // @updateURL    https://raw.githubusercontent.com/PhadeDev/reddit-wide-media-userscript/main/reddit-wide-media.user.js
+// @require      https://cdn.jsdelivr.net/npm/hls.js@1.5.20/dist/hls.min.js
 // @run-at       document-start
 // @grant        GM_addStyle
 // @grant        GM_getValue
@@ -180,10 +181,12 @@
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right .mail:before {
-        content: "mail";
-        font-size: 11px;
-        font-weight: 800;
-        line-height: 1;
+        content: "";
+        width: 15px;
+        height: 15px;
+        background: currentColor;
+        -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='14' rx='2'/%3E%3Cpath d='m3 7 9 6 9-6'/%3E%3C/svg%3E") center / contain no-repeat;
+        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='14' rx='2'/%3E%3Cpath d='m3 7 9 6 9-6'/%3E%3C/svg%3E") center / contain no-repeat;
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right .mail.havemail {
@@ -323,6 +326,20 @@
         color: #b9c8d8 !important;
       }
 
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .subreddit {
+        display: inline-flex !important;
+        align-items: center !important;
+        min-height: 20px !important;
+        padding: 1px 8px !important;
+        border: 1px solid #476a8d !important;
+        border-radius: 999px !important;
+        background: #20384f !important;
+        color: #d8edff !important;
+        font-size: 13px !important;
+        font-weight: 800 !important;
+        text-decoration: none !important;
+      }
+
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .rank {
         color: #a9b4c0 !important;
         font-size: 16px !important;
@@ -357,19 +374,24 @@
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .arrow:before {
         display: block;
-        font-size: 18px;
-        font-weight: 900;
-        line-height: 1;
+        content: "";
+        width: 18px;
+        height: 18px;
+        background: currentColor;
+        -webkit-mask: center / contain no-repeat;
+        mask: center / contain no-repeat;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .arrow.up:before,
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .arrow.upmod:before {
-        content: "^";
+        -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 4 4 14h5v6h6v-6h5z'/%3E%3C/svg%3E");
+        mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 4 4 14h5v6h6v-6h5z'/%3E%3C/svg%3E");
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .arrow.down:before,
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .arrow.downmod:before {
-        content: "v";
+        -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 20 4 10h5V4h6v6h5z'/%3E%3C/svg%3E");
+        mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 20 4 10h5V4h6v6h5z'/%3E%3C/svg%3E");
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .arrow.upmod {
@@ -496,14 +518,17 @@
       }
 
       html.${SCRIPT_CLASS} .expando-button:before {
-        content: "+";
-        font-size: 20px;
-        font-weight: 900;
-        line-height: 1;
+        content: "";
+        width: 16px;
+        height: 16px;
+        background: currentColor;
+        -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M12 5v14M5 12h14'/%3E%3C/svg%3E") center / contain no-repeat;
+        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M12 5v14M5 12h14'/%3E%3C/svg%3E") center / contain no-repeat;
       }
 
       html.${SCRIPT_CLASS} .expando-button.expanded:before {
-        content: "-";
+        -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M5 12h14'/%3E%3C/svg%3E");
+        mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M5 12h14'/%3E%3C/svg%3E");
       }
 
       html.${SCRIPT_CLASS} .side,
@@ -778,12 +803,30 @@
     container.hidden = false;
   }
 
-  function renderVideo(container, src) {
+  function renderVideo(container, item) {
+    const src = typeof item === "string" ? item : item.url;
+    const hlsUrl = typeof item === "string" ? "" : item.hlsUrl;
     const video = document.createElement("video");
     video.controls = true;
     video.loop = true;
+    video.muted = false;
+    video.volume = 1;
     video.preload = "metadata";
-    video.src = src;
+
+    if (hlsUrl && video.canPlayType("application/vnd.apple.mpegurl")) {
+      video.src = hlsUrl;
+    } else if (hlsUrl && window.Hls?.isSupported()) {
+      const hls = new window.Hls({
+        capLevelToPlayerSize: true,
+        maxBufferLength: 30,
+      });
+      hls.loadSource(hlsUrl);
+      hls.attachMedia(video);
+      video._rwmHls = hls;
+    } else {
+      video.src = src;
+    }
+
     container.appendChild(video);
     container.hidden = false;
   }
@@ -807,7 +850,11 @@
     const items = [];
     const video = post.secure_media?.reddit_video || post.media?.reddit_video;
     if (video?.fallback_url) {
-      items.push({ type: "video", url: video.fallback_url.replace(/&amp;/g, "&") });
+      items.push({
+        type: "video",
+        url: video.fallback_url.replace(/&amp;/g, "&"),
+        hlsUrl: video.hls_url ? video.hls_url.replace(/&amp;/g, "&") : "",
+      });
     }
 
     const metadata = post.media_metadata || {};
@@ -848,7 +895,7 @@
 
       if (items.length > 1) container.classList.add("rwm-gallery");
       for (const item of items.slice(0, 20)) {
-        if (item.type === "video") renderVideo(container, item.url);
+        if (item.type === "video") renderVideo(container, item);
         else renderImage(container, item.url, post?.title || "");
       }
     } catch (error) {
@@ -890,15 +937,23 @@
     if (!settings.autoExpandText) return;
     if (thing.getAttribute("data-rwm-text-expanded") === "1") return;
 
-    const button = thing.querySelector(
-      ".expando-button.collapsed.selftext, .expando-button.collapsed.selftext-muted",
-    );
-    if (!button) return;
+    const clickWhenReady = () => {
+      const button = thing.querySelector(
+        ".expando-button.collapsed.selftext, .expando-button.collapsed.selftext-muted",
+      );
+      if (!button) return false;
 
-    thing.setAttribute("data-rwm-text-expanded", "1");
-    window.setTimeout(() => {
+      thing.setAttribute("data-rwm-text-expanded", "1");
       if (button.isConnected && button.classList.contains("collapsed")) button.click();
-    }, 50);
+      return true;
+    };
+
+    if (clickWhenReady()) return;
+    [100, 350, 900, 1600].forEach((delay) => {
+      window.setTimeout(() => {
+        if (thing.getAttribute("data-rwm-text-expanded") !== "1") clickWhenReady();
+      }, delay);
+    });
   }
 
   function prepareThing(thing) {
