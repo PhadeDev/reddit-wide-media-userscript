@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.1.8
+// @version      0.1.9
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -153,12 +153,14 @@
         padding: 5px 8px !important;
       }
 
+      html.${SCRIPT_CLASS} #header-bottom-right #mail,
       html.${SCRIPT_CLASS} #header-bottom-right .mail,
       html.${SCRIPT_CLASS} #header-bottom-right .pref-lang,
       html.${SCRIPT_CLASS} #header-bottom-right .logout {
         vertical-align: middle !important;
       }
 
+      html.${SCRIPT_CLASS} #header-bottom-right #mail,
       html.${SCRIPT_CLASS} #header-bottom-right .mail {
         display: inline-flex !important;
         align-items: center !important;
@@ -175,27 +177,35 @@
         overflow: visible !important;
       }
 
+      html.${SCRIPT_CLASS} #header-bottom-right #mail.nohavemail,
+      html.${SCRIPT_CLASS} #header-bottom-right #mail.havemail,
       html.${SCRIPT_CLASS} #header-bottom-right .mail.nohavemail,
       html.${SCRIPT_CLASS} #header-bottom-right .mail.havemail {
         background-image: none !important;
       }
 
+      html.${SCRIPT_CLASS} #header-bottom-right #mail:before,
       html.${SCRIPT_CLASS} #header-bottom-right .mail:before {
-        content: "Mail";
+        content: none !important;
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-right #mail {
         font-size: 12px;
         font-weight: 900;
         line-height: 1;
       }
 
+      html.${SCRIPT_CLASS} #header-bottom-right #mail.havemail,
       html.${SCRIPT_CLASS} #header-bottom-right .mail.havemail {
         background: transparent !important;
         border-color: transparent !important;
         color: #f4bd52 !important;
       }
 
+      html.${SCRIPT_CLASS} #header-bottom-right #mail + .message-count,
       html.${SCRIPT_CLASS} #header-bottom-right .message-count,
       html.${SCRIPT_CLASS} #header-bottom-right .havemail + .message-count {
-        display: inline-flex !important;
+        display: none !important;
         align-items: center !important;
         justify-content: center !important;
         min-width: 0 !important;
@@ -209,11 +219,13 @@
         text-shadow: none !important;
       }
 
+      html.${SCRIPT_CLASS} #header-bottom-right #mail + .message-count:before,
       html.${SCRIPT_CLASS} #header-bottom-right .message-count:before,
       html.${SCRIPT_CLASS} #header-bottom-right .havemail + .message-count:before {
         content: "(";
       }
 
+      html.${SCRIPT_CLASS} #header-bottom-right #mail + .message-count:after,
       html.${SCRIPT_CLASS} #header-bottom-right .message-count:after,
       html.${SCRIPT_CLASS} #header-bottom-right .havemail + .message-count:after {
         content: ")";
@@ -592,8 +604,8 @@
         justify-content: center !important;
       }
 
-      html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media > .entry > .expando-button,
-      html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media > .expando-button {
+      html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media .expando-button,
+      html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media .entry > .expando:not(.${MEDIA_CLASS}) {
         display: none !important;
       }
 
@@ -1084,15 +1096,30 @@
     root.querySelectorAll(".thing.link").forEach(prepareThing);
   }
 
+  function rewriteMailLabel() {
+    const mail = document.querySelector("#header-bottom-right #mail");
+    if (!mail || mail.getAttribute("data-rwm-mail-rewritten") === "1") return;
+
+    const countEl = mail.parentElement?.querySelector(".message-count");
+    const rawCount = (countEl?.textContent || "").trim();
+    mail.textContent = rawCount ? `Mail (${rawCount})` : "Mail";
+    mail.setAttribute("data-rwm-mail-rewritten", "1");
+    if (countEl) countEl.hidden = true;
+  }
+
   function start() {
     document.documentElement.classList.add(SCRIPT_CLASS);
     if (settings.wideMode) document.documentElement.classList.add("rwm-wide");
 
     addStyles();
     registerMenu();
+    rewriteMailLabel();
 
     if (document.body) scan();
-    else document.addEventListener("DOMContentLoaded", () => scan(), { once: true });
+    else document.addEventListener("DOMContentLoaded", () => {
+      rewriteMailLabel();
+      scan();
+    }, { once: true });
 
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
@@ -1104,6 +1131,7 @@
 
     document.addEventListener("DOMContentLoaded", () => {
       observer.observe(document.body, { childList: true, subtree: true });
+      rewriteMailLabel();
       scan();
     }, { once: true });
   }
