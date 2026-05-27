@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.6
+// @version      0.3.7
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -348,8 +348,7 @@
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .author,
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .live-timestamp,
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline time,
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .domain {
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline time {
         display: inline-flex !important;
         align-items: center !important;
         min-height: 21px !important;
@@ -370,6 +369,11 @@
         color: #d8edff !important;
       }
 
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .domain,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .domain a {
+        display: none !important;
+      }
+
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons {
         display: flex !important;
         flex-wrap: wrap !important;
@@ -387,7 +391,6 @@
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li span.option,
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li form.toggle button,
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline a,
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .domain a,
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .subreddit {
         font-size: 14px !important;
         color: #b9c8d8 !important;
@@ -910,11 +913,44 @@
       html.${SCRIPT_CLASS} .rwm-comments-body .menuarea {
         max-width: 1280px !important;
         margin: 0 0 14px 0 !important;
-        padding: 10px 12px !important;
+        padding: 12px 14px !important;
         border: 1px solid #2f3d4a !important;
         border-radius: 8px !important;
         background: #151b22 !important;
         color: #cdd7e2 !important;
+        font-size: 15px !important;
+        font-weight: 800 !important;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-body .panestack-title .title {
+        color: #dfe8f2 !important;
+        font-size: 15px !important;
+        font-weight: 900 !important;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-body .menuarea {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-items: center !important;
+        gap: 8px !important;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-body .menuarea .dropdown-title,
+      html.${SCRIPT_CLASS} .rwm-comments-body .menuarea .toggle a,
+      html.${SCRIPT_CLASS} .rwm-comments-body .menuarea .toggle-button,
+      html.${SCRIPT_CLASS} .rwm-comments-body .menuarea .reddit-infobar {
+        display: inline-flex !important;
+        align-items: center !important;
+        min-height: 28px !important;
+        padding: 5px 10px !important;
+        border: 1px solid #40546a !important;
+        border-radius: 7px !important;
+        background: #202a35 !important;
+        color: #e3edf8 !important;
+        font-size: 13px !important;
+        font-weight: 900 !important;
+        line-height: 1 !important;
+        text-decoration: none !important;
       }
 
       html.${SCRIPT_CLASS} .rwm-comments-body .comment {
@@ -1604,20 +1640,14 @@
       if (fetchedTitle) titleEl.textContent = fetchedTitle;
 
       const content = document.createElement("div");
-      const post = doc.querySelector(".content > .sitetable.linklisting .thing.link")?.cloneNode(true);
       const commentArea = doc.querySelector(".commentarea")?.cloneNode(true);
-
-      if (post) {
-        post.querySelectorAll(".flat-list.buttons, .expando-button").forEach((node) => node.remove());
-        content.appendChild(post);
-      }
 
       if (commentArea) {
         commentArea.querySelectorAll("script, iframe").forEach((node) => node.remove());
         content.appendChild(commentArea);
       }
 
-      if (!post && !commentArea) throw new Error("No comment content found");
+      if (!commentArea) throw new Error("No comment content found");
 
       normalizeCloneLinks(content, url);
       enhanceCommentTree(content);
