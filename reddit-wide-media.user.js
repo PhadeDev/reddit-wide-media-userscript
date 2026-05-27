@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.1.4
+// @version      0.1.5
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -31,6 +31,7 @@
     contentWidth: "1920",
     mediaMode: "large",
     autoMedia: true,
+    autoExpandText: true,
     resCompat: true,
   };
 
@@ -95,6 +96,17 @@
       html.${SCRIPT_CLASS} {
         background: #101214 !important;
         color-scheme: dark;
+        --rwm-sidebar-width: 304px;
+        --rwm-content-width: min(calc(100vw - 380px), ${width}px);
+        --rwm-content-left: max(18px, calc((100vw - var(--rwm-sidebar-width) - var(--rwm-content-width)) / 2));
+        --rwm-card: #171b20;
+        --rwm-card-2: #1d232b;
+        --rwm-border: #344252;
+        --rwm-text: #d7dde3;
+        --rwm-muted: #aeb8c4;
+        --rwm-link: #8fc7ff;
+        --rwm-link-visited: #c3b6ff;
+        --rwm-accent: #45a3ff;
       }
 
       html.${SCRIPT_CLASS} body {
@@ -138,6 +150,62 @@
         border-radius: 0 0 0 4px !important;
         color: #cbd5df !important;
         padding: 5px 8px !important;
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-right .mail,
+      html.${SCRIPT_CLASS} #header-bottom-right .pref-lang,
+      html.${SCRIPT_CLASS} #header-bottom-right .logout {
+        vertical-align: middle !important;
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-right .mail {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-width: 24px !important;
+        height: 18px !important;
+        padding: 0 6px !important;
+        margin: 0 4px !important;
+        border-radius: 999px !important;
+        background: #263241 !important;
+        border: 1px solid #405267 !important;
+        color: #d7e5f5 !important;
+        text-decoration: none !important;
+        overflow: visible !important;
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-right .mail.nohavemail,
+      html.${SCRIPT_CLASS} #header-bottom-right .mail.havemail {
+        background-image: none !important;
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-right .mail:before {
+        content: "mail";
+        font-size: 11px;
+        font-weight: 800;
+        line-height: 1;
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-right .mail.havemail {
+        background: #5b3717 !important;
+        border-color: #f5a33b !important;
+        color: #fff3d9 !important;
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-right .message-count,
+      html.${SCRIPT_CLASS} #header-bottom-right .havemail + .message-count {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-width: 22px !important;
+        height: 18px !important;
+        padding: 0 6px !important;
+        border-radius: 999px !important;
+        background: #f0a12a !important;
+        color: #15100a !important;
+        font-size: 12px !important;
+        font-weight: 900 !important;
+        text-shadow: none !important;
       }
 
       html.${SCRIPT_CLASS} .tabmenu {
@@ -185,10 +253,10 @@
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .content {
-        width: min(calc(100vw - 340px), ${width}px) !important;
+        width: var(--rwm-content-width) !important;
         max-width: ${width}px !important;
-        margin-left: 14px !important;
-        margin-right: 304px !important;
+        margin-left: var(--rwm-content-left) !important;
+        margin-right: var(--rwm-sidebar-width) !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .listing-page .content,
@@ -208,11 +276,12 @@
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link {
-        margin: 0 0 13px 0 !important;
-        padding: 14px 16px 16px 10px !important;
-        border: 1px solid rgba(139, 157, 177, 0.20) !important;
-        border-radius: 4px !important;
-        background: #171b20 !important;
+        margin: 0 0 14px 0 !important;
+        padding: 16px 18px 18px 12px !important;
+        border: 1px solid rgba(139, 157, 177, 0.24) !important;
+        border-radius: 8px !important;
+        background: linear-gradient(180deg, #1a2027 0%, #161b21 100%) !important;
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.22) !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .entry {
@@ -228,14 +297,14 @@
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .title {
-        color: #8fc7ff !important;
+        color: var(--rwm-link) !important;
         font-size: 21px !important;
         line-height: 1.42 !important;
         font-weight: 700 !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .title:visited {
-        color: #c3b6ff !important;
+        color: var(--rwm-link-visited) !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline,
@@ -272,9 +341,47 @@
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .arrow {
-        transform: scale(1.45);
-        transform-origin: center;
-        margin: 8px auto !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 30px !important;
+        height: 26px !important;
+        margin: 6px auto !important;
+        background: #26313d !important;
+        border: 1px solid #3b4a5b !important;
+        border-radius: 6px !important;
+        color: #d6e0ea !important;
+        text-indent: 0 !important;
+        font-size: 0 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .arrow:before {
+        display: block;
+        font-size: 18px;
+        font-weight: 900;
+        line-height: 1;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .arrow.up:before,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .arrow.upmod:before {
+        content: "^";
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .arrow.down:before,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .arrow.downmod:before {
+        content: "v";
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .arrow.upmod {
+        background: #4a2d19 !important;
+        border-color: #e58c36 !important;
+        color: #ffc28a !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .arrow.downmod {
+        background: #222f4f !important;
+        border-color: #6e91ff !important;
+        color: #b9c8ff !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thumbnail,
@@ -298,12 +405,37 @@
       html.${SCRIPT_CLASS}.rwm-wide .flair {
         padding: 3px 7px !important;
         border-radius: 4px !important;
-        border-color: #4b5c70 !important;
-        background: #2a3440 !important;
-        color: #f1f5f9 !important;
+        border-color: #4f6680 !important;
+        background: #243a50 !important;
+        color: #d9efff !important;
         font-size: 12px !important;
         font-weight: 700 !important;
         vertical-align: 2px !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .linkflairlabel.rwm-flair-question {
+        background: #3a321f !important;
+        border-color: #b99143 !important;
+        color: #ffe2a2 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .linkflairlabel.rwm-flair-fun {
+        background: #273a29 !important;
+        border-color: #5ca366 !important;
+        color: #c9ffd0 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .linkflairlabel.rwm-flair-news {
+        background: #24374d !important;
+        border-color: #5d9bd7 !important;
+        color: #d9eeff !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .linkflairlabel.rwm-flair-warning,
+      html.${SCRIPT_CLASS}.rwm-wide .thumbnail.nsfw + .entry .linkflairlabel {
+        background: #4b202b !important;
+        border-color: #c7667a !important;
+        color: #ffd3dc !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .commentarea {
@@ -314,6 +446,64 @@
       html.${SCRIPT_CLASS}.rwm-wide .comment {
         max-width: none !important;
         font-size: 15px !important;
+      }
+
+      html.${SCRIPT_CLASS} .expando,
+      html.${SCRIPT_CLASS} .usertext,
+      html.${SCRIPT_CLASS} .usertext-body,
+      html.${SCRIPT_CLASS} .md {
+        color: var(--rwm-text) !important;
+      }
+
+      html.${SCRIPT_CLASS} .thing.link .expando,
+      html.${SCRIPT_CLASS} .thing.link .usertext-body {
+        max-width: min(calc(var(--rwm-content-width) - 170px), 980px) !important;
+        margin-top: 12px !important;
+        padding: 14px 16px !important;
+        border: 1px solid #3a4958 !important;
+        border-radius: 8px !important;
+        background: #11161c !important;
+        color: #dce4ed !important;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.025) !important;
+      }
+
+      html.${SCRIPT_CLASS} .thing.link .usertext-body .md,
+      html.${SCRIPT_CLASS} .thing.link .expando .md {
+        background: transparent !important;
+        border: 0 !important;
+        color: #dce4ed !important;
+        font-size: 15px !important;
+        line-height: 1.55 !important;
+      }
+
+      html.${SCRIPT_CLASS} .thing.link .usertext-body p,
+      html.${SCRIPT_CLASS} .thing.link .expando p {
+        margin: 0 0 10px 0 !important;
+      }
+
+      html.${SCRIPT_CLASS} .expando-button {
+        width: 30px !important;
+        height: 30px !important;
+        border-radius: 999px !important;
+        background: #26313d !important;
+        border: 1px solid #45566a !important;
+        color: #e6edf5 !important;
+        text-indent: 0 !important;
+        font-size: 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+
+      html.${SCRIPT_CLASS} .expando-button:before {
+        content: "+";
+        font-size: 20px;
+        font-weight: 900;
+        line-height: 1;
+      }
+
+      html.${SCRIPT_CLASS} .expando-button.expanded:before {
+        content: "-";
       }
 
       html.${SCRIPT_CLASS} .side,
@@ -370,7 +560,7 @@
       html.${SCRIPT_CLASS} .${MEDIA_CLASS} {
         clear: both;
         margin: 12px 0 6px 0;
-        width: min(calc(100vw - 440px), ${mediaMaxWidth});
+        width: min(calc(var(--rwm-content-width) - 170px), ${mediaMaxWidth});
         max-width: ${mediaMaxWidth};
       }
 
@@ -387,15 +577,16 @@
         height: auto;
         object-fit: contain;
         background: #070809;
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 4px;
+        border: 1px solid rgba(158, 177, 198, 0.18);
+        border-radius: 10px;
+        box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35);
       }
 
       html.${SCRIPT_CLASS} .${MEDIA_CLASS}.rwm-gallery {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(min(360px, 100%), 1fr));
         gap: 10px;
-        width: min(calc(100vw - 440px), 100%);
+        width: min(calc(var(--rwm-content-width) - 170px), 100%);
         max-width: 100%;
       }
 
@@ -427,6 +618,7 @@
 
       @media (max-width: 1200px) {
         html.${SCRIPT_CLASS}.rwm-wide .content {
+          --rwm-content-width: calc(100vw - 16px);
           width: auto !important;
           max-width: none !important;
           margin: 8px !important;
@@ -465,6 +657,11 @@
 
     GM_registerMenuCommand(`${settings.autoMedia ? "Disable" : "Enable"} auto media`, () => {
       setSetting("autoMedia", !settings.autoMedia);
+      location.reload();
+    });
+
+    GM_registerMenuCommand(`${settings.autoExpandText ? "Disable" : "Enable"} auto text expandos`, () => {
+      setSetting("autoExpandText", !settings.autoExpandText);
       location.reload();
     });
 
@@ -672,9 +869,43 @@
     (thing.querySelector(".entry") || thing).appendChild(button);
   }
 
+  function decorateFlairs(thing) {
+    thing.querySelectorAll(".linkflairlabel").forEach((label) => {
+      const text = (label.textContent || label.getAttribute("title") || "").trim().toLowerCase();
+      label.classList.remove("rwm-flair-question", "rwm-flair-fun", "rwm-flair-news", "rwm-flair-warning");
+
+      if (/question|help|support|advice/.test(text)) {
+        label.classList.add("rwm-flair-question");
+      } else if (/humou?r|meme|funny|lol|shitpost/.test(text)) {
+        label.classList.add("rwm-flair-fun");
+      } else if (/news|article|release|update|announcement/.test(text)) {
+        label.classList.add("rwm-flair-news");
+      } else if (/nsfw|spoiler|warning|serious/.test(text)) {
+        label.classList.add("rwm-flair-warning");
+      }
+    });
+  }
+
+  function autoExpandText(thing) {
+    if (!settings.autoExpandText) return;
+    if (thing.getAttribute("data-rwm-text-expanded") === "1") return;
+
+    const button = thing.querySelector(
+      ".expando-button.collapsed.selftext, .expando-button.collapsed.selftext-muted",
+    );
+    if (!button) return;
+
+    thing.setAttribute("data-rwm-text-expanded", "1");
+    window.setTimeout(() => {
+      if (button.isConnected && button.classList.contains("collapsed")) button.click();
+    }, 50);
+  }
+
   function prepareThing(thing) {
     if (thing.getAttribute(PROCESSED_ATTR) === "1") return;
     thing.setAttribute(PROCESSED_ATTR, "1");
+    decorateFlairs(thing);
+    autoExpandText(thing);
 
     if (hasResMedia(thing)) return;
 
