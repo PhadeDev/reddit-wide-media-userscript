@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.2.1
+// @version      0.3.0
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -33,6 +33,7 @@
     mediaMode: "large",
     autoMedia: true,
     autoExpandText: true,
+    commentsModal: true,
     resCompat: true,
   };
 
@@ -739,6 +740,173 @@
         font-size: 13px;
       }
 
+      html.${SCRIPT_CLASS}.rwm-modal-open {
+        overflow: hidden !important;
+      }
+
+      html.${SCRIPT_CLASS} #rwm-comments-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 999999;
+        display: none;
+        background: rgba(3, 6, 10, 0.72);
+        backdrop-filter: blur(4px);
+      }
+
+      html.${SCRIPT_CLASS} #rwm-comments-overlay.rwm-open {
+        display: block;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-shell {
+        position: absolute;
+        inset: 34px 42px;
+        display: grid;
+        grid-template-rows: auto 1fr;
+        overflow: hidden;
+        border: 1px solid #3b4b5c;
+        border-radius: 10px;
+        background: #11161c;
+        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.62);
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 14px;
+        border-bottom: 1px solid #2f3d4a;
+        background: #171e26;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-title {
+        min-width: 0;
+        overflow: hidden;
+        color: #dce8f5;
+        font-size: 17px;
+        font-weight: 900;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-actions {
+        display: flex;
+        flex: none;
+        gap: 8px;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-actions a,
+      html.${SCRIPT_CLASS} .rwm-comments-actions button {
+        display: inline-flex;
+        align-items: center;
+        min-height: 32px;
+        padding: 7px 11px;
+        border: 1px solid #40546a;
+        border-radius: 7px;
+        background: #202a35;
+        color: #e3edf8;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 900;
+        line-height: 1;
+        text-decoration: none;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-actions a:hover,
+      html.${SCRIPT_CLASS} .rwm-comments-actions button:hover {
+        background: #2b3948;
+        border-color: #6686a8;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-body {
+        overflow: auto;
+        padding: 18px;
+        scrollbar-color: #536779 #11161c;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-status {
+        display: flex;
+        min-height: 220px;
+        align-items: center;
+        justify-content: center;
+        color: #aeb8c4;
+        font-size: 16px;
+        font-weight: 800;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-body .linklisting {
+        margin-bottom: 16px !important;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-body .thing.link {
+        margin-bottom: 14px !important;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-body .commentarea {
+        max-width: none !important;
+        color: #d7dde3 !important;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-body .panestack-title,
+      html.${SCRIPT_CLASS} .rwm-comments-body .menuarea {
+        margin: 0 0 12px 0 !important;
+        padding: 10px 12px !important;
+        border: 1px solid #2f3d4a !important;
+        border-radius: 8px !important;
+        background: #151b22 !important;
+        color: #cdd7e2 !important;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment {
+        margin: 10px 0 10px 0 !important;
+        padding: 10px 12px !important;
+        border: 1px solid #263440 !important;
+        border-radius: 8px !important;
+        background: #151b22 !important;
+        color: #d7dde3 !important;
+        font-size: 15px !important;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .child {
+        margin-left: 22px !important;
+        border-left: 2px solid #2e3d4b !important;
+        padding-left: 12px !important;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .md {
+        background: transparent !important;
+        color: #dce4ed !important;
+        font-size: 15px !important;
+        line-height: 1.55 !important;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .tagline {
+        color: #aab7c5 !important;
+        font-size: 13px !important;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .flat-list a,
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .flat-list span {
+        color: #b9c8d8 !important;
+        font-size: 12px !important;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment textarea,
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .usertext-edit {
+        display: none !important;
+      }
+
+      @media (max-width: 900px) {
+        html.${SCRIPT_CLASS} .rwm-comments-shell {
+          inset: 10px;
+        }
+
+        html.${SCRIPT_CLASS} .rwm-comments-toolbar {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+      }
+
       @media (max-width: 1200px) {
         html.${SCRIPT_CLASS}.rwm-wide .content {
           --rwm-content-width: calc(100vw - 16px);
@@ -785,6 +953,11 @@
 
     GM_registerMenuCommand(`${settings.autoExpandText ? "Disable" : "Enable"} auto text expandos`, () => {
       setSetting("autoExpandText", !settings.autoExpandText);
+      location.reload();
+    });
+
+    GM_registerMenuCommand(`${settings.commentsModal ? "Disable" : "Enable"} comments lightbox`, () => {
+      setSetting("commentsModal", !settings.commentsModal);
       location.reload();
     });
 
@@ -882,6 +1055,115 @@
     container.hidden = true;
     entry.appendChild(container);
     return container;
+  }
+
+  function normalizeCloneLinks(root, baseUrl) {
+    root.querySelectorAll("[href]").forEach((el) => {
+      const raw = el.getAttribute("href");
+      if (!raw || raw.startsWith("#")) return;
+      el.href = new URL(raw, baseUrl).href;
+    });
+
+    root.querySelectorAll("[src]").forEach((el) => {
+      const raw = el.getAttribute("src");
+      if (!raw) return;
+      el.src = new URL(raw, baseUrl).href;
+    });
+
+    root.querySelectorAll("a").forEach((link) => {
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+    });
+  }
+
+  function getCommentsOverlay() {
+    let overlay = document.getElementById("rwm-comments-overlay");
+    if (overlay) return overlay;
+
+    overlay = document.createElement("div");
+    overlay.id = "rwm-comments-overlay";
+    overlay.innerHTML = `
+      <div class="rwm-comments-shell" role="dialog" aria-modal="true" aria-labelledby="rwm-comments-title">
+        <div class="rwm-comments-toolbar">
+          <div id="rwm-comments-title" class="rwm-comments-title">Comments</div>
+          <div class="rwm-comments-actions">
+            <a class="rwm-comments-open" href="#" target="_blank" rel="noopener noreferrer">Open full page</a>
+            <button class="rwm-comments-close" type="button">Close</button>
+          </div>
+        </div>
+        <div class="rwm-comments-body">
+          <div class="rwm-comments-status">Loading comments...</div>
+        </div>
+      </div>
+    `;
+
+    overlay.addEventListener("click", (event) => {
+      if (event.target === overlay) closeCommentsOverlay();
+    });
+
+    overlay.querySelector(".rwm-comments-close").addEventListener("click", closeCommentsOverlay);
+    document.body.appendChild(overlay);
+    return overlay;
+  }
+
+  function closeCommentsOverlay() {
+    const overlay = document.getElementById("rwm-comments-overlay");
+    if (!overlay) return;
+    overlay.classList.remove("rwm-open");
+    document.documentElement.classList.remove("rwm-modal-open");
+  }
+
+  async function openCommentsOverlay(url, title = "Comments") {
+    const overlay = getCommentsOverlay();
+    const body = overlay.querySelector(".rwm-comments-body");
+    const titleEl = overlay.querySelector(".rwm-comments-title");
+    const openLink = overlay.querySelector(".rwm-comments-open");
+
+    titleEl.textContent = title;
+    openLink.href = url;
+    body.innerHTML = `<div class="rwm-comments-status">Loading comments...</div>`;
+    overlay.classList.add("rwm-open");
+    document.documentElement.classList.add("rwm-modal-open");
+
+    try {
+      const response = await fetch(url, {
+        credentials: "include",
+        headers: { Accept: "text/html" },
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+      const html = await response.text();
+      const doc = new DOMParser().parseFromString(html, "text/html");
+      const fetchedTitle = doc.querySelector(".thing.link a.title")?.textContent?.trim();
+      if (fetchedTitle) titleEl.textContent = fetchedTitle;
+
+      const content = document.createElement("div");
+      const post = doc.querySelector(".content > .sitetable.linklisting .thing.link")?.cloneNode(true);
+      const commentArea = doc.querySelector(".commentarea")?.cloneNode(true);
+
+      if (post) {
+        post.querySelectorAll(".flat-list.buttons, .expando-button").forEach((node) => node.remove());
+        content.appendChild(post);
+      }
+
+      if (commentArea) {
+        commentArea.querySelectorAll("script, iframe").forEach((node) => node.remove());
+        content.appendChild(commentArea);
+      }
+
+      if (!post && !commentArea) throw new Error("No comment content found");
+
+      normalizeCloneLinks(content, url);
+      body.textContent = "";
+      body.appendChild(content);
+    } catch (error) {
+      body.innerHTML = `
+        <div class="rwm-comments-status">
+          Could not load comments here. Use Open full page.
+        </div>
+      `;
+      console.warn("[Reddit Wide Media] comment modal failed", error);
+    }
   }
 
   function renderImage(container, src, alt = "") {
@@ -1064,10 +1346,25 @@
     });
   }
 
+  function setupCommentsModal(thing) {
+    if (!settings.commentsModal) return;
+    const link = thing.querySelector("a.comments");
+    if (!link || link.getAttribute("data-rwm-comments-modal") === "1") return;
+
+    link.setAttribute("data-rwm-comments-modal", "1");
+    link.addEventListener("click", (event) => {
+      if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || event.button !== 0) return;
+      event.preventDefault();
+      const title = thing.querySelector("a.title")?.textContent?.trim() || "Comments";
+      openCommentsOverlay(link.href, title);
+    });
+  }
+
   function prepareThing(thing) {
     if (thing.getAttribute(PROCESSED_ATTR) === "1") return;
     thing.setAttribute(PROCESSED_ATTR, "1");
     decorateFlairs(thing);
+    setupCommentsModal(thing);
     autoExpandText(thing);
 
     if (hasResMedia(thing)) return;
@@ -1150,6 +1447,10 @@
       rewriteMailLabel();
       scan();
     }, { once: true });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeCommentsOverlay();
+    });
   }
 
   start();
