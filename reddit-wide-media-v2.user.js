@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.17
+// @version      0.3.18
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -861,7 +861,7 @@
 
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .rwm-comment-rail {
         position: absolute;
-        inset: 8px auto 8px 4px;
+        inset: 8px auto 8px 0;
         width: 10px !important;
         border: 1px solid color-mix(in srgb, var(--rwm-rail), #ffffff 18%) !important;
         border-radius: 999px !important;
@@ -906,7 +906,7 @@
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .entry {
         position: relative !important;
         overflow: visible !important;
-        padding-left: 0 !important;
+        padding-left: 22px !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .midcol {
@@ -1597,7 +1597,7 @@
 
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .rwm-comment-rail {
         position: absolute;
-        inset: 8px auto 8px -14px;
+        inset: 8px auto 8px 0;
         width: 10px !important;
         border: 1px solid color-mix(in srgb, var(--rwm-rail), #ffffff 18%) !important;
         border-radius: 999px !important;
@@ -1642,7 +1642,7 @@
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .entry {
         position: relative !important;
         overflow: visible !important;
-        padding-left: 6px !important;
+        padding-left: 22px !important;
       }
 
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .midcol {
