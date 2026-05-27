@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.24
+// @version      0.3.25
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -142,13 +142,18 @@
       }
 
       html.${SCRIPT_CLASS} #header-bottom-left {
-        min-height: 70px !important;
+        min-height: 78px !important;
         background: #18202a !important;
         display: flex !important;
-        align-items: flex-end !important;
-        gap: 14px !important;
-        padding: 0 0 0 12px !important;
+        align-items: center !important;
+        gap: 12px !important;
+        padding: 12px 0 10px 14px !important;
         box-sizing: border-box !important;
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-left #header-img,
+      html.${SCRIPT_CLASS} #header-bottom-left .redditname:not(.pagename) {
+        display: none !important;
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right {
@@ -281,9 +286,9 @@
       }
 
       html.${SCRIPT_CLASS} .tabmenu {
-        margin-top: 18px !important;
+        margin: 0 !important;
         display: flex !important;
-        align-items: flex-end !important;
+        align-items: center !important;
         gap: 6px !important;
       }
 
@@ -303,12 +308,29 @@
         color: #ffffff !important;
       }
 
-      html.${SCRIPT_CLASS} .pagename,
-      html.${SCRIPT_CLASS} .pagename a {
-        font-size: 26px !important;
-        line-height: 50px !important;
+      html.${SCRIPT_CLASS} .pagename {
+        display: inline-flex !important;
+        align-items: center !important;
+        min-height: 36px !important;
+        padding: 0 11px !important;
+        border: 1px solid #4d6c8f !important;
+        border-radius: 7px !important;
+        background: #20384f !important;
+        color: #e5f3ff !important;
+        font-size: 20px !important;
+        line-height: 1 !important;
         font-weight: 800 !important;
         letter-spacing: 0 !important;
+        text-decoration: none !important;
+        text-transform: uppercase !important;
+      }
+
+      html.${SCRIPT_CLASS} .pagename a {
+        color: inherit !important;
+        font-size: inherit !important;
+        font-weight: inherit !important;
+        line-height: inherit !important;
+        text-decoration: none !important;
       }
 
       html.${SCRIPT_CLASS} a {
@@ -347,6 +369,7 @@
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .content,
       html.${SCRIPT_CLASS}.rwm-wide .message-page .content,
       html.${SCRIPT_CLASS}.rwm-wide .search-page .content {
+        margin-top: 10px !important;
         padding-right: 0 !important;
       }
 
@@ -541,20 +564,108 @@
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .subreddit {
         display: inline-flex !important;
         align-items: center !important;
-        min-height: 20px !important;
-        padding: 1px 8px !important;
+        align-self: center !important;
+        min-height: 21px !important;
+        padding: 2px 8px !important;
         border: 1px solid #476a8d !important;
         border-radius: 7px !important;
         background: #20384f !important;
         color: #d8edff !important;
         font-size: 13px !important;
         font-weight: 800 !important;
+        line-height: 1 !important;
+        text-decoration: none !important;
+        vertical-align: middle !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .fancy-toggle-button.subscribe-button,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .subscribe-button,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .RESshortcut,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .RESshortcutside,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .RESDashboardToggle {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 22px !important;
+        height: 22px !important;
+        margin: 0 2px !important;
+        padding: 0 !important;
+        border: 1px solid #4d86bd !important;
+        border-radius: 6px !important;
+        background: #244263 !important;
+        color: #e5f3ff !important;
+        line-height: 1 !important;
+        overflow: hidden !important;
+        vertical-align: middle !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .fancy-toggle-button.subscribe-button .option,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .subscribe-button .option,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .RESshortcut,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .RESshortcutside,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .RESDashboardToggle {
+        color: transparent !important;
+        font-size: 0 !important;
+        text-indent: 0 !important;
         text-decoration: none !important;
       }
 
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .fancy-toggle-button.subscribe-button .option:not(.active),
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .subscribe-button .option:not(.active) {
+        display: none !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .fancy-toggle-button.subscribe-button .option.active,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .subscribe-button .option.active {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        height: 100% !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .fancy-toggle-button.subscribe-button .option.active:before,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .subscribe-button .option.active:before,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .RESshortcut:before,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .RESshortcutside:before,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .RESDashboardToggle:before {
+        content: "+";
+        color: #e5f3ff !important;
+        font-size: 20px !important;
+        font-weight: 900 !important;
+        line-height: 1 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .fancy-toggle-button.subscribe-button .remove.active:before,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .subscribe-button .remove.active:before {
+        content: "-";
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .fancy-toggle-button.subscribe-button:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .subscribe-button:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .RESshortcut:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .RESshortcutside:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .RESDashboardToggle:hover {
+        background: #2f5680 !important;
+        border-color: #73afe4 !important;
+        color: #ffffff !important;
+      }
+
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .rank {
-        color: #a9b4c0 !important;
-        font-size: 16px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 34px !important;
+        height: 28px !important;
+        margin: 0 10px 0 0 !important;
+        border: 1px solid #344658 !important;
+        border-radius: 999px !important;
+        background: #17212b !important;
+        color: #c9d6e3 !important;
+        font-size: 14px !important;
+        font-weight: 900 !important;
+        line-height: 1 !important;
+        text-align: center !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .midcol {
@@ -645,17 +756,47 @@
       html.${SCRIPT_CLASS}.rwm-wide .thumbnail.self,
       html.${SCRIPT_CLASS}.rwm-wide .thumbnail.default,
       html.${SCRIPT_CLASS}.rwm-wide .thumbnail.nsfw {
+        position: relative !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
         width: 88px !important;
         min-height: 64px !important;
         margin-right: 12px !important;
         background-color: #202833 !important;
+        background-image: none !important;
         border: 1px solid #354252 !important;
         border-radius: 4px !important;
+        overflow: hidden !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thumbnail img {
         max-width: 88px !important;
         max-height: 70px !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link:not(.rwm-youtube) .thumbnail.default:before {
+        content: "";
+        width: 30px;
+        height: 30px;
+        background: #9acbff;
+        -webkit-mask: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3ZM5 5h6v2H7v10h10v-4h2v6H5V5Z'/%3E%3C/svg%3E");
+        mask: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3ZM5 5h6v2H7v10h10v-4h2v6H5V5Z'/%3E%3C/svg%3E");
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link:not(.rwm-youtube) .thumbnail.default:after {
+        content: "link";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 6px;
+        color: #b7d8ff;
+        font-size: 10px;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        line-height: 1;
+        text-align: center;
+        text-transform: uppercase;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-youtube .thumbnail,
