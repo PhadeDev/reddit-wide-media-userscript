@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.3
+// @version      0.3.4
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -903,6 +903,12 @@
         padding: 0 0 0 18px !important;
       }
 
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .child .sitetable,
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .child .thing,
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .child:before {
+        border-left: 0 !important;
+      }
+
       html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-0 { --rwm-rail: #46a2ff; border-color: color-mix(in srgb, #46a2ff, #2c3a47 74%) !important; }
       html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-1 { --rwm-rail: #56d68c; border-color: color-mix(in srgb, #56d68c, #2c3a47 74%) !important; }
       html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-2 { --rwm-rail: #f0c64f; border-color: color-mix(in srgb, #f0c64f, #2c3a47 74%) !important; }
@@ -914,13 +920,13 @@
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .rwm-comment-rail {
         position: absolute;
         inset: 8px auto 8px -14px;
-        width: 10px;
-        border: 1px solid color-mix(in srgb, var(--rwm-rail), #ffffff 18%);
-        border-radius: 999px;
-        background: linear-gradient(180deg, color-mix(in srgb, var(--rwm-rail), #ffffff 16%), var(--rwm-rail));
-        cursor: pointer;
-        opacity: 0.9;
-        padding: 0;
+        width: 10px !important;
+        border: 1px solid color-mix(in srgb, var(--rwm-rail), #ffffff 18%) !important;
+        border-radius: 999px !important;
+        background: linear-gradient(180deg, color-mix(in srgb, var(--rwm-rail), #ffffff 16%), var(--rwm-rail)) !important;
+        cursor: pointer !important;
+        opacity: 0.95 !important;
+        padding: 0 !important;
         transition: opacity 120ms ease, filter 120ms ease, transform 120ms ease, box-shadow 120ms ease;
       }
 
@@ -979,6 +985,8 @@
         overflow: hidden !important;
         text-indent: -9999px !important;
         font-size: 0 !important;
+        cursor: pointer !important;
+        pointer-events: auto !important;
         transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease, transform 120ms ease !important;
       }
 
@@ -1032,9 +1040,27 @@
         color: #ffb7c2 !important;
       }
 
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .arrow.rwm-vote-pending {
+        filter: brightness(1.25) saturate(1.2);
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .arrow.rwm-vote-failed {
+        background: #4b2d16 !important;
+        border-color: #f0a23a !important;
+        color: #ffd08a !important;
+      }
+
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .score {
-        color: #cfd9e4 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        min-height: 21px !important;
+        padding: 2px 7px !important;
+        border: 1px solid #415266 !important;
+        border-radius: 7px !important;
+        background: #202934 !important;
+        color: #dce6f0 !important;
         font-size: 13px !important;
+        line-height: 1 !important;
         font-weight: 800 !important;
       }
 
@@ -1076,11 +1102,34 @@
       }
 
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .userattrs,
-      html.${SCRIPT_CLASS} .rwm-comments-body .comment .score,
       html.${SCRIPT_CLASS} .rwm-comments-body .comment time,
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .live-timestamp {
-        color: #aeb8c4 !important;
         font-size: 13px !important;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment time,
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .live-timestamp {
+        display: inline-flex !important;
+        align-items: center !important;
+        min-height: 21px !important;
+        padding: 2px 7px !important;
+        border: 1px solid #3b4b5d !important;
+        border-radius: 7px !important;
+        background: #1d2630 !important;
+        color: #b8c4d0 !important;
+        line-height: 1 !important;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .userattrs {
+        display: inline-flex !important;
+        align-items: center !important;
+        min-height: 21px !important;
+        padding: 2px 6px !important;
+        border: 1px solid #4c5f72 !important;
+        border-radius: 7px !important;
+        background: #212c37 !important;
+        color: #d3dee8 !important;
+        line-height: 1 !important;
       }
 
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .flat-list {
@@ -1320,7 +1369,10 @@
   async function voteFromModal(arrow, dir) {
     const thing = arrow.closest(".thing");
     const id = thing?.getAttribute("data-fullname");
-    if (!id) return;
+    if (!id) {
+      console.warn("[Reddit Wide Media] modal vote missing thing id", arrow);
+      return;
+    }
 
     const previousUp = arrow.classList.contains("upmod");
     const previousDown = arrow.classList.contains("downmod");
@@ -1328,10 +1380,11 @@
     const midcol = arrow.closest(".midcol") || thing;
 
     midcol.querySelectorAll(".arrow").forEach((node) => {
-      node.classList.remove("upmod", "downmod");
+      node.classList.remove("upmod", "downmod", "rwm-vote-pending", "rwm-vote-failed");
     });
     if (effectiveDir === 1) arrow.classList.add("upmod");
     if (effectiveDir === -1) arrow.classList.add("downmod");
+    arrow.classList.add("rwm-vote-pending");
 
     const body = new URLSearchParams({
       id,
@@ -1351,7 +1404,10 @@
         body,
       });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      arrow.classList.remove("rwm-vote-pending");
     } catch (error) {
+      arrow.classList.remove("rwm-vote-pending");
+      arrow.classList.add("rwm-vote-failed");
       console.warn("[Reddit Wide Media] modal vote failed", error);
     }
   }
@@ -1368,26 +1424,6 @@
 
       const entry = comment.querySelector(":scope > .entry");
       if (!entry) return;
-
-      entry.querySelectorAll(":scope .arrow.up, :scope .arrow.upmod").forEach((arrow) => {
-        if (arrow.getAttribute("data-rwm-vote-bound") === "1") return;
-        arrow.setAttribute("data-rwm-vote-bound", "1");
-        arrow.addEventListener("click", (event) => {
-          event.preventDefault();
-          event.stopPropagation();
-          voteFromModal(arrow, 1);
-        });
-      });
-
-      entry.querySelectorAll(":scope .arrow.down, :scope .arrow.downmod").forEach((arrow) => {
-        if (arrow.getAttribute("data-rwm-vote-bound") === "1") return;
-        arrow.setAttribute("data-rwm-vote-bound", "1");
-        arrow.addEventListener("click", (event) => {
-          event.preventDefault();
-          event.stopPropagation();
-          voteFromModal(arrow, -1);
-        });
-      });
 
       if (entry.querySelector(":scope > .rwm-comment-rail")) return;
 
@@ -1444,6 +1480,19 @@
     });
 
     overlay.querySelector(".rwm-comments-close").addEventListener("click", closeCommentsOverlay);
+    overlay.querySelector(".rwm-comments-body").addEventListener("click", (event) => {
+      const arrow = event.target.closest(".arrow");
+      if (!arrow || !overlay.contains(arrow)) return;
+      if (!arrow.closest(".comment")) return;
+
+      const isUp = arrow.classList.contains("up") || arrow.classList.contains("upmod");
+      const isDown = arrow.classList.contains("down") || arrow.classList.contains("downmod");
+      if (!isUp && !isDown) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+      voteFromModal(arrow, isUp ? 1 : -1);
+    }, true);
     document.body.appendChild(overlay);
     return overlay;
   }
