@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.22
+// @version      0.3.23
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -831,12 +831,22 @@
         margin-top: 8px !important;
       }
 
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons input[type="submit"],
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons input[type="button"],
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons input[value="save"],
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons input[value="Save"],
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons input[value="cancel"],
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons input[value="Cancel"],
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons button,
-      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons .save,
-      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons .cancel {
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons a.save,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons a.cancel {
+        appearance: none !important;
+        -moz-appearance: none !important;
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
+        width: auto !important;
+        height: auto !important;
         min-height: 28px !important;
         margin: 0 !important;
         padding: 5px 10px !important;
@@ -849,22 +859,33 @@
         font-weight: 900 !important;
         line-height: 1 !important;
         text-decoration: none !important;
+        vertical-align: middle !important;
       }
 
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons input[type="submit"],
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons input[value="save"],
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons input[value="Save"],
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons .save {
         background: #244263 !important;
         border-color: #4d86bd !important;
         color: #e5f3ff !important;
       }
 
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons input[type="button"],
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons input[value="cancel"],
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons input[value="Cancel"],
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons .cancel {
         background: #1b232c !important;
         border-color: #344252 !important;
         color: #c4ced9 !important;
       }
 
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons input:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons input:focus-visible,
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons button:hover,
-      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons button:focus-visible {
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons button:focus-visible,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons a:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons a:focus-visible {
         background: #2a3948 !important;
         border-color: #5d7a99 !important;
         color: #ffffff !important;
