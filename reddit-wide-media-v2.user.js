@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.16
+// @version      0.3.17
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -353,6 +353,13 @@
         width: 286px !important;
         margin: 10px 10px 0 0 !important;
         background: transparent !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .side,
+      html.${SCRIPT_CLASS}.rwm-wide .side * {
+        background-image: none !important;
+        text-shadow: none !important;
+        box-shadow: none !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .linklisting {
@@ -736,6 +743,17 @@
         color: #d7dde3 !important;
       }
 
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .commentarea > .panestack-title,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .commentarea > .usertext,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .commentarea > .usertext .usertext-edit,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .commentarea > .usertext .bottom-area,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .commentarea > .usertext .usertext-buttons,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .commentarea > .usertext .help-toggle,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .commentarea > .usertext .markhelp {
+        background: #101214 !important;
+        color: #d7dde3 !important;
+      }
+
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .sitetable.nestedlisting {
         max-width: 1280px !important;
       }
@@ -808,7 +826,7 @@
         --rwm-rail: #3a536a;
         max-width: 1280px !important;
         margin: 10px 0 !important;
-        padding: 12px 14px !important;
+        padding: 12px 14px 12px 24px !important;
         border: 1px solid #2c3a47 !important;
         border-radius: 8px !important;
         background: linear-gradient(180deg, #171e26 0%, #141a21 100%) !important;
@@ -824,7 +842,7 @@
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .child {
         margin: 12px 0 0 30px !important;
         border-left: 0 !important;
-        padding: 0 0 0 18px !important;
+        padding: 0 0 0 8px !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .child .sitetable,
@@ -843,7 +861,7 @@
 
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .rwm-comment-rail {
         position: absolute;
-        inset: 8px auto 8px -14px;
+        inset: 8px auto 8px 4px;
         width: 10px !important;
         border: 1px solid color-mix(in srgb, var(--rwm-rail), #ffffff 18%) !important;
         border-radius: 999px !important;
@@ -888,7 +906,7 @@
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .entry {
         position: relative !important;
         overflow: visible !important;
-        padding-left: 6px !important;
+        padding-left: 0 !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .midcol {
@@ -1200,8 +1218,17 @@
       html.${SCRIPT_CLASS} .side .spacer,
       html.${SCRIPT_CLASS} .sidecontentbox,
       html.${SCRIPT_CLASS} .titlebox,
-      html.${SCRIPT_CLASS} .linkinfo {
+      html.${SCRIPT_CLASS} .linkinfo,
+      html.${SCRIPT_CLASS} .side .sidebox,
+      html.${SCRIPT_CLASS} .side .sidebox .spacer,
+      html.${SCRIPT_CLASS} .side .md-container,
+      html.${SCRIPT_CLASS} .side .title,
+      html.${SCRIPT_CLASS} .side .redditname,
+      html.${SCRIPT_CLASS} .side .account-activity-box,
+      html.${SCRIPT_CLASS} .side .subscribers,
+      html.${SCRIPT_CLASS} .side .users-online {
         background: #151a20 !important;
+        border-color: #303d4b !important;
         color: #d4dce5 !important;
       }
 
@@ -1213,6 +1240,35 @@
         background: transparent !important;
         color: #c9d3dd !important;
         font-size: 14px !important;
+      }
+
+      html.${SCRIPT_CLASS} .side a,
+      html.${SCRIPT_CLASS} .side .md a,
+      html.${SCRIPT_CLASS} .side .titlebox a,
+      html.${SCRIPT_CLASS} .sidecontentbox a {
+        color: #8fc7ff !important;
+      }
+
+      html.${SCRIPT_CLASS} .side .md h1,
+      html.${SCRIPT_CLASS} .side .md h2,
+      html.${SCRIPT_CLASS} .side .md h3,
+      html.${SCRIPT_CLASS} .side .md h4,
+      html.${SCRIPT_CLASS} .side .md h5,
+      html.${SCRIPT_CLASS} .side .md h6 {
+        color: #dce8f5 !important;
+        font-weight: 900 !important;
+      }
+
+      html.${SCRIPT_CLASS} .side .md blockquote,
+      html.${SCRIPT_CLASS} .side .md table,
+      html.${SCRIPT_CLASS} .side .md pre {
+        background: #11161c !important;
+        border-color: #344252 !important;
+        color: #d4dce5 !important;
+      }
+
+      html.${SCRIPT_CLASS} .side .md hr {
+        border-color: #3a4654 !important;
       }
 
       html.${SCRIPT_CLASS} .side .morelink {
@@ -1227,7 +1283,37 @@
         padding: 9px 10px !important;
         border: 1px solid #43566d !important;
         border-radius: 4px !important;
+        background: #243241 !important;
+        color: #f1f6fb !important;
         font-size: 14px !important;
+      }
+
+      html.${SCRIPT_CLASS} .side .md a[href],
+      html.${SCRIPT_CLASS} .side .md p > a:only-child,
+      html.${SCRIPT_CLASS} .side .md li > a:only-child {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        max-width: 100% !important;
+        min-height: 28px !important;
+        margin: 2px 0 !important;
+        padding: 5px 8px !important;
+        border: 1px solid #334455 !important;
+        border-radius: 6px !important;
+        background: #202934 !important;
+        color: #d6e1ec !important;
+        font-size: 12px !important;
+        font-weight: 800 !important;
+        line-height: 1.25 !important;
+        text-align: center !important;
+        text-decoration: none !important;
+        box-sizing: border-box !important;
+      }
+
+      html.${SCRIPT_CLASS} .side .md a[href]:hover {
+        background: #2a3948 !important;
+        border-color: #5d7a99 !important;
+        color: #ffffff !important;
       }
 
       html.${SCRIPT_CLASS} .side #search input[type="text"] {
