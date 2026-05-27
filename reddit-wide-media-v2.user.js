@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.21
+// @version      0.3.22
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -821,6 +821,53 @@
         color: #dce4ed !important;
         font-size: 15px !important;
         line-height: 1.5 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+        align-items: center !important;
+        margin-top: 8px !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons button,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons .save,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons .cancel {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-height: 28px !important;
+        margin: 0 !important;
+        padding: 5px 10px !important;
+        border: 1px solid #40546a !important;
+        border-radius: 7px !important;
+        background: #202a35 !important;
+        color: #e3edf8 !important;
+        cursor: pointer !important;
+        font-size: 13px !important;
+        font-weight: 900 !important;
+        line-height: 1 !important;
+        text-decoration: none !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons .save {
+        background: #244263 !important;
+        border-color: #4d86bd !important;
+        color: #e5f3ff !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons .cancel {
+        background: #1b232c !important;
+        border-color: #344252 !important;
+        color: #c4ced9 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons button:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-buttons button:focus-visible {
+        background: #2a3948 !important;
+        border-color: #5d7a99 !important;
+        color: #ffffff !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment {
