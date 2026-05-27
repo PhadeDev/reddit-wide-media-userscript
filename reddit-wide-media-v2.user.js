@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.9
+// @version      0.3.10
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -127,10 +127,10 @@
 
       html.${SCRIPT_CLASS} #sr-header-area {
         height: auto !important;
-        min-height: 28px !important;
+        min-height: 34px !important;
         background: #11151a !important;
         border-bottom: 1px solid #303842 !important;
-        line-height: 28px !important;
+        line-height: 34px !important;
       }
 
       html.${SCRIPT_CLASS} #sr-header-area a,
@@ -138,29 +138,38 @@
       html.${SCRIPT_CLASS} #header-bottom-left a,
       html.${SCRIPT_CLASS} #header-bottom-right a {
         color: #d2dae4 !important;
-        font-size: 12px !important;
+        font-size: 15px !important;
       }
 
       html.${SCRIPT_CLASS} #header-bottom-left {
-        min-height: 58px !important;
+        min-height: 70px !important;
         background: #18202a !important;
         display: flex !important;
         align-items: flex-end !important;
-        gap: 10px !important;
-        padding: 0 0 0 8px !important;
+        gap: 14px !important;
+        padding: 0 0 0 12px !important;
         box-sizing: border-box !important;
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right {
-        top: 32px !important;
+        top: 36px !important;
         background: #17202a !important;
         border-radius: 0 0 0 4px !important;
         color: #cbd5df !important;
-        padding: 6px 10px !important;
-        font-size: 14px !important;
-        line-height: 28px !important;
-        min-height: 34px !important;
+        padding: 8px 12px !important;
+        font-size: 16px !important;
+        line-height: 34px !important;
+        min-height: 42px !important;
         overflow: visible !important;
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-right .user,
+      html.${SCRIPT_CLASS} #header-bottom-right .user a,
+      html.${SCRIPT_CLASS} #header-bottom-right .userkarma,
+      html.${SCRIPT_CLASS} #header-bottom-right .separator,
+      html.${SCRIPT_CLASS} #header-bottom-right .logout {
+        font-size: 16px !important;
+        line-height: 34px !important;
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right #mail,
@@ -175,17 +184,17 @@
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
-        min-width: 52px !important;
-        height: 28px !important;
-        padding: 0 6px !important;
-        margin: 0 6px 0 10px !important;
+        min-width: 62px !important;
+        height: 34px !important;
+        padding: 0 8px !important;
+        margin: 0 8px 0 12px !important;
         border-radius: 4px !important;
         background: rgba(244, 189, 82, 0.1) !important;
         border: 0 !important;
         color: #f4bd52 !important;
-        font-size: 14px !important;
+        font-size: 17px !important;
         font-weight: 900 !important;
-        line-height: 28px !important;
+        line-height: 34px !important;
         text-decoration: none !important;
         overflow: visible !important;
         text-indent: 0 !important;
@@ -203,14 +212,14 @@
       html.${SCRIPT_CLASS} #header-bottom-right .mail:before {
         content: "\\2709" !important;
         display: inline-block !important;
-        margin-right: 5px !important;
+        margin-right: 6px !important;
         color: #f4bd52 !important;
-        font-size: 17px !important;
+        font-size: 20px !important;
         line-height: 1 !important;
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right #mail {
-        font-size: 14px;
+        font-size: 17px;
         font-weight: 900;
         line-height: 1;
       }
@@ -253,39 +262,36 @@
 
       html.${SCRIPT_CLASS} #header-bottom-right .chat,
       html.${SCRIPT_CLASS} #header-bottom-right .chat-link,
-      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/chat"],
       html.${SCRIPT_CLASS} #header-bottom-right .pref-lang {
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
-        min-width: 28px !important;
-        width: auto !important;
-        min-height: 28px !important;
-        height: 28px !important;
-        padding: 0 4px !important;
-        margin: 0 2px !important;
-        font-size: 17px !important;
-        line-height: 28px !important;
+        min-width: 32px !important;
+        min-height: 32px !important;
+        padding: 0 5px !important;
+        margin: 0 4px !important;
+        font-size: 20px !important;
+        line-height: 32px !important;
         vertical-align: middle !important;
         overflow: visible !important;
-        background-size: auto !important;
-        text-indent: 0 !important;
+        transform: scale(1.2);
+        transform-origin: center;
       }
 
       html.${SCRIPT_CLASS} .tabmenu {
-        margin-top: 14px !important;
+        margin-top: 18px !important;
         display: flex !important;
         align-items: flex-end !important;
-        gap: 4px !important;
+        gap: 6px !important;
       }
 
       html.${SCRIPT_CLASS} .tabmenu li a,
       html.${SCRIPT_CLASS} .tabmenu li.selected a {
-        padding: 9px 13px !important;
+        padding: 12px 17px !important;
         background: #26313d !important;
         border: 1px solid #3b4856 !important;
         color: #dce7f3 !important;
-        font-size: 14px !important;
+        font-size: 17px !important;
         font-weight: 700 !important;
         line-height: 1.2 !important;
       }
@@ -297,8 +303,8 @@
 
       html.${SCRIPT_CLASS} .pagename,
       html.${SCRIPT_CLASS} .pagename a {
-        font-size: 22px !important;
-        line-height: 38px !important;
+        font-size: 26px !important;
+        line-height: 50px !important;
         font-weight: 800 !important;
         letter-spacing: 0 !important;
       }
