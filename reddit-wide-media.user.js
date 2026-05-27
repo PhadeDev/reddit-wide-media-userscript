@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.1.1
+// @version      0.1.2
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -88,8 +88,8 @@
 
   function addStyles() {
     const width = Number(settings.contentWidth) || Number(defaults.contentWidth);
-    const mediaMaxHeight = settings.mediaMode === "huge" ? "92vh" : settings.mediaMode === "medium" ? "620px" : "820px";
-    const mediaMaxWidth = settings.mediaMode === "huge" ? "100%" : settings.mediaMode === "medium" ? "900px" : "1180px";
+    const mediaMaxHeight = settings.mediaMode === "huge" ? "92vh" : settings.mediaMode === "medium" ? "680px" : "840px";
+    const mediaMaxWidth = settings.mediaMode === "huge" ? "1440px" : settings.mediaMode === "medium" ? "960px" : "1220px";
 
     GM_addStyle(`
       html.${SCRIPT_CLASS} {
@@ -130,7 +130,7 @@
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link {
         margin: 0 0 13px 0 !important;
-        padding: 10px 12px 12px 8px !important;
+        padding: 12px 14px 14px 8px !important;
         border: 1px solid rgba(255, 255, 255, 0.08) !important;
         border-radius: 4px !important;
         background: rgba(255, 255, 255, 0.025) !important;
@@ -142,13 +142,22 @@
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .title {
-        font-size: 16px !important;
-        line-height: 1.35 !important;
+        font-size: 18px !important;
+        line-height: 1.38 !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline,
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list {
-        line-height: 1.45 !important;
+        font-size: 12px !important;
+        line-height: 1.55 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .rank {
+        font-size: 13px !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .midcol {
+        margin-right: 8px !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .commentarea {
@@ -161,7 +170,8 @@
 
       html.${SCRIPT_CLASS} .${MEDIA_CLASS} {
         clear: both;
-        margin: 10px 0 6px 0;
+        margin: 12px 0 6px 0;
+        width: min(100%, ${mediaMaxWidth});
         max-width: ${mediaMaxWidth};
       }
 
@@ -172,9 +182,9 @@
       html.${SCRIPT_CLASS} .${MEDIA_CLASS} img,
       html.${SCRIPT_CLASS} .${MEDIA_CLASS} video {
         display: block;
+        width: 100%;
         max-width: 100%;
         max-height: ${mediaMaxHeight};
-        width: auto;
         height: auto;
         object-fit: contain;
         background: #070809;
