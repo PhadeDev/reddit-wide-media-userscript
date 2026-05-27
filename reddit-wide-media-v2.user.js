@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.14
+// @version      0.3.15
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -1555,6 +1555,7 @@
         }
       }
 
+      id = id.split(/[?&#]/)[0] || "";
       return /^[A-Za-z0-9_-]{11}$/.test(id) ? id : "";
     } catch (_) {
       return "";
@@ -1564,6 +1565,19 @@
   function youtubeEmbedUrl(rawUrl) {
     const id = youtubeIdFromUrl(rawUrl);
     return id ? `https://www.youtube-nocookie.com/embed/${id}` : "";
+  }
+
+  function youtubeUrlFromThing(thing, postUrl = "") {
+    if (youtubeEmbedUrl(postUrl)) return postUrl;
+
+    const candidates = [
+      thing.getAttribute("data-url") || "",
+      thing.querySelector("a.title")?.href || "",
+      ...Array.from(thing.querySelectorAll(".entry .expando a[href], .entry .usertext-body a[href], .entry .md a[href]"))
+        .map((link) => link.href || link.getAttribute("href") || ""),
+    ];
+
+    return candidates.find((candidate) => youtubeEmbedUrl(candidate)) || "";
   }
 
   function hasResMedia(thing) {
@@ -2053,7 +2067,8 @@
 
     const postUrl = getPostUrl(thing);
     const directImage = imageUrlFromPostUrl(postUrl);
-    const youtubeEmbed = youtubeEmbedUrl(postUrl);
+    const youtubeUrl = youtubeUrlFromThing(thing, postUrl);
+    const youtubeEmbed = youtubeEmbedUrl(youtubeUrl);
     const needsFetch = isRedditGallery(postUrl) || isRedditVideo(postUrl);
 
     if (!directImage && !youtubeEmbed && !needsFetch) {
@@ -2069,7 +2084,7 @@
       if (container.getAttribute("data-rwm-loaded") === "1") return;
       container.setAttribute("data-rwm-loaded", "1");
       const title = thing.querySelector("a.title")?.textContent || "";
-      if (youtubeEmbed) renderYouTube(container, postUrl, title);
+      if (youtubeEmbed) renderYouTube(container, youtubeUrl, title);
       else if (directImage) renderImage(container, directImage, title);
       else renderFetchedMedia(thing, container);
     };
