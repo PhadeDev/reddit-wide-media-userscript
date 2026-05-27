@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.1.2
+// @version      0.1.3
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -28,7 +28,7 @@
   const defaults = {
     redirect: true,
     wideMode: true,
-    contentWidth: "1680",
+    contentWidth: "1920",
     mediaMode: "large",
     autoMedia: true,
     resCompat: true,
@@ -89,7 +89,7 @@
   function addStyles() {
     const width = Number(settings.contentWidth) || Number(defaults.contentWidth);
     const mediaMaxHeight = settings.mediaMode === "huge" ? "92vh" : settings.mediaMode === "medium" ? "680px" : "840px";
-    const mediaMaxWidth = settings.mediaMode === "huge" ? "1440px" : settings.mediaMode === "medium" ? "960px" : "1220px";
+    const mediaMaxWidth = settings.mediaMode === "huge" ? "1560px" : settings.mediaMode === "medium" ? "980px" : "1280px";
 
     GM_addStyle(`
       html.${SCRIPT_CLASS} {
@@ -106,10 +106,10 @@
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .content {
-        width: min(calc(100vw - 360px), ${width}px) !important;
+        width: min(calc(100vw - 340px), ${width}px) !important;
         max-width: ${width}px !important;
-        margin-left: 22px !important;
-        margin-right: 320px !important;
+        margin-left: 14px !important;
+        margin-right: 304px !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .listing-page .content,
@@ -119,8 +119,8 @@
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .side {
-        width: 290px !important;
-        margin: 10px 16px 0 0 !important;
+        width: 286px !important;
+        margin: 10px 10px 0 0 !important;
         background: transparent !important;
       }
 
@@ -139,6 +139,13 @@
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .entry {
         overflow: visible !important;
         margin-left: 8px !important;
+        max-width: none !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link:after {
+        content: "";
+        display: block;
+        clear: both;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .title {
@@ -171,7 +178,7 @@
       html.${SCRIPT_CLASS} .${MEDIA_CLASS} {
         clear: both;
         margin: 12px 0 6px 0;
-        width: min(100%, ${mediaMaxWidth});
+        width: min(calc(100vw - 440px), ${mediaMaxWidth});
         max-width: ${mediaMaxWidth};
       }
 
@@ -196,6 +203,7 @@
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(min(360px, 100%), 1fr));
         gap: 10px;
+        width: min(calc(100vw - 440px), 100%);
         max-width: 100%;
       }
 
@@ -234,6 +242,11 @@
 
         html.${SCRIPT_CLASS}.rwm-wide .side {
           display: none !important;
+        }
+
+        html.${SCRIPT_CLASS} .${MEDIA_CLASS},
+        html.${SCRIPT_CLASS} .${MEDIA_CLASS}.rwm-gallery {
+          width: 100%;
         }
       }
     `);
