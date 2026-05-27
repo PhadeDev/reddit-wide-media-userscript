@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.5
+// @version      0.3.6
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -1008,6 +1008,9 @@
         width: 42px !important;
         margin-right: 16px !important;
         overflow: visible !important;
+        position: relative !important;
+        z-index: 5 !important;
+        pointer-events: auto !important;
       }
 
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .arrow {
@@ -1026,6 +1029,8 @@
         font-size: 0 !important;
         cursor: pointer !important;
         pointer-events: auto !important;
+        position: relative !important;
+        z-index: 6 !important;
         transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease, transform 120ms ease !important;
       }
 
@@ -1123,6 +1128,11 @@
         margin-bottom: 7px !important;
         color: #aab7c5 !important;
         font-size: 13px !important;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .tagline .expand,
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .tagline .numchildren {
+        display: none !important;
       }
 
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .author {
@@ -1476,14 +1486,19 @@
       const entry = comment.querySelector(":scope > .entry");
       if (!entry) return;
 
+      entry.querySelectorAll(":scope > .tagline .score.likes, :scope > .tagline .score.dislikes, :scope > .tagline .expand, :scope > .tagline .numchildren").forEach((node) => {
+        node.remove();
+      });
+
       if (entry.querySelector(":scope > .rwm-comment-rail")) return;
 
       const child = comment.querySelector(":scope > .child");
       if (!child) return;
 
-      const rail = document.createElement("button");
-      rail.type = "button";
+      const rail = document.createElement("div");
       rail.className = "rwm-comment-rail";
+      rail.setAttribute("role", "button");
+      rail.tabIndex = 0;
       rail.style.setProperty("--rwm-rail", railColors[depth]);
       rail.title = "Collapse replies";
       rail.setAttribute("aria-label", "Collapse replies");
@@ -1502,6 +1517,12 @@
         const collapsed = comment.classList.toggle("rwm-collapsed-branch");
         rail.title = collapsed ? "Expand replies" : "Collapse replies";
         rail.setAttribute("aria-label", rail.title);
+      });
+
+      rail.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        rail.click();
       });
 
       entry.prepend(rail);
