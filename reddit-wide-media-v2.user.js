@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.20
+// @version      0.3.21
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -1345,6 +1345,29 @@
         text-decoration: none !important;
       }
 
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .flat-list form.toggle,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .flat-list form.toggle,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .flat-list form.toggle {
+        display: inline-flex !important;
+        align-items: center !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .flat-list form.toggle .option:not(.active),
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .flat-list form.toggle .option:not(.active),
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .flat-list form.toggle .option:not(.active) {
+        display: none !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .flat-list form.toggle .option.active,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .flat-list form.toggle .option.active,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .flat-list form.toggle .option.active {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 4px !important;
+      }
+
       html.${SCRIPT_CLASS}.rwm-wide .message-page .message .flat-list a:hover,
       html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .flat-list a:hover,
       html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .flat-list a:hover {
@@ -1356,7 +1379,98 @@
       html.${SCRIPT_CLASS}.rwm-wide .message-page .message .arrow,
       html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .arrow,
       html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .arrow {
-        filter: brightness(1.8) saturate(0.7) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 24px !important;
+        height: 22px !important;
+        margin: 3px auto !important;
+        border: 1px solid #3b4a5b !important;
+        border-radius: 6px !important;
+        background: #222c37 !important;
+        color: #d6e0ea !important;
+        background-image: none !important;
+        overflow: hidden !important;
+        text-indent: -9999px !important;
+        font-size: 0 !important;
+        cursor: pointer !important;
+        pointer-events: auto !important;
+        position: relative !important;
+        z-index: 6 !important;
+        filter: none !important;
+        transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease, transform 120ms ease !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .arrow:before,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .arrow:before,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .arrow:before {
+        content: "";
+        display: block;
+        width: 14px;
+        height: 14px;
+        background: currentColor;
+        -webkit-mask: center / contain no-repeat;
+        mask: center / contain no-repeat;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .arrow.up:before,
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .arrow.upmod:before,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .arrow.up:before,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .arrow.upmod:before,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .arrow.up:before,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .arrow.upmod:before {
+        -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 4 4 14h5v6h6v-6h5z'/%3E%3C/svg%3E");
+        mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 4 4 14h5v6h6v-6h5z'/%3E%3C/svg%3E");
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .arrow.down:before,
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .arrow.downmod:before,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .arrow.down:before,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .arrow.downmod:before,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .arrow.down:before,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .arrow.downmod:before {
+        -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 20 4 10h5V4h6v6h5z'/%3E%3C/svg%3E");
+        mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 20 4 10h5V4h6v6h5z'/%3E%3C/svg%3E");
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .arrow.up:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .arrow.up:focus-visible,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .arrow.up:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .arrow.up:focus-visible,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .arrow.up:hover,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .arrow.up:focus-visible {
+        background: #1f3b2a !important;
+        border-color: #46b36a !important;
+        color: #9df0b8 !important;
+        transform: translateY(-1px);
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .arrow.down:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .arrow.down:focus-visible,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .arrow.down:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .arrow.down:focus-visible,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .arrow.down:hover,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .arrow.down:focus-visible {
+        background: #4a2026 !important;
+        border-color: #d16072 !important;
+        color: #ffb7c2 !important;
+        transform: translateY(1px);
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .arrow.upmod,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .arrow.upmod,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .arrow.upmod {
+        background: #1f3b2a !important;
+        border-color: #46b36a !important;
+        color: #9df0b8 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .arrow.downmod,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .arrow.downmod,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .arrow.downmod {
+        background: #4a2026 !important;
+        border-color: #d16072 !important;
+        color: #ffb7c2 !important;
       }
 
       html.${SCRIPT_CLASS} .expando,
