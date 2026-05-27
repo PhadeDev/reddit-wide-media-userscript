@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.1
+// @version      0.3.2
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -458,6 +458,23 @@
         color: #d6e0ea !important;
         text-indent: 0 !important;
         font-size: 0 !important;
+        transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease, transform 120ms ease !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .arrow.up:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .arrow.up:focus-visible {
+        background: #1f3b2a !important;
+        border-color: #46b36a !important;
+        color: #9df0b8 !important;
+        transform: translateY(-1px);
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .arrow.down:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .arrow.down:focus-visible {
+        background: #4a2026 !important;
+        border-color: #d16072 !important;
+        color: #ffb7c2 !important;
+        transform: translateY(1px);
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .arrow:before {
@@ -483,15 +500,15 @@
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .arrow.upmod {
-        background: #4a2d19 !important;
-        border-color: #e58c36 !important;
-        color: #ffc28a !important;
+        background: #1f3b2a !important;
+        border-color: #46b36a !important;
+        color: #9df0b8 !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .arrow.downmod {
-        background: #222f4f !important;
-        border-color: #6e91ff !important;
-        color: #b9c8ff !important;
+        background: #4a2026 !important;
+        border-color: #d16072 !important;
+        color: #ffb7c2 !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thumbnail,
@@ -863,6 +880,7 @@
       }
 
       html.${SCRIPT_CLASS} .rwm-comments-body .comment {
+        --rwm-rail: #3a536a;
         max-width: 1280px !important;
         margin: 10px 0 10px 0 !important;
         padding: 12px 14px !important;
@@ -880,12 +898,64 @@
 
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .child {
         margin: 12px 0 0 20px !important;
-        border-left: 2px solid #3a536a !important;
+        border-left: 0 !important;
         padding: 0 0 0 14px !important;
       }
 
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-0 { --rwm-rail: #46a2ff; }
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-1 { --rwm-rail: #56d68c; }
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-2 { --rwm-rail: #f0c64f; }
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-3 { --rwm-rail: #ef8a4c; }
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-4 { --rwm-rail: #e86fa2; }
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-5 { --rwm-rail: #a98cff; }
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-6 { --rwm-rail: #63d5d7; }
+
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .rwm-comment-rail {
+        position: absolute;
+        inset: 8px auto 8px -8px;
+        width: 7px;
+        border: 0;
+        border-radius: 999px;
+        background: var(--rwm-rail);
+        cursor: pointer;
+        opacity: 0.62;
+        padding: 0;
+        transition: opacity 120ms ease, filter 120ms ease, transform 120ms ease, box-shadow 120ms ease;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .rwm-comment-rail:hover,
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .rwm-comment-rail:focus-visible {
+        opacity: 1;
+        filter: saturate(1.35) brightness(1.2);
+        transform: scaleX(1.35);
+        box-shadow: 0 0 18px color-mix(in srgb, var(--rwm-rail), transparent 42%);
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-collapsed-branch > .child {
+        display: none !important;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-collapsed-branch > .entry .rwm-collapse-note {
+        display: inline-flex;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-body .rwm-collapse-note {
+        display: none;
+        align-items: center;
+        margin-left: 8px;
+        padding: 3px 7px;
+        border: 1px solid color-mix(in srgb, var(--rwm-rail), #ffffff 18%);
+        border-radius: 7px;
+        background: color-mix(in srgb, var(--rwm-rail), #11161c 72%);
+        color: #f3f7fb;
+        font-size: 12px;
+        font-weight: 900;
+      }
+
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .entry {
+        position: relative !important;
         overflow: visible !important;
+        padding-left: 6px !important;
       }
 
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .midcol {
@@ -907,6 +977,23 @@
         color: #d6e0ea !important;
         text-indent: 0 !important;
         font-size: 0 !important;
+        transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease, transform 120ms ease !important;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .arrow.up:hover,
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .arrow.up:focus-visible {
+        background: #1f3b2a !important;
+        border-color: #46b36a !important;
+        color: #9df0b8 !important;
+        transform: translateY(-1px);
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .arrow.down:hover,
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .arrow.down:focus-visible {
+        background: #4a2026 !important;
+        border-color: #d16072 !important;
+        color: #ffb7c2 !important;
+        transform: translateY(1px);
       }
 
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .arrow:before {
@@ -928,6 +1015,18 @@
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .arrow.downmod:before {
         -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 20 4 10h5V4h6v6h5z'/%3E%3C/svg%3E");
         mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 20 4 10h5V4h6v6h5z'/%3E%3C/svg%3E");
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .arrow.upmod {
+        background: #1f3b2a !important;
+        border-color: #46b36a !important;
+        color: #9df0b8 !important;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .arrow.downmod {
+        background: #4a2026 !important;
+        border-color: #d16072 !important;
+        color: #ffb7c2 !important;
       }
 
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .score {
@@ -1208,6 +1307,41 @@
     });
   }
 
+  function enhanceCommentTree(root) {
+    root.querySelectorAll(".comment").forEach((comment) => {
+      const depth = Math.min(6, comment.parentElement?.closest(".comment") ? Number(comment.parentElement.closest(".comment").dataset.rwmDepth || 0) + 1 : 0);
+      comment.dataset.rwmDepth = String(depth);
+      comment.classList.add(`rwm-depth-${depth}`);
+
+      const entry = comment.querySelector(":scope > .entry");
+      if (!entry || entry.querySelector(":scope > .rwm-comment-rail")) return;
+
+      const child = comment.querySelector(":scope > .child");
+      if (!child) return;
+
+      const rail = document.createElement("button");
+      rail.type = "button";
+      rail.className = "rwm-comment-rail";
+      rail.title = "Collapse replies";
+      rail.setAttribute("aria-label", "Collapse replies");
+
+      const note = document.createElement("span");
+      note.className = "rwm-collapse-note";
+      note.textContent = "replies hidden";
+      entry.appendChild(note);
+
+      rail.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const collapsed = comment.classList.toggle("rwm-collapsed-branch");
+        rail.title = collapsed ? "Expand replies" : "Collapse replies";
+        rail.setAttribute("aria-label", rail.title);
+      });
+
+      entry.prepend(rail);
+    });
+  }
+
   function getCommentsOverlay() {
     let overlay = document.getElementById("rwm-comments-overlay");
     if (overlay) return overlay;
@@ -1286,6 +1420,7 @@
       if (!post && !commentArea) throw new Error("No comment content found");
 
       normalizeCloneLinks(content, url);
+      enhanceCommentTree(content);
       body.textContent = "";
       body.appendChild(content);
     } catch (error) {
