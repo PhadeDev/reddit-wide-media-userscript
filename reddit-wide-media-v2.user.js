@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.13
+// @version      0.3.14
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -650,6 +650,39 @@
         max-height: 70px !important;
       }
 
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-youtube .thumbnail,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-youtube .thumbnail.default,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-youtube .thumbnail.self {
+        position: relative !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: linear-gradient(135deg, #331014 0%, #5b141b 100%) !important;
+        border-color: #9f303b !important;
+        color: #fff !important;
+        overflow: hidden !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-youtube .thumbnail:before {
+        content: "";
+        width: 46px;
+        height: 32px;
+        border-radius: 8px;
+        background: #ff0033;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.28);
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-youtube .thumbnail:after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-top: 9px solid transparent;
+        border-bottom: 9px solid transparent;
+        border-left: 15px solid #fff;
+        transform: translateX(2px);
+      }
+
       html.${SCRIPT_CLASS}.rwm-wide .linkflairlabel,
       html.${SCRIPT_CLASS}.rwm-wide .flair {
         padding: 3px 7px !important;
@@ -844,17 +877,28 @@
       }
 
       html.${SCRIPT_CLASS} .${MEDIA_CLASS} img,
-      html.${SCRIPT_CLASS} .${MEDIA_CLASS} video {
+      html.${SCRIPT_CLASS} .${MEDIA_CLASS} video,
+      html.${SCRIPT_CLASS} .${MEDIA_CLASS} iframe {
         display: block;
         width: 100%;
         max-width: 100%;
         max-height: ${mediaMaxHeight};
-        height: auto;
         object-fit: contain;
         background: #070809;
         border: 1px solid rgba(158, 177, 198, 0.18);
         border-radius: 10px;
         box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35);
+      }
+
+      html.${SCRIPT_CLASS} .${MEDIA_CLASS} img,
+      html.${SCRIPT_CLASS} .${MEDIA_CLASS} video {
+        height: auto;
+      }
+
+      html.${SCRIPT_CLASS} .${MEDIA_CLASS} iframe {
+        aspect-ratio: 16 / 9;
+        height: auto;
+        min-height: 360px;
       }
 
       html.${SCRIPT_CLASS} .${MEDIA_CLASS}.rwm-gallery {
@@ -1493,6 +1537,35 @@
     }
   }
 
+  function youtubeIdFromUrl(rawUrl) {
+    const url = normalizeUrl(rawUrl);
+    if (!url) return "";
+
+    try {
+      const parsed = new URL(url);
+      const host = parsed.hostname.replace(/^www\./i, "").toLowerCase();
+      let id = "";
+
+      if (host === "youtu.be") {
+        id = parsed.pathname.split("/").filter(Boolean)[0] || "";
+      } else if (host === "youtube.com" || host === "m.youtube.com" || host === "music.youtube.com") {
+        if (parsed.pathname === "/watch") id = parsed.searchParams.get("v") || "";
+        else if (/^\/(?:shorts|embed|live)\//.test(parsed.pathname)) {
+          id = parsed.pathname.split("/").filter(Boolean)[1] || "";
+        }
+      }
+
+      return /^[A-Za-z0-9_-]{11}$/.test(id) ? id : "";
+    } catch (_) {
+      return "";
+    }
+  }
+
+  function youtubeEmbedUrl(rawUrl) {
+    const id = youtubeIdFromUrl(rawUrl);
+    return id ? `https://www.youtube-nocookie.com/embed/${id}` : "";
+  }
+
   function hasResMedia(thing) {
     if (!settings.resCompat) return false;
     return Boolean(
@@ -1801,6 +1874,23 @@
     container.hidden = false;
   }
 
+  function renderYouTube(container, rawUrl, title = "") {
+    const embedUrl = youtubeEmbedUrl(rawUrl);
+    if (!embedUrl) return false;
+
+    const iframe = document.createElement("iframe");
+    iframe.src = embedUrl;
+    iframe.title = title || "YouTube video";
+    iframe.loading = "lazy";
+    iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+    iframe.allowFullscreen = true;
+    iframe.referrerPolicy = "strict-origin-when-cross-origin";
+
+    container.appendChild(iframe);
+    container.hidden = false;
+    return true;
+  }
+
   async function fetchPostJson(thing) {
     const permalink = getPermalink(thing);
     if (!permalink) return null;
@@ -1958,22 +2048,29 @@
     thing.setAttribute(PROCESSED_ATTR, "1");
     decorateFlairs(thing);
     setupCommentsModal(thing);
-    autoExpandText(thing);
 
     if (hasResMedia(thing)) return;
 
     const postUrl = getPostUrl(thing);
     const directImage = imageUrlFromPostUrl(postUrl);
+    const youtubeEmbed = youtubeEmbedUrl(postUrl);
     const needsFetch = isRedditGallery(postUrl) || isRedditVideo(postUrl);
 
-    if (!directImage && !needsFetch) return;
+    if (!directImage && !youtubeEmbed && !needsFetch) {
+      autoExpandText(thing);
+      return;
+    }
+
+    if (youtubeEmbed) thing.classList.add("rwm-youtube");
 
     suppressNativeMediaExpando(thing);
     const container = placeMediaContainer(thing);
     const load = () => {
       if (container.getAttribute("data-rwm-loaded") === "1") return;
       container.setAttribute("data-rwm-loaded", "1");
-      if (directImage) renderImage(container, directImage, thing.querySelector("a.title")?.textContent || "");
+      const title = thing.querySelector("a.title")?.textContent || "";
+      if (youtubeEmbed) renderYouTube(container, postUrl, title);
+      else if (directImage) renderImage(container, directImage, title);
       else renderFetchedMedia(thing, container);
     };
 
