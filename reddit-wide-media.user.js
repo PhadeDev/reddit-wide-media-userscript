@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.1.7
+// @version      0.1.8
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -163,14 +163,14 @@
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
-        min-width: 24px !important;
+        min-width: 0 !important;
         height: 18px !important;
-        padding: 0 6px !important;
-        margin: 0 4px !important;
-        border-radius: 999px !important;
-        background: #263241 !important;
-        border: 1px solid #405267 !important;
-        color: #d7e5f5 !important;
+        padding: 0 !important;
+        margin: 0 2px 0 6px !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        border: 0 !important;
+        color: #f4bd52 !important;
         text-decoration: none !important;
         overflow: visible !important;
       }
@@ -181,18 +181,16 @@
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right .mail:before {
-        content: "";
-        width: 15px;
-        height: 15px;
-        background: currentColor;
-        -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='14' rx='2'/%3E%3Cpath d='m3 7 9 6 9-6'/%3E%3C/svg%3E") center / contain no-repeat;
-        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='14' rx='2'/%3E%3Cpath d='m3 7 9 6 9-6'/%3E%3C/svg%3E") center / contain no-repeat;
+        content: "Mail";
+        font-size: 12px;
+        font-weight: 900;
+        line-height: 1;
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right .mail.havemail {
-        background: #5b3717 !important;
-        border-color: #f5a33b !important;
-        color: #fff3d9 !important;
+        background: transparent !important;
+        border-color: transparent !important;
+        color: #f4bd52 !important;
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right .message-count,
@@ -200,15 +198,25 @@
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
-        min-width: 22px !important;
+        min-width: 0 !important;
         height: 18px !important;
-        padding: 0 6px !important;
-        border-radius: 999px !important;
-        background: #f0a12a !important;
-        color: #15100a !important;
+        padding: 0 !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        color: #f4bd52 !important;
         font-size: 12px !important;
         font-weight: 900 !important;
         text-shadow: none !important;
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-right .message-count:before,
+      html.${SCRIPT_CLASS} #header-bottom-right .havemail + .message-count:before {
+        content: "(";
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-right .message-count:after,
+      html.${SCRIPT_CLASS} #header-bottom-right .havemail + .message-count:after {
+        content: ")";
       }
 
       html.${SCRIPT_CLASS} .tabmenu {
@@ -348,7 +356,7 @@
         min-height: 28px !important;
         padding: 5px 10px !important;
         border: 1px solid #3a4b5d !important;
-        border-radius: 999px !important;
+        border-radius: 7px !important;
         background: #202934 !important;
         color: #d6e1ec !important;
         font-size: 13px !important;
@@ -399,7 +407,7 @@
         min-height: 20px !important;
         padding: 1px 8px !important;
         border: 1px solid #476a8d !important;
-        border-radius: 999px !important;
+        border-radius: 7px !important;
         background: #20384f !important;
         color: #d8edff !important;
         font-size: 13px !important;
@@ -582,6 +590,11 @@
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
+      }
+
+      html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media > .entry > .expando-button,
+      html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media > .expando-button {
+        display: none !important;
       }
 
       html.${SCRIPT_CLASS} .expando-button:before {
@@ -877,7 +890,7 @@
     video.controls = true;
     video.loop = true;
     video.muted = false;
-    video.volume = 1;
+    video.volume = 0.25;
     video.preload = "metadata";
 
     if (hlsUrl && video.canPlayType("application/vnd.apple.mpegurl")) {
@@ -1037,6 +1050,7 @@
 
     if (!directImage && !needsFetch) return;
 
+    thing.classList.add("rwm-has-own-media");
     const container = placeMediaContainer(thing);
     const load = () => {
       if (container.getAttribute("data-rwm-loaded") === "1") return;
