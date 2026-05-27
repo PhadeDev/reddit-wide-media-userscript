@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.4
+// @version      0.3.5
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -338,6 +338,38 @@
         line-height: 1.55 !important;
       }
 
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-items: center !important;
+        gap: 6px !important;
+        margin-top: 3px !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .author,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .live-timestamp,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline time,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .domain {
+        display: inline-flex !important;
+        align-items: center !important;
+        min-height: 21px !important;
+        padding: 2px 7px !important;
+        border: 1px solid #3b4b5d !important;
+        border-radius: 7px !important;
+        background: #1d2630 !important;
+        color: #cbd7e3 !important;
+        font-size: 13px !important;
+        font-weight: 800 !important;
+        line-height: 1 !important;
+        text-decoration: none !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .author {
+        border-color: #476a8d !important;
+        background: #20384f !important;
+        color: #d8edff !important;
+      }
+
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons {
         display: flex !important;
         flex-wrap: wrap !important;
@@ -443,6 +475,11 @@
         color: #d9e1ea !important;
         font-size: 16px !important;
         line-height: 1.2 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .score.dislikes,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .score.likes {
+        display: none !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .arrow {
@@ -943,20 +980,22 @@
       }
 
       html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-collapsed-branch > .entry .rwm-collapse-note {
-        display: inline-flex;
+        display: inline-flex !important;
       }
 
       html.${SCRIPT_CLASS} .rwm-comments-body .rwm-collapse-note {
-        display: none;
-        align-items: center;
-        margin-left: 8px;
-        padding: 3px 7px;
-        border: 1px solid color-mix(in srgb, var(--rwm-rail), #ffffff 18%);
-        border-radius: 7px;
-        background: color-mix(in srgb, var(--rwm-rail), #11161c 72%);
-        color: #f3f7fb;
-        font-size: 12px;
-        font-weight: 900;
+        display: none !important;
+        align-items: center !important;
+        min-height: 25px !important;
+        margin-top: 9px !important;
+        padding: 4px 8px !important;
+        border: 1px solid color-mix(in srgb, var(--rwm-rail), #ffffff 18%) !important;
+        border-radius: 7px !important;
+        background: color-mix(in srgb, var(--rwm-rail), #11161c 72%) !important;
+        color: #f3f7fb !important;
+        font-size: 12px !important;
+        font-weight: 900 !important;
+        line-height: 1 !important;
       }
 
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .entry {
@@ -1064,6 +1103,11 @@
         font-weight: 800 !important;
       }
 
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .score.dislikes,
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .score.likes {
+        display: none !important;
+      }
+
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .md {
         background: transparent !important;
         color: #dce4ed !important;
@@ -1130,6 +1174,13 @@
         background: #212c37 !important;
         color: #d3dee8 !important;
         line-height: 1 !important;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .tagline .RESUserTagImage,
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .tagline .voteWeight,
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .tagline .userattrs:empty,
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .tagline span:empty {
+        display: none !important;
       }
 
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .flat-list {
@@ -1439,8 +1490,11 @@
 
       const note = document.createElement("span");
       note.className = "rwm-collapse-note";
-      note.textContent = "replies hidden";
-      entry.appendChild(note);
+      const hiddenCount = child.querySelectorAll(".comment").length;
+      note.textContent = `${hiddenCount} ${hiddenCount === 1 ? "reply" : "replies"} hidden`;
+      const buttons = entry.querySelector(":scope > .flat-list.buttons, :scope > ul.flat-list");
+      if (buttons) buttons.after(note);
+      else entry.appendChild(note);
 
       rail.addEventListener("click", (event) => {
         event.preventDefault();
