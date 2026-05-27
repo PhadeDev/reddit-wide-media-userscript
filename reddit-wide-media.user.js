@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.11
+// @version      0.3.12
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -725,6 +725,18 @@
       html.${SCRIPT_CLASS} .thing.link .usertext-body p,
       html.${SCRIPT_CLASS} .thing.link .expando p {
         margin: 0 0 10px 0 !important;
+      }
+
+      html.${SCRIPT_CLASS} .thing.link .entry > .expando:empty,
+      html.${SCRIPT_CLASS} .thing.link .entry > .media-preview:empty,
+      html.${SCRIPT_CLASS} .thing.link .entry > .media-preview-content:empty,
+      html.${SCRIPT_CLASS} .thing.link .entry > .reddit-video-player-root:empty {
+        display: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        min-height: 0 !important;
+        height: 0 !important;
       }
 
       html.${SCRIPT_CLASS} .expando-button {
@@ -1844,7 +1856,8 @@
       container.textContent = "";
 
       if (!items.length) {
-        container.appendChild(makeStatus("No expandable media found"));
+        container.remove();
+        thing.classList.remove("rwm-has-own-media");
         return;
       }
 
@@ -1855,7 +1868,9 @@
       }
     } catch (error) {
       container.textContent = "";
-      container.appendChild(makeStatus(`Media load failed: ${error.message}`));
+      container.remove();
+      thing.classList.remove("rwm-has-own-media");
+      console.warn("[Reddit Wide Media] media load failed", error);
     }
   }
 
