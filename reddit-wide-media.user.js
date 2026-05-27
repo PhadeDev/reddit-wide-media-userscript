@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.18
+// @version      0.3.19
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -345,6 +345,7 @@
 
       html.${SCRIPT_CLASS}.rwm-wide .listing-page .content,
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .content,
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .content,
       html.${SCRIPT_CLASS}.rwm-wide .search-page .content {
         padding-right: 0 !important;
       }
@@ -1128,6 +1129,208 @@
         font-size: 13px !important;
         font-weight: 900 !important;
         text-decoration: none !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .content,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .content,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .content {
+        max-width: min(calc(100vw - 64px), 1720px) !important;
+        margin-left: 30px !important;
+        margin-right: 30px !important;
+        color: #d7dde3 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .content > .spacer,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .content > .spacer,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .content > .spacer {
+        background: transparent !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .menuarea,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .menuarea,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .menuarea {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        align-items: center !important;
+        margin: 10px 0 14px !important;
+        padding: 12px 14px !important;
+        border: 1px solid #2f3d4a !important;
+        border-radius: 8px !important;
+        background: #151b22 !important;
+        color: #cdd7e2 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .menuarea a,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .menuarea a,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .menuarea a {
+        display: inline-flex !important;
+        align-items: center !important;
+        min-height: 28px !important;
+        padding: 5px 10px !important;
+        border: 1px solid #40546a !important;
+        border-radius: 7px !important;
+        background: #202a35 !important;
+        color: #e3edf8 !important;
+        font-size: 13px !important;
+        font-weight: 900 !important;
+        line-height: 1 !important;
+        text-decoration: none !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .menuarea a.choice,
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .menuarea a.active,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .menuarea a.choice,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .menuarea a.active,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .menuarea a.choice,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .menuarea a.active {
+        background: #244263 !important;
+        border-color: #4d86bd !important;
+        color: #e5f3ff !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message {
+        display: flow-root !important;
+        max-width: none !important;
+        min-height: 0 !important;
+        margin: 12px 0 18px !important;
+        padding: 12px 14px 12px 52px !important;
+        border: 1px solid #2f3d4a !important;
+        border-radius: 8px !important;
+        background: linear-gradient(180deg, #171e26 0%, #141a21 100%) !important;
+        color: #d7dde3 !important;
+        font-size: 15px !important;
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.16) !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message.new,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message.new,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message.new {
+        border-color: #4d86bd !important;
+        background: linear-gradient(180deg, #1b2834 0%, #17202a 100%) !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .midcol,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .midcol,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .midcol {
+        width: 34px !important;
+        margin-left: -42px !important;
+        margin-right: 10px !important;
+        overflow: visible !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .entry,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .entry,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .entry {
+        overflow: visible !important;
+        color: #d7dde3 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .subject,
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .parent,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .subject,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .parent,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .subject,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .parent {
+        color: #8fc7ff !important;
+        font-size: 16px !important;
+        font-weight: 800 !important;
+        text-decoration: none !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .tagline,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .tagline,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .tagline {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-items: center !important;
+        gap: 6px !important;
+        margin: 4px 0 7px !important;
+        color: #aab7c5 !important;
+        font-size: 13px !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .tagline a,
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .tagline .author,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .tagline a,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .tagline .author,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .tagline a,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .tagline .author {
+        color: #8fc7ff !important;
+        font-weight: 800 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .md,
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .usertext-body,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .md,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .usertext-body,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .md,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .usertext-body {
+        margin: 8px 0 !important;
+        padding: 0 !important;
+        background: transparent !important;
+        color: #dce4ed !important;
+        font-size: 15px !important;
+        line-height: 1.55 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .md p,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .md p,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .md p {
+        color: #dce4ed !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .flat-list,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .flat-list,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .flat-list {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+        margin-top: 9px !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .flat-list li,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .flat-list li,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .flat-list li {
+        display: inline-flex !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .flat-list a,
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .flat-list span,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .flat-list a,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .flat-list span,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .flat-list a,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .flat-list span {
+        display: inline-flex !important;
+        align-items: center !important;
+        min-height: 25px !important;
+        padding: 4px 8px !important;
+        border: 1px solid #334455 !important;
+        border-radius: 7px !important;
+        background: #202934 !important;
+        color: #d6e1ec !important;
+        font-size: 12px !important;
+        font-weight: 800 !important;
+        line-height: 1 !important;
+        text-decoration: none !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .flat-list a:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .flat-list a:hover,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .flat-list a:hover {
+        background: #2a3948 !important;
+        border-color: #5d7a99 !important;
+        color: #ffffff !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .message-page .message .arrow,
+      html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .arrow,
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .arrow {
+        filter: brightness(1.8) saturate(0.7) !important;
       }
 
       html.${SCRIPT_CLASS} .expando,
