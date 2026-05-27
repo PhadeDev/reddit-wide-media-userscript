@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.1.9
+// @version      0.2.0
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -605,7 +605,13 @@
       }
 
       html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media .expando-button,
-      html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media .entry > .expando:not(.${MEDIA_CLASS}) {
+      html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media .expando-button.collapsed,
+      html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media .expando-button.video,
+      html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media .expando-button.image,
+      html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media .entry > .expando:not(.${MEDIA_CLASS}),
+      html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media .entry > .media-preview,
+      html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media .entry > .media-preview-content,
+      html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media .entry > .reddit-video-player-root {
         display: none !important;
       }
 
@@ -1025,6 +1031,16 @@
     });
   }
 
+  function suppressNativeMediaExpando(thing) {
+    thing.classList.add("rwm-has-own-media");
+    thing.querySelectorAll(
+      ".expando-button:not(.selftext):not(.selftext-muted), .entry > .expando:not(.rwm-media), .entry > .media-preview, .entry > .media-preview-content, .entry > .reddit-video-player-root",
+    ).forEach((node) => {
+      node.hidden = true;
+      node.style.setProperty("display", "none", "important");
+    });
+  }
+
   function autoExpandText(thing) {
     if (!settings.autoExpandText) return;
     if (thing.getAttribute("data-rwm-text-expanded") === "1") return;
@@ -1062,7 +1078,7 @@
 
     if (!directImage && !needsFetch) return;
 
-    thing.classList.add("rwm-has-own-media");
+    suppressNativeMediaExpando(thing);
     const container = placeMediaContainer(thing);
     const load = () => {
       if (container.getAttribute("data-rwm-loaded") === "1") return;
