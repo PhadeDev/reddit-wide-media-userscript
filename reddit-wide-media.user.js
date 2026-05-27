@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.7
+// @version      0.3.8
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -152,6 +152,8 @@
         border-radius: 0 0 0 4px !important;
         color: #cbd5df !important;
         padding: 5px 8px !important;
+        font-size: 13px !important;
+        line-height: 22px !important;
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right #mail,
@@ -166,16 +168,21 @@
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
-        min-width: 0 !important;
-        height: 18px !important;
-        padding: 0 !important;
-        margin: 0 2px 0 6px !important;
-        border-radius: 0 !important;
-        background: transparent !important;
+        min-width: 44px !important;
+        height: 22px !important;
+        padding: 0 4px !important;
+        margin: 0 4px 0 8px !important;
+        border-radius: 4px !important;
+        background: rgba(244, 189, 82, 0.1) !important;
         border: 0 !important;
         color: #f4bd52 !important;
+        font-size: 13px !important;
+        font-weight: 900 !important;
+        line-height: 22px !important;
         text-decoration: none !important;
         overflow: visible !important;
+        text-indent: 0 !important;
+        white-space: nowrap !important;
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right #mail.nohavemail,
@@ -187,11 +194,16 @@
 
       html.${SCRIPT_CLASS} #header-bottom-right #mail:before,
       html.${SCRIPT_CLASS} #header-bottom-right .mail:before {
-        content: none !important;
+        content: "\\2709" !important;
+        display: inline-block !important;
+        margin-right: 4px !important;
+        color: #f4bd52 !important;
+        font-size: 15px !important;
+        line-height: 1 !important;
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right #mail {
-        font-size: 12px;
+        font-size: 13px;
         font-weight: 900;
         line-height: 1;
       }
@@ -230,6 +242,20 @@
       html.${SCRIPT_CLASS} #header-bottom-right .message-count:after,
       html.${SCRIPT_CLASS} #header-bottom-right .havemail + .message-count:after {
         content: ")";
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-right .chat,
+      html.${SCRIPT_CLASS} #header-bottom-right .chat-link,
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/chat"],
+      html.${SCRIPT_CLASS} #header-bottom-right .pref-lang {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-width: 22px !important;
+        min-height: 22px !important;
+        font-size: 15px !important;
+        line-height: 22px !important;
+        vertical-align: middle !important;
       }
 
       html.${SCRIPT_CLASS} .tabmenu {
@@ -436,6 +462,24 @@
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.first a.comments:focus-visible {
         background: #2f5680 !important;
         border-color: #73afe4 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-unsave-button a,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-unsave-button span.option,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-unsave-button form.toggle button {
+        background: #173d2a !important;
+        border-color: #3fa86d !important;
+        color: #dbffe9 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-unsave-button a:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-unsave-button span.option:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-unsave-button form.toggle button:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-unsave-button a:focus-visible,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-unsave-button form.toggle button:focus-visible {
+        background: #1f5639 !important;
+        border-color: #66d992 !important;
+        color: #ffffff !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons form.toggle,
@@ -1904,16 +1948,31 @@
 
   function scan(root = document) {
     root.querySelectorAll(".thing.link").forEach(prepareThing);
+    refreshActionButtonStates(root);
+  }
+
+  function refreshActionButtonStates(root = document) {
+    root.querySelectorAll(".thing.link .flat-list.buttons li").forEach((item) => {
+      const visibleLabels = Array.from(item.querySelectorAll("a, button, span.option"))
+        .filter((node) => {
+          const style = window.getComputedStyle(node);
+          return style.display !== "none" && style.visibility !== "hidden";
+        })
+        .map((node) => (node.innerText || node.textContent || "").trim().toLowerCase())
+        .filter(Boolean);
+      const label = visibleLabels.join(" ") || (item.innerText || item.textContent || "").trim().toLowerCase();
+      item.classList.toggle("rwm-unsave-button", label === "unsave");
+    });
   }
 
   function rewriteMailLabel() {
     const mail = document.querySelector("#header-bottom-right #mail");
-    if (!mail || mail.getAttribute("data-rwm-mail-rewritten") === "1") return;
+    if (!mail) return;
 
     const countEl = mail.parentElement?.querySelector(".message-count");
     const rawCount = (countEl?.textContent || "").trim();
-    mail.textContent = rawCount ? `Mail (${rawCount})` : "Mail";
-    mail.setAttribute("data-rwm-mail-rewritten", "1");
+    const label = rawCount ? `Mail (${rawCount})` : "Mail";
+    if (mail.textContent !== label) mail.textContent = label;
     if (countEl) countEl.hidden = true;
   }
 
@@ -1932,15 +1991,26 @@
     }, { once: true });
 
     const observer = new MutationObserver((mutations) => {
+      let needsActionRefresh = false;
+      let needsMailRefresh = false;
       for (const mutation of mutations) {
+        const target = mutation.target;
+        const targetElement = target?.nodeType === Node.ELEMENT_NODE ? target : target?.parentElement;
+        if (targetElement?.closest?.(".flat-list.buttons")) needsActionRefresh = true;
+        if (targetElement?.closest?.("#header-bottom-right")) needsMailRefresh = true;
         for (const node of mutation.addedNodes) {
-          if (node.nodeType === Node.ELEMENT_NODE) scan(node);
+          if (node.nodeType !== Node.ELEMENT_NODE) continue;
+          scan(node);
+          if (node.matches?.("#header-bottom-right, #header-bottom-right *")) needsMailRefresh = true;
+          if (node.matches?.(".flat-list.buttons, .flat-list.buttons *")) needsActionRefresh = true;
         }
       }
+      if (needsActionRefresh) refreshActionButtonStates();
+      if (needsMailRefresh) rewriteMailLabel();
     });
 
     document.addEventListener("DOMContentLoaded", () => {
-      observer.observe(document.body, { childList: true, subtree: true });
+      observer.observe(document.body, { childList: true, characterData: true, subtree: true });
       rewriteMailLabel();
       scan();
     }, { once: true });
