@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.10
+// @version      0.3.11
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -167,6 +167,7 @@
       html.${SCRIPT_CLASS} #header-bottom-right .user a,
       html.${SCRIPT_CLASS} #header-bottom-right .userkarma,
       html.${SCRIPT_CLASS} #header-bottom-right .separator,
+      html.${SCRIPT_CLASS} #header-bottom-right .pref-lang,
       html.${SCRIPT_CLASS} #header-bottom-right .logout {
         font-size: 16px !important;
         line-height: 34px !important;
@@ -260,21 +261,22 @@
         content: ")";
       }
 
-      html.${SCRIPT_CLASS} #header-bottom-right .chat,
-      html.${SCRIPT_CLASS} #header-bottom-right .chat-link,
       html.${SCRIPT_CLASS} #header-bottom-right .pref-lang {
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        min-width: 32px !important;
-        min-height: 32px !important;
-        padding: 0 5px !important;
-        margin: 0 4px !important;
-        font-size: 20px !important;
-        line-height: 32px !important;
+        transform: none !important;
+        font-weight: 700 !important;
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-right #modmail,
+      html.${SCRIPT_CLASS} #header-bottom-right .modmail,
+      html.${SCRIPT_CLASS} #header-bottom-right .chat,
+      html.${SCRIPT_CLASS} #header-bottom-right .chat-link {
+        display: inline-block !important;
+        min-width: 18px !important;
+        min-height: 18px !important;
+        margin: 0 8px !important;
         vertical-align: middle !important;
         overflow: visible !important;
-        transform: scale(1.2);
+        transform: scale(1.65);
         transform-origin: center;
       }
 
