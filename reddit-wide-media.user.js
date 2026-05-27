@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.1.3
+// @version      0.1.4
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -94,15 +94,94 @@
     GM_addStyle(`
       html.${SCRIPT_CLASS} {
         background: #101214 !important;
+        color-scheme: dark;
       }
 
       html.${SCRIPT_CLASS} body {
         min-width: 0 !important;
         background: #101214 !important;
+        color: #d7dde3 !important;
+        font-size: 15px !important;
+        line-height: 1.45 !important;
       }
 
       html.${SCRIPT_CLASS} #header {
         min-width: 0 !important;
+        background: #171b20 !important;
+        border-bottom: 1px solid #303842 !important;
+      }
+
+      html.${SCRIPT_CLASS} #sr-header-area {
+        height: auto !important;
+        min-height: 28px !important;
+        background: #11151a !important;
+        border-bottom: 1px solid #303842 !important;
+        line-height: 28px !important;
+      }
+
+      html.${SCRIPT_CLASS} #sr-header-area a,
+      html.${SCRIPT_CLASS} #sr-more-link,
+      html.${SCRIPT_CLASS} #header-bottom-left a,
+      html.${SCRIPT_CLASS} #header-bottom-right a {
+        color: #d2dae4 !important;
+        font-size: 12px !important;
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-left {
+        min-height: 42px !important;
+        background: #18202a !important;
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-right {
+        top: 30px !important;
+        background: #17202a !important;
+        border-radius: 0 0 0 4px !important;
+        color: #cbd5df !important;
+        padding: 5px 8px !important;
+      }
+
+      html.${SCRIPT_CLASS} .tabmenu {
+        margin-top: 8px !important;
+      }
+
+      html.${SCRIPT_CLASS} .tabmenu li a,
+      html.${SCRIPT_CLASS} .tabmenu li.selected a {
+        padding: 5px 9px !important;
+        background: #26313d !important;
+        border: 1px solid #3b4856 !important;
+        color: #dce7f3 !important;
+        font-size: 13px !important;
+        font-weight: 700 !important;
+      }
+
+      html.${SCRIPT_CLASS} .tabmenu li.selected a {
+        background: #3b638a !important;
+        color: #ffffff !important;
+      }
+
+      html.${SCRIPT_CLASS} a {
+        color: #8fc7ff !important;
+      }
+
+      html.${SCRIPT_CLASS} a:visited {
+        color: #b6a7ff !important;
+      }
+
+      html.${SCRIPT_CLASS} input,
+      html.${SCRIPT_CLASS} textarea,
+      html.${SCRIPT_CLASS} select {
+        background: #171d24 !important;
+        border: 1px solid #3a4654 !important;
+        color: #e7edf4 !important;
+        font-size: 14px !important;
+      }
+
+      html.${SCRIPT_CLASS} button,
+      html.${SCRIPT_CLASS} .side .morelink a,
+      html.${SCRIPT_CLASS} .side .morelink .nub {
+        background: #243241 !important;
+        border-color: #3f5267 !important;
+        color: #f1f6fb !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .content {
@@ -130,10 +209,10 @@
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link {
         margin: 0 0 13px 0 !important;
-        padding: 12px 14px 14px 8px !important;
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        padding: 14px 16px 16px 10px !important;
+        border: 1px solid rgba(139, 157, 177, 0.20) !important;
         border-radius: 4px !important;
-        background: rgba(255, 255, 255, 0.025) !important;
+        background: #171b20 !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .entry {
@@ -149,30 +228,143 @@
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .title {
-        font-size: 18px !important;
-        line-height: 1.38 !important;
+        color: #8fc7ff !important;
+        font-size: 21px !important;
+        line-height: 1.42 !important;
+        font-weight: 700 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .title:visited {
+        color: #c3b6ff !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline,
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list {
-        font-size: 12px !important;
+        color: #aeb8c4 !important;
+        font-size: 14px !important;
         line-height: 1.55 !important;
       }
 
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li a,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li span,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline a,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .domain a,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .subreddit {
+        font-size: 14px !important;
+        color: #b9c8d8 !important;
+      }
+
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .rank {
-        font-size: 13px !important;
+        color: #a9b4c0 !important;
+        font-size: 16px !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .midcol {
-        margin-right: 8px !important;
+        width: 54px !important;
+        margin-right: 10px !important;
+        overflow: visible !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .score {
+        color: #d9e1ea !important;
+        font-size: 16px !important;
+        line-height: 1.2 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .arrow {
+        transform: scale(1.45);
+        transform-origin: center;
+        margin: 8px auto !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thumbnail,
+      html.${SCRIPT_CLASS}.rwm-wide .thumbnail.self,
+      html.${SCRIPT_CLASS}.rwm-wide .thumbnail.default,
+      html.${SCRIPT_CLASS}.rwm-wide .thumbnail.nsfw {
+        width: 88px !important;
+        min-height: 64px !important;
+        margin-right: 12px !important;
+        background-color: #202833 !important;
+        border: 1px solid #354252 !important;
+        border-radius: 4px !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thumbnail img {
+        max-width: 88px !important;
+        max-height: 70px !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .linkflairlabel,
+      html.${SCRIPT_CLASS}.rwm-wide .flair {
+        padding: 3px 7px !important;
+        border-radius: 4px !important;
+        border-color: #4b5c70 !important;
+        background: #2a3440 !important;
+        color: #f1f5f9 !important;
+        font-size: 12px !important;
+        font-weight: 700 !important;
+        vertical-align: 2px !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .commentarea {
         max-width: none !important;
+        color: #d7dde3 !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .comment {
         max-width: none !important;
+        font-size: 15px !important;
+      }
+
+      html.${SCRIPT_CLASS} .side,
+      html.${SCRIPT_CLASS} .side .spacer,
+      html.${SCRIPT_CLASS} .sidecontentbox,
+      html.${SCRIPT_CLASS} .titlebox,
+      html.${SCRIPT_CLASS} .linkinfo {
+        background: #151a20 !important;
+        color: #d4dce5 !important;
+      }
+
+      html.${SCRIPT_CLASS} .side .md,
+      html.${SCRIPT_CLASS} .side .usertext-body,
+      html.${SCRIPT_CLASS} .titlebox form.toggle,
+      html.${SCRIPT_CLASS} .leavemoderator,
+      html.${SCRIPT_CLASS} .icon-menu a {
+        background: transparent !important;
+        color: #c9d3dd !important;
+        font-size: 14px !important;
+      }
+
+      html.${SCRIPT_CLASS} .side .morelink {
+        height: auto !important;
+        line-height: 1.3 !important;
+        background: none !important;
+        border: 0 !important;
+      }
+
+      html.${SCRIPT_CLASS} .side .morelink a {
+        display: block !important;
+        padding: 9px 10px !important;
+        border: 1px solid #43566d !important;
+        border-radius: 4px !important;
+        font-size: 14px !important;
+      }
+
+      html.${SCRIPT_CLASS} .side #search input[type="text"] {
+        height: 32px !important;
+        padding: 5px 8px !important;
+        box-sizing: border-box !important;
+      }
+
+      html.${SCRIPT_CLASS} .morecomments a,
+      html.${SCRIPT_CLASS} .deepthread a,
+      html.${SCRIPT_CLASS} .nextprev a {
+        background: #243241 !important;
+        border: 1px solid #3f5267 !important;
+        border-radius: 4px !important;
+        color: #f1f6fb !important;
+        padding: 5px 8px !important;
+        font-size: 14px !important;
       }
 
       html.${SCRIPT_CLASS} .${MEDIA_CLASS} {
@@ -219,18 +411,18 @@
         border-radius: 4px;
         background: rgba(255, 255, 255, 0.08);
         color: #aaa;
-        font-size: 11px;
+        font-size: 13px;
       }
 
       html.${SCRIPT_CLASS} .rwm-toggle {
         border: 0;
         border-radius: 4px;
-        padding: 4px 7px;
+        padding: 6px 9px;
         margin: 7px 0 0 0;
         cursor: pointer;
         background: #2d5d88;
         color: #fff;
-        font-size: 11px;
+        font-size: 13px;
       }
 
       @media (max-width: 1200px) {
