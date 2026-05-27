@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.15
+// @version      0.3.16
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -728,6 +728,388 @@
       html.${SCRIPT_CLASS}.rwm-wide .comment {
         max-width: none !important;
         font-size: 15px !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .commentarea {
+        padding: 16px 22px 24px !important;
+        background: #101214 !important;
+        color: #d7dde3 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .sitetable.nestedlisting {
+        max-width: 1280px !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .panestack-title,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .menuarea {
+        max-width: 1280px !important;
+        margin: 0 0 14px 0 !important;
+        padding: 12px 14px !important;
+        border: 1px solid #2f3d4a !important;
+        border-radius: 8px !important;
+        background: #151b22 !important;
+        color: #cdd7e2 !important;
+        font-size: 15px !important;
+        font-weight: 800 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .panestack-title .title {
+        color: #dfe8f2 !important;
+        font-size: 15px !important;
+        font-weight: 900 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .menuarea {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-items: center !important;
+        gap: 8px !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .menuarea .dropdown-title,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .menuarea .toggle a,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .menuarea .toggle-button,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .menuarea .reddit-infobar {
+        display: inline-flex !important;
+        align-items: center !important;
+        min-height: 28px !important;
+        padding: 5px 10px !important;
+        border: 1px solid #40546a !important;
+        border-radius: 7px !important;
+        background: #202a35 !important;
+        color: #e3edf8 !important;
+        font-size: 13px !important;
+        font-weight: 900 !important;
+        line-height: 1 !important;
+        text-decoration: none !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable .usertext-edit {
+        max-width: 1280px !important;
+        margin-bottom: 12px !important;
+        color: #d7dde3 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .usertext.cloneable textarea {
+        box-sizing: border-box !important;
+        width: min(100%, 780px) !important;
+        min-height: 110px !important;
+        padding: 10px 12px !important;
+        border: 1px solid #3b4b5d !important;
+        border-radius: 8px !important;
+        background: #11161c !important;
+        color: #dce4ed !important;
+        font-size: 15px !important;
+        line-height: 1.5 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment {
+        --rwm-rail: #3a536a;
+        max-width: 1280px !important;
+        margin: 10px 0 !important;
+        padding: 12px 14px !important;
+        border: 1px solid #2c3a47 !important;
+        border-radius: 8px !important;
+        background: linear-gradient(180deg, #171e26 0%, #141a21 100%) !important;
+        color: #d7dde3 !important;
+        font-size: 15px !important;
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.16) !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment.collapsed {
+        opacity: 0.72 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .child {
+        margin: 12px 0 0 30px !important;
+        border-left: 0 !important;
+        padding: 0 0 0 18px !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .child .sitetable,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .child .thing,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .child:before {
+        border-left: 0 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment.rwm-depth-0 { --rwm-rail: #46a2ff; border-color: color-mix(in srgb, #46a2ff, #2c3a47 74%) !important; }
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment.rwm-depth-1 { --rwm-rail: #56d68c; border-color: color-mix(in srgb, #56d68c, #2c3a47 74%) !important; }
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment.rwm-depth-2 { --rwm-rail: #f0c64f; border-color: color-mix(in srgb, #f0c64f, #2c3a47 74%) !important; }
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment.rwm-depth-3 { --rwm-rail: #ef8a4c; border-color: color-mix(in srgb, #ef8a4c, #2c3a47 74%) !important; }
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment.rwm-depth-4 { --rwm-rail: #e86fa2; border-color: color-mix(in srgb, #e86fa2, #2c3a47 74%) !important; }
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment.rwm-depth-5 { --rwm-rail: #a98cff; border-color: color-mix(in srgb, #a98cff, #2c3a47 74%) !important; }
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment.rwm-depth-6 { --rwm-rail: #63d5d7; border-color: color-mix(in srgb, #63d5d7, #2c3a47 74%) !important; }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .rwm-comment-rail {
+        position: absolute;
+        inset: 8px auto 8px -14px;
+        width: 10px !important;
+        border: 1px solid color-mix(in srgb, var(--rwm-rail), #ffffff 18%) !important;
+        border-radius: 999px !important;
+        background: linear-gradient(180deg, color-mix(in srgb, var(--rwm-rail), #ffffff 16%), var(--rwm-rail)) !important;
+        cursor: pointer !important;
+        opacity: 0.95 !important;
+        padding: 0 !important;
+        transition: opacity 120ms ease, filter 120ms ease, transform 120ms ease, box-shadow 120ms ease;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .rwm-comment-rail:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .rwm-comment-rail:focus-visible {
+        opacity: 1;
+        filter: saturate(1.35) brightness(1.2);
+        transform: scaleX(1.25);
+        box-shadow: 0 0 18px color-mix(in srgb, var(--rwm-rail), transparent 42%);
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment.rwm-collapsed-branch > .child {
+        display: none !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment.rwm-collapsed-branch > .entry .rwm-collapse-note {
+        display: inline-flex !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .rwm-collapse-note {
+        display: none !important;
+        align-items: center !important;
+        min-height: 25px !important;
+        margin-top: 9px !important;
+        padding: 4px 8px !important;
+        border: 1px solid color-mix(in srgb, var(--rwm-rail), #ffffff 18%) !important;
+        border-radius: 7px !important;
+        background: color-mix(in srgb, var(--rwm-rail), #11161c 72%) !important;
+        color: #f3f7fb !important;
+        font-size: 12px !important;
+        font-weight: 900 !important;
+        line-height: 1 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .entry {
+        position: relative !important;
+        overflow: visible !important;
+        padding-left: 6px !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .midcol {
+        width: 42px !important;
+        margin-right: 16px !important;
+        overflow: visible !important;
+        position: relative !important;
+        z-index: 5 !important;
+        pointer-events: auto !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .arrow {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 24px !important;
+        height: 22px !important;
+        margin: 3px auto !important;
+        border: 1px solid #3b4a5b !important;
+        border-radius: 6px !important;
+        background: #222c37 !important;
+        color: #d6e0ea !important;
+        overflow: hidden !important;
+        text-indent: -9999px !important;
+        font-size: 0 !important;
+        cursor: pointer !important;
+        pointer-events: auto !important;
+        position: relative !important;
+        z-index: 6 !important;
+        transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease, transform 120ms ease !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .arrow.up:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .arrow.up:focus-visible {
+        background: #1f3b2a !important;
+        border-color: #46b36a !important;
+        color: #9df0b8 !important;
+        transform: translateY(-1px);
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .arrow.down:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .arrow.down:focus-visible {
+        background: #4a2026 !important;
+        border-color: #d16072 !important;
+        color: #ffb7c2 !important;
+        transform: translateY(1px);
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .arrow:before {
+        content: "";
+        display: block;
+        width: 14px;
+        height: 14px;
+        background: currentColor;
+        -webkit-mask: center / contain no-repeat;
+        mask: center / contain no-repeat;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .arrow.up:before,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .arrow.upmod:before {
+        -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 4 4 14h5v6h6v-6h5z'/%3E%3C/svg%3E");
+        mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 4 4 14h5v6h6v-6h5z'/%3E%3C/svg%3E");
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .arrow.down:before,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .arrow.downmod:before {
+        -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 20 4 10h5V4h6v6h5z'/%3E%3C/svg%3E");
+        mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 20 4 10h5V4h6v6h5z'/%3E%3C/svg%3E");
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .arrow.upmod {
+        background: #1f3b2a !important;
+        border-color: #46b36a !important;
+        color: #9df0b8 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .arrow.downmod {
+        background: #4a2026 !important;
+        border-color: #d16072 !important;
+        color: #ffb7c2 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .score {
+        display: inline-flex !important;
+        align-items: center !important;
+        min-height: 21px !important;
+        padding: 2px 7px !important;
+        border: 1px solid #415266 !important;
+        border-radius: 7px !important;
+        background: #202934 !important;
+        color: #dce6f0 !important;
+        font-size: 13px !important;
+        line-height: 1 !important;
+        font-weight: 800 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .score.dislikes,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .score.likes {
+        display: none !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .md {
+        background: transparent !important;
+        color: #dce4ed !important;
+        font-size: 15px !important;
+        line-height: 1.55 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .tagline {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-items: center !important;
+        gap: 6px !important;
+        margin-bottom: 7px !important;
+        color: #aab7c5 !important;
+        font-size: 13px !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .tagline .expand,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .tagline .numchildren {
+        display: none !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .author {
+        display: inline-flex !important;
+        align-items: center !important;
+        min-height: 22px !important;
+        padding: 2px 8px !important;
+        border: 1px solid #476a8d !important;
+        border-radius: 7px !important;
+        background: #20384f !important;
+        color: #d8edff !important;
+        font-size: 13px !important;
+        font-weight: 900 !important;
+        text-decoration: none !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .author.submitter {
+        border-color: #6f9ed0 !important;
+        background: #244c76 !important;
+        color: #edf7ff !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .userattrs,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment time,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .live-timestamp {
+        font-size: 13px !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment time,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .live-timestamp {
+        display: inline-flex !important;
+        align-items: center !important;
+        min-height: 21px !important;
+        padding: 2px 7px !important;
+        border: 1px solid #3b4b5d !important;
+        border-radius: 7px !important;
+        background: #1d2630 !important;
+        color: #b8c4d0 !important;
+        line-height: 1 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .userattrs {
+        display: inline-flex !important;
+        align-items: center !important;
+        min-height: 21px !important;
+        padding: 2px 6px !important;
+        border: 1px solid #4c5f72 !important;
+        border-radius: 7px !important;
+        background: #212c37 !important;
+        color: #d3dee8 !important;
+        line-height: 1 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .tagline .RESUserTagImage,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .tagline .voteWeight,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .tagline .userattrs:empty,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .tagline span:empty {
+        display: none !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+        margin-top: 9px !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list li {
+        display: inline-flex !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list a,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list span {
+        display: inline-flex !important;
+        align-items: center !important;
+        min-height: 25px !important;
+        padding: 4px 8px !important;
+        border: 1px solid #334455 !important;
+        border-radius: 7px !important;
+        background: #202934 !important;
+        color: #d6e1ec !important;
+        font-size: 12px !important;
+        font-weight: 800 !important;
+        line-height: 1 !important;
+        text-decoration: none !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list a:hover {
+        background: #2a3948 !important;
+        border-color: #5d7a99 !important;
+        color: #ffffff !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .expand {
+        color: #7fb8f0 !important;
+        font-size: 13px !important;
+        font-weight: 900 !important;
+        text-decoration: none !important;
       }
 
       html.${SCRIPT_CLASS} .expando,
@@ -2111,7 +2493,10 @@
   });
 
   function scan(root = document) {
+    if (root.matches?.(".thing.link")) prepareThing(root);
     root.querySelectorAll(".thing.link").forEach(prepareThing);
+    if (root.matches?.(".comment")) enhanceCommentTree(root.parentElement || document);
+    enhanceCommentTree(root);
     refreshActionButtonStates(root);
   }
 
