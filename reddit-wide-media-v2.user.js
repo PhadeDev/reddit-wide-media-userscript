@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.2
+// @version      0.3.3
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -456,7 +456,8 @@
         border: 1px solid #3b4a5b !important;
         border-radius: 6px !important;
         color: #d6e0ea !important;
-        text-indent: 0 !important;
+        overflow: hidden !important;
+        text-indent: -9999px !important;
         font-size: 0 !important;
         transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease, transform 120ms ease !important;
       }
@@ -897,28 +898,28 @@
       }
 
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .child {
-        margin: 12px 0 0 20px !important;
+        margin: 12px 0 0 30px !important;
         border-left: 0 !important;
-        padding: 0 0 0 14px !important;
+        padding: 0 0 0 18px !important;
       }
 
-      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-0 { --rwm-rail: #46a2ff; }
-      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-1 { --rwm-rail: #56d68c; }
-      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-2 { --rwm-rail: #f0c64f; }
-      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-3 { --rwm-rail: #ef8a4c; }
-      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-4 { --rwm-rail: #e86fa2; }
-      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-5 { --rwm-rail: #a98cff; }
-      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-6 { --rwm-rail: #63d5d7; }
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-0 { --rwm-rail: #46a2ff; border-color: color-mix(in srgb, #46a2ff, #2c3a47 74%) !important; }
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-1 { --rwm-rail: #56d68c; border-color: color-mix(in srgb, #56d68c, #2c3a47 74%) !important; }
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-2 { --rwm-rail: #f0c64f; border-color: color-mix(in srgb, #f0c64f, #2c3a47 74%) !important; }
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-3 { --rwm-rail: #ef8a4c; border-color: color-mix(in srgb, #ef8a4c, #2c3a47 74%) !important; }
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-4 { --rwm-rail: #e86fa2; border-color: color-mix(in srgb, #e86fa2, #2c3a47 74%) !important; }
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-5 { --rwm-rail: #a98cff; border-color: color-mix(in srgb, #a98cff, #2c3a47 74%) !important; }
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-6 { --rwm-rail: #63d5d7; border-color: color-mix(in srgb, #63d5d7, #2c3a47 74%) !important; }
 
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .rwm-comment-rail {
         position: absolute;
-        inset: 8px auto 8px -8px;
-        width: 7px;
-        border: 0;
+        inset: 8px auto 8px -14px;
+        width: 10px;
+        border: 1px solid color-mix(in srgb, var(--rwm-rail), #ffffff 18%);
         border-radius: 999px;
-        background: var(--rwm-rail);
+        background: linear-gradient(180deg, color-mix(in srgb, var(--rwm-rail), #ffffff 16%), var(--rwm-rail));
         cursor: pointer;
-        opacity: 0.62;
+        opacity: 0.9;
         padding: 0;
         transition: opacity 120ms ease, filter 120ms ease, transform 120ms ease, box-shadow 120ms ease;
       }
@@ -927,7 +928,7 @@
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .rwm-comment-rail:focus-visible {
         opacity: 1;
         filter: saturate(1.35) brightness(1.2);
-        transform: scaleX(1.35);
+        transform: scaleX(1.25);
         box-shadow: 0 0 18px color-mix(in srgb, var(--rwm-rail), transparent 42%);
       }
 
@@ -959,8 +960,8 @@
       }
 
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .midcol {
-        width: 36px !important;
-        margin-right: 10px !important;
+        width: 42px !important;
+        margin-right: 16px !important;
         overflow: visible !important;
       }
 
@@ -975,7 +976,8 @@
         border-radius: 6px !important;
         background: #222c37 !important;
         color: #d6e0ea !important;
-        text-indent: 0 !important;
+        overflow: hidden !important;
+        text-indent: -9999px !important;
         font-size: 0 !important;
         transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease, transform 120ms ease !important;
       }
@@ -998,6 +1000,7 @@
 
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .arrow:before {
         content: "";
+        display: block;
         width: 14px;
         height: 14px;
         background: currentColor;
@@ -1307,14 +1310,86 @@
     });
   }
 
+  function getModhash() {
+    return window.reddit?.modhash
+      || document.querySelector('input[name="uh"]')?.value
+      || document.body?.getAttribute("data-modhash")
+      || "";
+  }
+
+  async function voteFromModal(arrow, dir) {
+    const thing = arrow.closest(".thing");
+    const id = thing?.getAttribute("data-fullname");
+    if (!id) return;
+
+    const previousUp = arrow.classList.contains("upmod");
+    const previousDown = arrow.classList.contains("downmod");
+    const effectiveDir = (dir === 1 && previousUp) || (dir === -1 && previousDown) ? 0 : dir;
+    const midcol = arrow.closest(".midcol") || thing;
+
+    midcol.querySelectorAll(".arrow").forEach((node) => {
+      node.classList.remove("upmod", "downmod");
+    });
+    if (effectiveDir === 1) arrow.classList.add("upmod");
+    if (effectiveDir === -1) arrow.classList.add("downmod");
+
+    const body = new URLSearchParams({
+      id,
+      dir: String(effectiveDir),
+      rank: "2",
+    });
+    const uh = getModhash();
+    if (uh) body.set("uh", uh);
+
+    try {
+      const response = await fetch("/api/vote", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        },
+        body,
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    } catch (error) {
+      console.warn("[Reddit Wide Media] modal vote failed", error);
+    }
+  }
+
   function enhanceCommentTree(root) {
+    const railColors = ["#46a2ff", "#56d68c", "#f0c64f", "#ef8a4c", "#e86fa2", "#a98cff", "#63d5d7"];
+
     root.querySelectorAll(".comment").forEach((comment) => {
-      const depth = Math.min(6, comment.parentElement?.closest(".comment") ? Number(comment.parentElement.closest(".comment").dataset.rwmDepth || 0) + 1 : 0);
+      const parent = comment.parentElement?.closest(".comment");
+      const depth = Math.min(6, parent ? Number(parent.dataset.rwmDepth || 0) + 1 : 0);
       comment.dataset.rwmDepth = String(depth);
       comment.classList.add(`rwm-depth-${depth}`);
+      comment.style.setProperty("--rwm-rail", railColors[depth]);
 
       const entry = comment.querySelector(":scope > .entry");
-      if (!entry || entry.querySelector(":scope > .rwm-comment-rail")) return;
+      if (!entry) return;
+
+      entry.querySelectorAll(":scope .arrow.up, :scope .arrow.upmod").forEach((arrow) => {
+        if (arrow.getAttribute("data-rwm-vote-bound") === "1") return;
+        arrow.setAttribute("data-rwm-vote-bound", "1");
+        arrow.addEventListener("click", (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          voteFromModal(arrow, 1);
+        });
+      });
+
+      entry.querySelectorAll(":scope .arrow.down, :scope .arrow.downmod").forEach((arrow) => {
+        if (arrow.getAttribute("data-rwm-vote-bound") === "1") return;
+        arrow.setAttribute("data-rwm-vote-bound", "1");
+        arrow.addEventListener("click", (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          voteFromModal(arrow, -1);
+        });
+      });
+
+      if (entry.querySelector(":scope > .rwm-comment-rail")) return;
 
       const child = comment.querySelector(":scope > .child");
       if (!child) return;
@@ -1322,6 +1397,7 @@
       const rail = document.createElement("button");
       rail.type = "button";
       rail.className = "rwm-comment-rail";
+      rail.style.setProperty("--rwm-rail", railColors[depth]);
       rail.title = "Collapse replies";
       rail.setAttribute("aria-label", "Collapse replies");
 
