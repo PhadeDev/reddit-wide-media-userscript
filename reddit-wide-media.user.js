@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.51
+// @version      0.3.52
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -374,13 +374,12 @@
         align-items: center !important;
         gap: 8px !important;
         top: 0 !important;
-        background: #17202a !important;
-        border-radius: 0 0 0 4px !important;
+        background: transparent !important;
+        border-radius: 0 !important;
         color: #cbd5df !important;
-        padding: 5px 12px !important;
-        font-size: 16px !important;
+        padding: 0 12px !important;
+        font-size: 13px !important;
         line-height: 1 !important;
-        min-height: 52px !important;
         overflow: visible !important;
       }
 
@@ -397,7 +396,7 @@
       html.${SCRIPT_CLASS} #header-bottom-right .userkarma,
       html.${SCRIPT_CLASS} #header-bottom-right .pref-lang,
       html.${SCRIPT_CLASS} #header-bottom-right .logout {
-        font-size: 16px !important;
+        font-size: 13px !important;
         line-height: 1 !important;
       }
 
@@ -416,20 +415,20 @@
         align-items: center !important;
         justify-content: center !important;
         box-sizing: border-box !important;
-        height: 38px !important;
-        min-height: 38px !important;
-        max-height: 38px !important;
+        height: 30px !important;
+        min-height: 30px !important;
+        max-height: 30px !important;
         margin: 0 !important;
         padding: 0 10px !important;
-        border: 1px solid #3d4d5e !important;
+        border: 1px solid #35485a !important;
         border-radius: 8px !important;
-        background: #202a35 !important;
+        background: #1c2631 !important;
         color: #dce7f3 !important;
+        font-size: 13px !important;
         font-weight: 900 !important;
         line-height: 1 !important;
         text-decoration: none !important;
         white-space: nowrap !important;
-        box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset !important;
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right > .user,
@@ -447,9 +446,9 @@
       html.${SCRIPT_CLASS} #header-bottom-right > a[href*="chat.reddit.com"],
       html.${SCRIPT_CLASS} #header-bottom-right > a[href*="/notifications"],
       html.${SCRIPT_CLASS} #header-bottom-right > a[href*="/message/"] {
-        height: 38px !important;
-        min-height: 38px !important;
-        max-height: 38px !important;
+        height: 30px !important;
+        min-height: 30px !important;
+        max-height: 30px !important;
         margin-top: 0 !important;
         margin-bottom: 0 !important;
         line-height: 1 !important;
