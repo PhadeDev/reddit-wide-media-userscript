@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.41
+// @version      0.3.42
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -1298,6 +1298,10 @@
         font-weight: 900 !important;
         line-height: 1 !important;
         text-align: center !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.link .rank {
+        display: none !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .midcol {
@@ -3720,7 +3724,9 @@
     const container = document.createElement("div");
     container.className = MEDIA_CLASS;
     container.hidden = true;
-    entry.appendChild(container);
+    const preserved = entry.querySelector(".rwm-preserve-expando");
+    if (preserved) entry.insertBefore(container, preserved);
+    else entry.appendChild(container);
     return container;
   }
 
@@ -4500,6 +4506,17 @@
         node.classList.add("rwm-preserve-expando");
         node.hidden = false;
         node.style.removeProperty("display");
+        // Hide native gallery/media children within the preserved expando;
+        // keep only the usertext wrapper and its descendants.
+        Array.from(node.children).forEach((child) => {
+          if (
+            !child.classList.contains("usertext-body") &&
+            !child.classList.contains("usertext") &&
+            !child.querySelector(".usertext-body, .md")
+          ) {
+            child.hidden = true;
+          }
+        });
         return;
       }
 
