@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.31
+// @version      0.3.32
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -314,9 +314,11 @@
       html.${SCRIPT_CLASS} #header-bottom-right #mail:before,
       html.${SCRIPT_CLASS} #header-bottom-right .mail:before {
         content: "" !important;
-        width: 21px !important;
-        height: 21px !important;
-        margin-right: 7px !important;
+        display: inline-block !important;
+        flex: 0 0 auto !important;
+        width: 24px !important;
+        height: 24px !important;
+        margin-right: 8px !important;
         background: currentColor !important;
         -webkit-mask: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 5h18v14H3V5Zm2.4 2 6.6 5.1L18.6 7H5.4ZM5 9.1V17h14V9.1l-7 5.4-7-5.4Z'/%3E%3C/svg%3E") !important;
         mask: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 5h18v14H3V5Zm2.4 2 6.6 5.1L18.6 7H5.4ZM5 9.1V17h14V9.1l-7 5.4-7-5.4Z'/%3E%3C/svg%3E") !important;
@@ -385,8 +387,7 @@
       html.${SCRIPT_CLASS} #header-bottom-right .chat-link,
       html.${SCRIPT_CLASS} #header-bottom-right a[href*="/chat"],
       html.${SCRIPT_CLASS} #header-bottom-right a[href*="chat.reddit.com"],
-      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/notifications"],
-      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/message/"] {
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/notifications"] {
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -413,8 +414,7 @@
       html.${SCRIPT_CLASS} #header-bottom-right .chat-link:before,
       html.${SCRIPT_CLASS} #header-bottom-right a[href*="/chat"]:before,
       html.${SCRIPT_CLASS} #header-bottom-right a[href*="chat.reddit.com"]:before,
-      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/notifications"]:before,
-      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/message/"]:before {
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/notifications"]:before {
         content: "" !important;
         display: block !important;
         width: 20px !important;
@@ -425,7 +425,8 @@
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right #modmail:before,
-      html.${SCRIPT_CLASS} #header-bottom-right .modmail:before {
+      html.${SCRIPT_CLASS} #header-bottom-right .modmail:before,
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/notifications"]:before {
         -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 22a2.7 2.7 0 0 0 2.6-2h-5.2A2.7 2.7 0 0 0 12 22Zm7-6v-5a7 7 0 0 0-14 0v5l-2 2v1h18v-1l-2-2Zm-2 1H7v-6a5 5 0 0 1 10 0v6Z'/%3E%3C/svg%3E") !important;
         mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 22a2.7 2.7 0 0 0 2.6-2h-5.2A2.7 2.7 0 0 0 12 22Zm7-6v-5a7 7 0 0 0-14 0v5l-2 2v1h18v-1l-2-2Zm-2 1H7v-6a5 5 0 0 1 10 0v6Z'/%3E%3C/svg%3E") !important;
       }
@@ -444,8 +445,7 @@
       html.${SCRIPT_CLASS} #header-bottom-right .chat-link:hover,
       html.${SCRIPT_CLASS} #header-bottom-right a[href*="/chat"]:hover,
       html.${SCRIPT_CLASS} #header-bottom-right a[href*="chat.reddit.com"]:hover,
-      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/notifications"]:hover,
-      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/message/"]:hover {
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/notifications"]:hover {
         background: #26394c !important;
         border-color: #5d7a99 !important;
         color: #ffffff !important;
@@ -545,7 +545,6 @@
         #header-bottom-right a[href*="/chat"],
         #header-bottom-right a[href*="chat.reddit.com"],
         #header-bottom-right a[href*="/notifications"],
-        #header-bottom-right a[href*="/message/"],
         .thing.link .flat-list.buttons li a,
         .thing.link .flat-list.buttons li span.option,
         .thing.link .flat-list.buttons li form.toggle button,
@@ -574,7 +573,6 @@
         #header-bottom-right a[href*="/chat"],
         #header-bottom-right a[href*="chat.reddit.com"],
         #header-bottom-right a[href*="/notifications"],
-        #header-bottom-right a[href*="/message/"],
         .thing.link .flat-list.buttons li a,
         .thing.link .flat-list.buttons li span.option,
         .thing.link .flat-list.buttons li form.toggle button,
@@ -1321,9 +1319,10 @@
 
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment {
         --rwm-rail: #3a536a;
+        position: relative !important;
         max-width: 1280px !important;
         margin: 10px 0 !important;
-        padding: 12px 14px 12px 30px !important;
+        padding: 12px 14px 12px 72px !important;
         border: 1px solid #2c3a47 !important;
         border-radius: 8px !important;
         background: linear-gradient(180deg, #171e26 0%, #141a21 100%) !important;
@@ -1404,14 +1403,16 @@
         position: relative !important;
         overflow: visible !important;
         padding-left: 22px !important;
+        margin-left: 0 !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .midcol {
-        width: 48px !important;
-        margin-left: 28px !important;
-        margin-right: 14px !important;
+        position: absolute !important;
+        left: 18px !important;
+        top: 14px !important;
+        width: 30px !important;
+        margin: 0 !important;
         overflow: visible !important;
-        position: relative !important;
         z-index: 5 !important;
         pointer-events: auto !important;
       }
@@ -2228,6 +2229,208 @@
         font-size: 14px !important;
       }
 
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .content {
+        max-width: min(1680px, calc(100vw - 80px)) !important;
+        margin: 0 auto !important;
+        padding: 18px 22px 60px !important;
+        box-sizing: border-box !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .content > h1,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .content > .spacer > h1 {
+        color: #e3edf7 !important;
+        font-size: 22px !important;
+        font-weight: 900 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit-search,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page #sr-autocomplete-area,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .searchpane,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .search-result-listing,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .raisedbox {
+        background: #171d24 !important;
+        border: 1px solid #334252 !important;
+        border-radius: 8px !important;
+        color: #d7dde3 !important;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22) !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit-search,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .searchpane {
+        margin: 0 0 12px !important;
+        padding: 18px 22px !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit-search input[type="text"],
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .searchpane input[type="text"] {
+        min-width: min(520px, 70vw) !important;
+        height: 36px !important;
+        padding: 7px 11px !important;
+        border-radius: 6px !important;
+        background: #111820 !important;
+        border-color: #43566d !important;
+        color: #e7edf4 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .infobar {
+        margin: 12px 0 !important;
+        padding: 10px 14px !important;
+        border: 1px solid #6e5a22 !important;
+        border-radius: 7px !important;
+        background: #352c17 !important;
+        color: #f7df9e !important;
+        font-size: 14px !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit {
+        display: grid !important;
+        grid-template-columns: auto minmax(0, 1fr) !important;
+        gap: 8px 12px !important;
+        max-width: 980px !important;
+        margin: 14px 0 !important;
+        padding: 16px 18px !important;
+        border: 1px solid #334252 !important;
+        border-radius: 8px !important;
+        background: #171d24 !important;
+        color: #d7dde3 !important;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18) !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit > * {
+        min-width: 0 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .fancy-toggle-button,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .subscribe-button {
+        grid-row: 1 / span 3 !important;
+        align-self: start !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-width: 54px !important;
+        height: 30px !important;
+        margin: 0 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .fancy-toggle-button .option,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .subscribe-button .option,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .report {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-height: 30px !important;
+        padding: 0 11px !important;
+        border: 1px solid #3f5267 !important;
+        border-radius: 6px !important;
+        background: #243241 !important;
+        color: #f1f6fb !important;
+        font-size: 13px !important;
+        font-weight: 800 !important;
+        line-height: 1 !important;
+        text-decoration: none !important;
+        box-sizing: border-box !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .fancy-toggle-button .add,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .subscribe-button .add {
+        background: #1e5a34 !important;
+        border-color: #58d58d !important;
+        color: #eafff2 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .fancy-toggle-button .remove,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .subscribe-button .remove {
+        background: #5b2a35 !important;
+        border-color: #e17386 !important;
+        color: #ffecef !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .fancy-toggle-button .option:not(.active),
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .subscribe-button .option:not(.active) {
+        display: none !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .fancy-toggle-button .option:hover,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .subscribe-button .option:hover,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .report:hover,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .rwm-subreddit-tools button:hover {
+        box-shadow: 0 0 16px color-mix(in srgb, currentColor, transparent 58%), 0 1px 0 rgba(255, 255, 255, 0.05) inset !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit a.title,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .title a,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit > a[href^="/r/"] {
+        color: #8fc7ff !important;
+        font-size: 18px !important;
+        font-weight: 850 !important;
+        text-decoration: none !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .usertext-body,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .md,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .description {
+        width: min(760px, 100%) !important;
+        margin: 3px 0 !important;
+        padding: 8px 10px !important;
+        border: 1px solid #2f3c49 !important;
+        border-radius: 7px !important;
+        background: #111820 !important;
+        color: #cdd6df !important;
+        font-size: 14px !important;
+        line-height: 1.35 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .usertext-body *,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .md *,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .description * {
+        color: inherit !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .tagline,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .age,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .users {
+        color: #9da8b5 !important;
+        font-size: 12px !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .rwm-subreddit-tools {
+        display: flex !important;
+        align-items: center !important;
+        flex-wrap: wrap !important;
+        gap: 9px !important;
+        max-width: 980px !important;
+        margin: 0 0 14px !important;
+        padding: 12px !important;
+        border: 1px solid #334252 !important;
+        border-radius: 8px !important;
+        background: #171d24 !important;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18) !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .rwm-subreddit-tools button {
+        min-height: 36px !important;
+        padding: 0 13px !important;
+        border-radius: 7px !important;
+        font-weight: 850 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .rwm-subreddit-tools .rwm-export-subs {
+        background: #203f5f !important;
+        border-color: #6aa8e6 !important;
+        color: #e9f5ff !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .rwm-subreddit-tools .rwm-import-subs {
+        background: #49346b !important;
+        border-color: #a885e6 !important;
+        color: #f3ebff !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .rwm-subreddit-status {
+        color: #b8c4d0 !important;
+        font-size: 13px !important;
+      }
+
       html.${SCRIPT_CLASS} .${MEDIA_CLASS} {
         clear: both;
         margin: 12px 0 6px 0;
@@ -2455,9 +2658,10 @@
 
       html.${SCRIPT_CLASS} .rwm-comments-body .comment {
         --rwm-rail: #3a536a;
+        position: relative !important;
         max-width: 1280px !important;
         margin: 10px 0 10px 0 !important;
-        padding: 12px 14px !important;
+        padding: 12px 14px 12px 72px !important;
         border: 1px solid #2c3a47 !important;
         border-radius: 8px !important;
         background: linear-gradient(180deg, #171e26 0%, #141a21 100%) !important;
@@ -2538,13 +2742,16 @@
         position: relative !important;
         overflow: visible !important;
         padding-left: 22px !important;
+        margin-left: 0 !important;
       }
 
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .midcol {
-        width: 42px !important;
-        margin-right: 16px !important;
+        position: absolute !important;
+        left: 18px !important;
+        top: 14px !important;
+        width: 30px !important;
+        margin: 0 !important;
         overflow: visible !important;
-        position: relative !important;
         z-index: 5 !important;
         pointer-events: auto !important;
       }
@@ -3004,6 +3211,224 @@
       || document.querySelector('input[name="uh"]')?.value
       || document.body?.getAttribute("data-modhash")
       || "";
+  }
+
+  const sleep = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
+
+  function isSubredditsPage() {
+    return /^\/subreddits\/?/i.test(location.pathname);
+  }
+
+  function normalizeSubredditName(value) {
+    const raw = String(value || "")
+      .trim()
+      .replace(/^https?:\/\/(?:old\.|www\.)?reddit\.com\/r\//i, "")
+      .replace(/^\/?r\//i, "")
+      .replace(/\/.*$/, "");
+    if (!/^[A-Za-z0-9_]{2,30}$/.test(raw)) return "";
+    return raw;
+  }
+
+  function parseSubredditImportPayload(payload) {
+    const source = Array.isArray(payload) ? payload : payload?.subreddits;
+    if (!Array.isArray(source)) throw new Error("JSON must be an array or an object with a subreddits array.");
+
+    return Array.from(new Set(source.map((item) => {
+      if (typeof item === "string") return normalizeSubredditName(item);
+      return normalizeSubredditName(item?.display_name || item?.name || item?.display_name_prefixed || item?.url);
+    }).filter(Boolean))).sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }));
+  }
+
+  async function fetchSubscribedSubreddits() {
+    const subreddits = [];
+    let after = "";
+
+    do {
+      const url = new URL("/subreddits/mine/subscriber.json", location.origin);
+      url.searchParams.set("limit", "100");
+      url.searchParams.set("raw_json", "1");
+      if (after) url.searchParams.set("after", after);
+
+      const response = await fetch(url, { credentials: "include" });
+      if (!response.ok) throw new Error(`Reddit returned HTTP ${response.status}`);
+      const payload = await response.json();
+      const listing = payload?.data;
+
+      for (const child of listing?.children || []) {
+        const data = child?.data || {};
+        const name = normalizeSubredditName(data.display_name || data.display_name_prefixed || data.url);
+        if (!name) continue;
+        subreddits.push({
+          name,
+          display_name: data.display_name || name,
+          display_name_prefixed: data.display_name_prefixed || `r/${name}`,
+          title: data.title || "",
+          url: data.url || `/r/${name}/`,
+        });
+      }
+
+      after = listing?.after || "";
+    } while (after);
+
+    const seen = new Set();
+    return subreddits
+      .filter((subreddit) => {
+        const key = subreddit.name.toLowerCase();
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      })
+      .sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: "base" }));
+  }
+
+  function downloadJson(filename, payload) {
+    const blob = new Blob([`${JSON.stringify(payload, null, 2)}\n`], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 5000);
+  }
+
+  async function subscribeToSubreddit(name) {
+    const body = new URLSearchParams({
+      action: "sub",
+      sr_name: name,
+      api_type: "json",
+    });
+    const uh = getModhash();
+    if (uh) body.set("uh", uh);
+
+    const response = await fetch("/api/subscribe", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+      },
+      body,
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+    const payload = await response.json().catch(() => null);
+    const errors = payload?.json?.errors || [];
+    if (errors.length) throw new Error(errors.map((error) => error?.[1] || error?.[0]).filter(Boolean).join(", "));
+  }
+
+  async function exportSubreddits(status) {
+    status.textContent = "Exporting subscriptions...";
+    const subreddits = await fetchSubscribedSubreddits();
+    const date = new Date().toISOString().slice(0, 10);
+    downloadJson(`reddit-subreddits-${date}.json`, {
+      schema: "reddit-wide-media-subreddits-v1",
+      exportedAt: new Date().toISOString(),
+      source: location.origin,
+      count: subreddits.length,
+      subreddits,
+    });
+    status.textContent = `Downloaded ${subreddits.length} subscriptions.`;
+  }
+
+  async function importSubreddits(file, status) {
+    status.textContent = "Reading import file...";
+    const payload = JSON.parse(await file.text());
+    const names = parseSubredditImportPayload(payload);
+    if (!names.length) {
+      status.textContent = "No valid subreddit names found.";
+      return;
+    }
+
+    const confirmed = window.confirm(`Subscribe this account to ${names.length} subreddits?\n\nThis will run slowly to reduce rate-limit trouble.`);
+    if (!confirmed) {
+      status.textContent = "Import cancelled.";
+      return;
+    }
+
+    let ok = 0;
+    const failed = [];
+    for (let index = 0; index < names.length; index += 1) {
+      const name = names[index];
+      status.textContent = `Subscribing ${index + 1}/${names.length}: r/${name}`;
+      try {
+        await subscribeToSubreddit(name);
+        ok += 1;
+      } catch (error) {
+        failed.push(`r/${name}`);
+        console.warn("[Reddit Wide Media] subreddit import failed", name, error);
+      }
+      await sleep(900);
+    }
+
+    status.textContent = failed.length
+      ? `Import finished: ${ok} subscribed, ${failed.length} failed. Check console for details.`
+      : `Import finished: ${ok} subscribed.`;
+  }
+
+  function setupSubredditPageTools() {
+    if (!isSubredditsPage()) return;
+    document.documentElement.classList.add("rwm-subreddits-page");
+    if (!document.body || document.querySelector(".rwm-subreddit-tools")) return;
+
+    const content = document.querySelector(".content");
+    if (!content) return;
+
+    const toolbar = document.createElement("div");
+    toolbar.className = "rwm-subreddit-tools";
+
+    const exportButton = document.createElement("button");
+    exportButton.type = "button";
+    exportButton.className = "rwm-export-subs";
+    exportButton.textContent = "Download Subreddits";
+
+    const importButton = document.createElement("button");
+    importButton.type = "button";
+    importButton.className = "rwm-import-subs";
+    importButton.textContent = "Import Subreddits";
+
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+    fileInput.accept = "application/json,.json";
+    fileInput.hidden = true;
+
+    const status = document.createElement("span");
+    status.className = "rwm-subreddit-status";
+    status.textContent = "Backup or restore this account's subreddit subscriptions.";
+
+    toolbar.append(exportButton, importButton, fileInput, status);
+    content.prepend(toolbar);
+
+    exportButton.addEventListener("click", async () => {
+      exportButton.disabled = true;
+      try {
+        await exportSubreddits(status);
+      } catch (error) {
+        status.textContent = `Export failed: ${error.message}`;
+        console.warn("[Reddit Wide Media] subreddit export failed", error);
+      } finally {
+        exportButton.disabled = false;
+      }
+    });
+
+    importButton.addEventListener("click", () => fileInput.click());
+    fileInput.addEventListener("change", async () => {
+      const file = fileInput.files?.[0];
+      fileInput.value = "";
+      if (!file) return;
+
+      importButton.disabled = true;
+      exportButton.disabled = true;
+      try {
+        await importSubreddits(file, status);
+      } catch (error) {
+        status.textContent = `Import failed: ${error.message}`;
+        console.warn("[Reddit Wide Media] subreddit import failed", error);
+      } finally {
+        importButton.disabled = false;
+        exportButton.disabled = false;
+      }
+    });
   }
 
   async function voteFromModal(arrow, dir) {
@@ -3636,11 +4061,13 @@
     registerMenu();
     rewriteMailLabel();
     setupUserHeaderMenu();
+    setupSubredditPageTools();
 
     if (document.body) scan();
     else document.addEventListener("DOMContentLoaded", () => {
       rewriteMailLabel();
       setupUserHeaderMenu();
+      setupSubredditPageTools();
       scan();
     }, { once: true });
 
@@ -3664,12 +4091,14 @@
         rewriteMailLabel();
         setupUserHeaderMenu();
       }
+      setupSubredditPageTools();
     });
 
     document.addEventListener("DOMContentLoaded", () => {
       observer.observe(document.body, { childList: true, characterData: true, subtree: true });
       rewriteMailLabel();
       setupUserHeaderMenu();
+      setupSubredditPageTools();
       scan();
     }, { once: true });
 
