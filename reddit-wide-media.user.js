@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.30
+// @version      0.3.31
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -797,9 +797,9 @@
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-save-button a,
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-save-button span.option,
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-save-button form.toggle button {
-        background: #233326 !important;
-        border-color: #4f8c5b !important;
-        color: #dfffe6 !important;
+        background: #2c3340 !important;
+        border-color: #657588 !important;
+        color: #e1e9f3 !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-hide-button a,
@@ -1637,9 +1637,9 @@
 
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list li.rwm-save-button a,
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list li.rwm-save-button span {
-        background: #233326 !important;
-        border-color: #4f8c5b !important;
-        color: #dfffe6 !important;
+        background: #2c3340 !important;
+        border-color: #657588 !important;
+        color: #e1e9f3 !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list li.rwm-unsave-button a,
