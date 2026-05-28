@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.28
+// @version      0.3.29
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -158,13 +158,16 @@
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right {
+        display: flex !important;
+        align-items: center !important;
+        gap: 7px !important;
         top: 36px !important;
         background: #17202a !important;
         border-radius: 0 0 0 4px !important;
         color: #cbd5df !important;
-        padding: 8px 12px !important;
+        padding: 7px 12px !important;
         font-size: 16px !important;
-        line-height: 34px !important;
+        line-height: 1 !important;
         min-height: 42px !important;
         overflow: visible !important;
       }
@@ -172,40 +175,122 @@
       html.${SCRIPT_CLASS} #header-bottom-right .user,
       html.${SCRIPT_CLASS} #header-bottom-right .user a,
       html.${SCRIPT_CLASS} #header-bottom-right .userkarma,
-      html.${SCRIPT_CLASS} #header-bottom-right .separator,
       html.${SCRIPT_CLASS} #header-bottom-right .pref-lang,
       html.${SCRIPT_CLASS} #header-bottom-right .logout {
         font-size: 16px !important;
-        line-height: 34px !important;
+        line-height: 1 !important;
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-right .separator {
+        display: none !important;
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-right .user,
+      html.${SCRIPT_CLASS} #header-bottom-right #mail,
+      html.${SCRIPT_CLASS} #header-bottom-right .mail,
+      html.${SCRIPT_CLASS} #header-bottom-right .pref-lang,
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/prefs"],
+      html.${SCRIPT_CLASS} #header-bottom-right .logout,
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/logout"] {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        min-height: 34px !important;
+        margin: 0 !important;
+        padding: 0 10px !important;
+        border: 1px solid #3d4d5e !important;
+        border-radius: 8px !important;
+        background: #202a35 !important;
+        color: #dce7f3 !important;
+        font-weight: 900 !important;
+        text-decoration: none !important;
+        white-space: nowrap !important;
+        box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset !important;
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-right .user {
+        position: relative !important;
+        gap: 4px !important;
+        border-color: #4d6c8f !important;
+        background: #20384f !important;
+        color: #e5f3ff !important;
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-right .user a {
+        color: inherit !important;
+        font-weight: 900 !important;
+        text-decoration: none !important;
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-right .userkarma {
+        color: #9fb4c9 !important;
+        font-weight: 800 !important;
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-right .user.rwm-user-menu-open {
+        border-color: #73afe4 !important;
+        background: #28496c !important;
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-right .rwm-user-menu {
+        position: absolute !important;
+        top: calc(100% + 8px) !important;
+        left: 0 !important;
+        z-index: 10000 !important;
+        display: none !important;
+        min-width: 178px !important;
+        padding: 7px !important;
+        border: 1px solid #42576c !important;
+        border-radius: 9px !important;
+        background: #111820 !important;
+        box-shadow: 0 14px 32px rgba(0, 0, 0, 0.42) !important;
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-right .user.rwm-user-menu-open .rwm-user-menu {
+        display: grid !important;
+        gap: 5px !important;
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-right .rwm-user-menu a {
+        display: flex !important;
+        align-items: center !important;
+        min-height: 30px !important;
+        padding: 0 9px !important;
+        border: 1px solid #304253 !important;
+        border-radius: 7px !important;
+        background: #1c2631 !important;
+        color: #dce7f3 !important;
+        font-size: 13px !important;
+        font-weight: 900 !important;
+        line-height: 1 !important;
+        text-decoration: none !important;
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-right .rwm-user-menu a:hover,
+      html.${SCRIPT_CLASS} #header-bottom-right .rwm-user-menu a:focus-visible {
+        background: #26394c !important;
+        border-color: #5d7a99 !important;
+        color: #ffffff !important;
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right #mail,
       html.${SCRIPT_CLASS} #header-bottom-right .mail,
       html.${SCRIPT_CLASS} #header-bottom-right .pref-lang,
-      html.${SCRIPT_CLASS} #header-bottom-right .logout {
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/prefs"],
+      html.${SCRIPT_CLASS} #header-bottom-right .logout,
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/logout"] {
         vertical-align: middle !important;
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right #mail,
       html.${SCRIPT_CLASS} #header-bottom-right .mail {
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        min-width: 62px !important;
-        height: 34px !important;
-        padding: 0 8px !important;
-        margin: 0 8px 0 12px !important;
-        border-radius: 4px !important;
-        background: rgba(244, 189, 82, 0.1) !important;
-        border: 0 !important;
-        color: #f4bd52 !important;
-        font-size: 17px !important;
-        font-weight: 900 !important;
-        line-height: 34px !important;
-        text-decoration: none !important;
+        min-width: 74px !important;
+        background: #f4bd52 !important;
+        border-color: #ffd989 !important;
+        color: #14100a !important;
+        font-size: 15px !important;
         overflow: visible !important;
         text-indent: 0 !important;
-        white-space: nowrap !important;
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right #mail.nohavemail,
@@ -217,12 +302,13 @@
 
       html.${SCRIPT_CLASS} #header-bottom-right #mail:before,
       html.${SCRIPT_CLASS} #header-bottom-right .mail:before {
-        content: "\\2709" !important;
-        display: inline-block !important;
+        content: "" !important;
+        width: 17px !important;
+        height: 17px !important;
         margin-right: 6px !important;
-        color: #f4bd52 !important;
-        font-size: 20px !important;
-        line-height: 1 !important;
+        background: currentColor !important;
+        -webkit-mask: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 5h18v14H3V5Zm2.4 2 6.6 5.1L18.6 7H5.4ZM5 9.1V17h14V9.1l-7 5.4-7-5.4Z'/%3E%3C/svg%3E") !important;
+        mask: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 5h18v14H3V5Zm2.4 2 6.6 5.1L18.6 7H5.4ZM5 9.1V17h14V9.1l-7 5.4-7-5.4Z'/%3E%3C/svg%3E") !important;
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right #mail {
@@ -233,9 +319,9 @@
 
       html.${SCRIPT_CLASS} #header-bottom-right #mail.havemail,
       html.${SCRIPT_CLASS} #header-bottom-right .mail.havemail {
-        background: transparent !important;
-        border-color: transparent !important;
-        color: #f4bd52 !important;
+        background: #f4bd52 !important;
+        border-color: #ffd989 !important;
+        color: #14100a !important;
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right #mail + .message-count,
@@ -267,23 +353,81 @@
         content: ")";
       }
 
-      html.${SCRIPT_CLASS} #header-bottom-right .pref-lang {
+      html.${SCRIPT_CLASS} #header-bottom-right .pref-lang,
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/prefs"] {
+        border-color: #665a86 !important;
+        background: #352d4a !important;
+        color: #dfd6ff !important;
         transform: none !important;
-        font-weight: 700 !important;
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-right .logout,
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/logout"] {
+        border-color: #6b4650 !important;
+        background: #3c2229 !important;
+        color: #ffdce4 !important;
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right #modmail,
       html.${SCRIPT_CLASS} #header-bottom-right .modmail,
       html.${SCRIPT_CLASS} #header-bottom-right .chat,
-      html.${SCRIPT_CLASS} #header-bottom-right .chat-link {
-        display: inline-block !important;
-        min-width: 18px !important;
-        min-height: 18px !important;
-        margin: 0 8px !important;
-        vertical-align: middle !important;
-        overflow: visible !important;
-        transform: scale(1.65);
-        transform-origin: center;
+      html.${SCRIPT_CLASS} #header-bottom-right .chat-link,
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/chat"] {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 34px !important;
+        height: 34px !important;
+        min-width: 34px !important;
+        min-height: 34px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 1px solid #42576c !important;
+        border-radius: 8px !important;
+        background: #1d2b38 !important;
+        color: #dce7f3 !important;
+        background-image: none !important;
+        overflow: hidden !important;
+        text-indent: -9999px !important;
+        font-size: 0 !important;
+        transform: none !important;
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-right #modmail:before,
+      html.${SCRIPT_CLASS} #header-bottom-right .modmail:before,
+      html.${SCRIPT_CLASS} #header-bottom-right .chat:before,
+      html.${SCRIPT_CLASS} #header-bottom-right .chat-link:before,
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/chat"]:before {
+        content: "" !important;
+        display: block !important;
+        width: 20px !important;
+        height: 20px !important;
+        background: currentColor !important;
+        -webkit-mask: center / contain no-repeat !important;
+        mask: center / contain no-repeat !important;
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-right #modmail:before,
+      html.${SCRIPT_CLASS} #header-bottom-right .modmail:before {
+        -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 22a2.7 2.7 0 0 0 2.6-2h-5.2A2.7 2.7 0 0 0 12 22Zm7-6v-5a7 7 0 0 0-14 0v5l-2 2v1h18v-1l-2-2Zm-2 1H7v-6a5 5 0 0 1 10 0v6Z'/%3E%3C/svg%3E") !important;
+        mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 22a2.7 2.7 0 0 0 2.6-2h-5.2A2.7 2.7 0 0 0 12 22Zm7-6v-5a7 7 0 0 0-14 0v5l-2 2v1h18v-1l-2-2Zm-2 1H7v-6a5 5 0 0 1 10 0v6Z'/%3E%3C/svg%3E") !important;
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-right .chat:before,
+      html.${SCRIPT_CLASS} #header-bottom-right .chat-link:before,
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/chat"]:before {
+        -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 4h16v11H8.4L4 19.2V4Zm2 2v8.5l1.6-1.5H18V6H6Z'/%3E%3C/svg%3E") !important;
+        mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 4h16v11H8.4L4 19.2V4Zm2 2v8.5l1.6-1.5H18V6H6Z'/%3E%3C/svg%3E") !important;
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-right #modmail:hover,
+      html.${SCRIPT_CLASS} #header-bottom-right .modmail:hover,
+      html.${SCRIPT_CLASS} #header-bottom-right .chat:hover,
+      html.${SCRIPT_CLASS} #header-bottom-right .chat-link:hover,
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/chat"]:hover {
+        background: #26394c !important;
+        border-color: #5d7a99 !important;
+        color: #ffffff !important;
       }
 
       html.${SCRIPT_CLASS} .tabmenu {
@@ -361,6 +505,62 @@
         background: #243241 !important;
         border-color: #3f5267 !important;
         color: #f1f6fb !important;
+      }
+
+      html.${SCRIPT_CLASS} :is(
+        button,
+        .tabmenu li a,
+        #header-bottom-right .user,
+        #header-bottom-right #mail,
+        #header-bottom-right .mail,
+        #header-bottom-right .pref-lang,
+        #header-bottom-right a[href*="/prefs"],
+        #header-bottom-right .logout,
+        #header-bottom-right a[href*="/logout"],
+        #header-bottom-right #modmail,
+        #header-bottom-right .modmail,
+        #header-bottom-right .chat,
+        #header-bottom-right .chat-link,
+        #header-bottom-right a[href*="/chat"],
+        .thing.link .flat-list.buttons li a,
+        .thing.link .flat-list.buttons li span.option,
+        .thing.link .flat-list.buttons li form.toggle button,
+        .thing.link .arrow,
+        .comments-page .thing.comment .flat-list a,
+        .comments-page .thing.comment .flat-list span,
+        .comments-page .thing.comment .arrow,
+        .usertext.cloneable .usertext-buttons input,
+        .usertext.cloneable .usertext-buttons button,
+        .usertext.cloneable .usertext-buttons a
+      ):hover,
+      html.${SCRIPT_CLASS} :is(
+        button,
+        .tabmenu li a,
+        #header-bottom-right .user,
+        #header-bottom-right #mail,
+        #header-bottom-right .mail,
+        #header-bottom-right .pref-lang,
+        #header-bottom-right a[href*="/prefs"],
+        #header-bottom-right .logout,
+        #header-bottom-right a[href*="/logout"],
+        #header-bottom-right #modmail,
+        #header-bottom-right .modmail,
+        #header-bottom-right .chat,
+        #header-bottom-right .chat-link,
+        #header-bottom-right a[href*="/chat"],
+        .thing.link .flat-list.buttons li a,
+        .thing.link .flat-list.buttons li span.option,
+        .thing.link .flat-list.buttons li form.toggle button,
+        .thing.link .arrow,
+        .comments-page .thing.comment .flat-list a,
+        .comments-page .thing.comment .flat-list span,
+        .comments-page .thing.comment .arrow,
+        .usertext.cloneable .usertext-buttons input,
+        .usertext.cloneable .usertext-buttons button,
+        .usertext.cloneable .usertext-buttons a
+      ):focus-visible {
+        filter: saturate(1.25) brightness(1.12) !important;
+        box-shadow: 0 0 16px rgba(70, 162, 255, 0.34), 0 1px 0 rgba(255, 255, 255, 0.05) inset !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .content {
@@ -557,6 +757,54 @@
         background: #1f5639 !important;
         border-color: #66d992 !important;
         color: #ffffff !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-share-button a,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-share-button span.option,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-share-button form.toggle button {
+        background: #253146 !important;
+        border-color: #506a9d !important;
+        color: #dce8ff !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-save-button a,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-save-button span.option,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-save-button form.toggle button {
+        background: #233326 !important;
+        border-color: #4f8c5b !important;
+        color: #dfffe6 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-hide-button a,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-hide-button span.option,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-hide-button form.toggle button {
+        background: #332e22 !important;
+        border-color: #8e7441 !important;
+        color: #ffe7b2 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-report-button a,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-report-button span.option,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-report-button form.toggle button {
+        background: #3a2228 !important;
+        border-color: #a45666 !important;
+        color: #ffdbe3 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-crosspost-button a,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-crosspost-button span.option,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-crosspost-button form.toggle button {
+        background: #2d2842 !important;
+        border-color: #6f60ad !important;
+        color: #e9e1ff !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li:is(.rwm-share-button, .rwm-save-button, .rwm-hide-button, .rwm-report-button, .rwm-crosspost-button, .rwm-unsave-button) a:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li:is(.rwm-share-button, .rwm-save-button, .rwm-hide-button, .rwm-report-button, .rwm-crosspost-button, .rwm-unsave-button) span.option:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li:is(.rwm-share-button, .rwm-save-button, .rwm-hide-button, .rwm-report-button, .rwm-crosspost-button, .rwm-unsave-button) form.toggle button:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li:is(.rwm-share-button, .rwm-save-button, .rwm-hide-button, .rwm-report-button, .rwm-crosspost-button, .rwm-unsave-button) a:focus-visible,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li:is(.rwm-share-button, .rwm-save-button, .rwm-hide-button, .rwm-report-button, .rwm-crosspost-button, .rwm-unsave-button) form.toggle button:focus-visible {
+        box-shadow: 0 0 16px color-mix(in srgb, currentColor, transparent 58%), 0 1px 0 rgba(255, 255, 255, 0.05) inset !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons form.toggle,
@@ -1048,7 +1296,7 @@
         --rwm-rail: #3a536a;
         max-width: 1280px !important;
         margin: 10px 0 !important;
-        padding: 12px 14px 12px 24px !important;
+        padding: 12px 14px 12px 30px !important;
         border: 1px solid #2c3a47 !important;
         border-radius: 8px !important;
         background: linear-gradient(180deg, #171e26 0%, #141a21 100%) !important;
@@ -1133,7 +1381,8 @@
 
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .midcol {
         width: 42px !important;
-        margin-right: 16px !important;
+        margin-left: 16px !important;
+        margin-right: 14px !important;
         overflow: visible !important;
         position: relative !important;
         z-index: 5 !important;
@@ -1343,6 +1592,61 @@
         background: #2a3948 !important;
         border-color: #5d7a99 !important;
         color: #ffffff !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list li.rwm-permalink-button a,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list li.rwm-permalink-button span {
+        background: #253146 !important;
+        border-color: #506a9d !important;
+        color: #dce8ff !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list li.rwm-embed-button a,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list li.rwm-embed-button span {
+        background: #2c3340 !important;
+        border-color: #657588 !important;
+        color: #e1e9f3 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list li.rwm-save-button a,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list li.rwm-save-button span {
+        background: #233326 !important;
+        border-color: #4f8c5b !important;
+        color: #dfffe6 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list li.rwm-unsave-button a,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list li.rwm-unsave-button span {
+        background: #173d2a !important;
+        border-color: #3fa86d !important;
+        color: #dbffe9 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list li.rwm-parent-button a,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list li.rwm-parent-button span {
+        background: #332e22 !important;
+        border-color: #8e7441 !important;
+        color: #ffe7b2 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list li.rwm-report-button a,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list li.rwm-report-button span {
+        background: #3a2228 !important;
+        border-color: #a45666 !important;
+        color: #ffdbe3 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list li.rwm-reply-button a,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list li.rwm-reply-button span {
+        background: #2d2842 !important;
+        border-color: #6f60ad !important;
+        color: #e9e1ff !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list li:is(.rwm-permalink-button, .rwm-embed-button, .rwm-save-button, .rwm-unsave-button, .rwm-parent-button, .rwm-report-button, .rwm-reply-button) a:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list li:is(.rwm-permalink-button, .rwm-embed-button, .rwm-save-button, .rwm-unsave-button, .rwm-parent-button, .rwm-report-button, .rwm-reply-button) span:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list li:is(.rwm-permalink-button, .rwm-embed-button, .rwm-save-button, .rwm-unsave-button, .rwm-parent-button, .rwm-report-button, .rwm-reply-button) a:focus-visible {
+        box-shadow: 0 0 16px color-mix(in srgb, currentColor, transparent 58%), 0 1px 0 rgba(255, 255, 255, 0.05) inset !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .expand {
@@ -3151,7 +3455,21 @@
   }
 
   function refreshActionButtonStates(root = document) {
-    root.querySelectorAll(".thing.link .flat-list.buttons li").forEach((item) => {
+    const buttonClassMap = new Map([
+      ["comments", "rwm-comments-button"],
+      ["share", "rwm-share-button"],
+      ["save", "rwm-save-button"],
+      ["unsave", "rwm-unsave-button"],
+      ["hide", "rwm-hide-button"],
+      ["report", "rwm-report-button"],
+      ["crosspost", "rwm-crosspost-button"],
+      ["permalink", "rwm-permalink-button"],
+      ["embed", "rwm-embed-button"],
+      ["parent", "rwm-parent-button"],
+      ["reply", "rwm-reply-button"],
+    ]);
+    const buttonClasses = Array.from(buttonClassMap.values());
+    const classify = (item) => {
       const visibleLabels = Array.from(item.querySelectorAll("a, button, span.option"))
         .filter((node) => {
           const style = window.getComputedStyle(node);
@@ -3160,7 +3478,18 @@
         .map((node) => (node.innerText || node.textContent || "").trim().toLowerCase())
         .filter(Boolean);
       const label = visibleLabels.join(" ") || (item.innerText || item.textContent || "").trim().toLowerCase();
-      item.classList.toggle("rwm-unsave-button", label === "unsave");
+      item.classList.remove(...buttonClasses);
+      for (const [needle, className] of buttonClassMap) {
+        if (label === needle || label.startsWith(`${needle} `)) {
+          item.classList.add(className);
+          break;
+        }
+      }
+    };
+
+    root.querySelectorAll(".thing.link .flat-list.buttons li").forEach(classify);
+    root.querySelectorAll(".comments-page .thing.comment .flat-list li, .rwm-comments-body .comment .flat-list li").forEach((item) => {
+      classify(item);
     });
   }
 
@@ -3173,6 +3502,60 @@
     const label = rawCount ? `Mail (${rawCount})` : "Mail";
     if (mail.textContent !== label) mail.textContent = label;
     if (countEl) countEl.hidden = true;
+  }
+
+  function setupUserHeaderMenu() {
+    const header = document.querySelector("#header-bottom-right");
+    header?.childNodes.forEach((node) => {
+      if (node.nodeType === Node.TEXT_NODE && /^\s*\|\s*$/.test(node.textContent || "")) node.textContent = "";
+    });
+
+    const user = document.querySelector("#header-bottom-right .user");
+    const userLink = user?.querySelector("a[href*='/user/']");
+    if (!user || !userLink) return;
+
+    const username = (userLink.textContent || "").trim();
+    if (!username) return;
+
+    user.classList.add("rwm-user-pill");
+    if (!user.querySelector(".rwm-user-menu")) {
+      const encoded = encodeURIComponent(username);
+      const menu = document.createElement("div");
+      menu.className = "rwm-user-menu";
+      menu.setAttribute("role", "menu");
+      menu.innerHTML = [
+        ["Saved", `https://old.reddit.com/user/${encoded}/saved/`],
+        ["Submitted", `https://old.reddit.com/user/${encoded}/submitted/`],
+        ["Upvoted", `https://old.reddit.com/user/${encoded}/upvoted/`],
+        ["Downvoted", `https://old.reddit.com/user/${encoded}/downvoted/`],
+      ].map(([label, href]) => `<a role="menuitem" href="${href}">${label}</a>`).join("");
+      user.appendChild(menu);
+    }
+
+    if (userLink.dataset.rwmMenuReady === "1") return;
+    userLink.dataset.rwmMenuReady = "1";
+    userLink.setAttribute("aria-haspopup", "menu");
+    userLink.setAttribute("aria-expanded", "false");
+
+    const close = () => {
+      user.classList.remove("rwm-user-menu-open");
+      userLink.setAttribute("aria-expanded", "false");
+    };
+
+    userLink.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const isOpen = user.classList.toggle("rwm-user-menu-open");
+      userLink.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!user.contains(event.target)) close();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") close();
+    });
   }
 
   function restoreHiddenPostFromUndo(control) {
@@ -3207,10 +3590,12 @@
     addStyles();
     registerMenu();
     rewriteMailLabel();
+    setupUserHeaderMenu();
 
     if (document.body) scan();
     else document.addEventListener("DOMContentLoaded", () => {
       rewriteMailLabel();
+      setupUserHeaderMenu();
       scan();
     }, { once: true });
 
@@ -3230,12 +3615,16 @@
         }
       }
       if (needsActionRefresh) refreshActionButtonStates();
-      if (needsMailRefresh) rewriteMailLabel();
+      if (needsMailRefresh) {
+        rewriteMailLabel();
+        setupUserHeaderMenu();
+      }
     });
 
     document.addEventListener("DOMContentLoaded", () => {
       observer.observe(document.body, { childList: true, characterData: true, subtree: true });
       rewriteMailLabel();
+      setupUserHeaderMenu();
       scan();
     }, { once: true });
 
