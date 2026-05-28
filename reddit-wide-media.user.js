@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.53
+// @version      0.3.54
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -775,6 +775,38 @@
         font-weight: inherit !important;
         line-height: inherit !important;
         text-decoration: none !important;
+      }
+
+      @media (max-width: 1599px) {
+        html.${SCRIPT_CLASS} .tabmenu li[data-rwm-tab="controversial"],
+        html.${SCRIPT_CLASS} .tabmenu li[data-rwm-tab="wiki"] {
+          display: none !important;
+        }
+        html.${SCRIPT_CLASS} #header-bottom-left .pagename {
+          display: none !important;
+        }
+        html.${SCRIPT_CLASS} #header-bottom-left {
+          gap: 7px !important;
+        }
+      }
+
+      @media (max-width: 1349px) {
+        html.${SCRIPT_CLASS} .tabmenu li[data-rwm-tab="top"],
+        html.${SCRIPT_CLASS} .tabmenu li[data-rwm-tab="rising"] {
+          display: none !important;
+        }
+        html.${SCRIPT_CLASS} #header .srdrop:not(.drop-choices) .selected > span {
+          display: none !important;
+        }
+      }
+
+      @media (max-width: 1099px) {
+        html.${SCRIPT_CLASS} .tabmenu li[data-rwm-tab="new"] {
+          display: none !important;
+        }
+        html.${SCRIPT_CLASS} #header .srdrop:not(.drop-choices) {
+          display: none !important;
+        }
       }
 
       html.${SCRIPT_CLASS} a {
@@ -4782,6 +4814,13 @@
     });
   }
 
+  function markTabmenuItems() {
+    document.querySelectorAll(".tabmenu li").forEach((li) => {
+      const text = (li.querySelector("a")?.textContent || "").trim().toLowerCase();
+      if (text) li.setAttribute("data-rwm-tab", text);
+    });
+  }
+
   function setupSubredditHeaderBar() {
     const header = document.querySelector("#sr-header-area");
     if (!header) return;
@@ -4945,6 +4984,7 @@
     setupSubredditHeaderBar();
     setupSubredditDropdownSearch();
     setupSubredditPageTools();
+    markTabmenuItems();
 
     if (document.body) scan();
     else document.addEventListener("DOMContentLoaded", () => {
@@ -4953,6 +4993,7 @@
       setupSubredditHeaderBar();
       setupSubredditDropdownSearch();
       setupSubredditPageTools();
+      markTabmenuItems();
       scan();
     }, { once: true });
 
