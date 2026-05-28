@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.39
+// @version      0.3.40
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -938,6 +938,7 @@
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-nsfw-post {
+        position: relative !important;
         border-color: rgba(224, 85, 102, 0.58) !important;
         background:
           linear-gradient(90deg, rgba(120, 28, 38, 0.32) 0, rgba(26, 32, 39, 0) 96px),
@@ -946,6 +947,30 @@
           0 0 0 1px rgba(224, 85, 102, 0.24) inset,
           0 0 24px rgba(224, 85, 102, 0.16),
           0 10px 26px rgba(0, 0, 0, 0.24) !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-nsfw-post:before {
+        content: "NSFW" !important;
+        position: absolute !important;
+        top: 12px !important;
+        right: 14px !important;
+        z-index: 3 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        height: 26px !important;
+        padding: 0 10px !important;
+        border: 1px solid rgba(255, 151, 166, 0.64) !important;
+        border-radius: 999px !important;
+        background: rgba(79, 20, 29, 0.88) !important;
+        color: #ffd7dd !important;
+        font-size: 12px !important;
+        font-weight: 900 !important;
+        letter-spacing: 0.08em !important;
+        line-height: 1 !important;
+        pointer-events: none !important;
+        text-transform: uppercase !important;
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.24) !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link.hidden {
@@ -1379,21 +1404,28 @@
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-nsfw-post .thumbnail,
       html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-nsfw-post .thumbnail.nsfw {
-        background: #2c1217 !important;
+        background-color: #202833 !important;
         border-color: #d75a6d !important;
         color: #ffd7dd !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-nsfw-post .thumbnail.nsfw:before,
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-nsfw-post .thumbnail.nsfw:after {
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-nsfw-post .thumbnail img {
+        display: block !important;
+        width: 100% !important;
+        height: 100% !important;
+        max-width: none !important;
+        max-height: none !important;
+        object-fit: cover !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-nsfw-post .thumbnail.nsfw:not(.rwm-has-thumb):before,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-nsfw-post .thumbnail.nsfw:not(.rwm-has-thumb):after {
         content: none !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-nsfw-post .thumbnail.nsfw {
-        font-size: 12px !important;
-        font-weight: 900 !important;
-        letter-spacing: 0.08em !important;
-        text-transform: uppercase !important;
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-nsfw-post .rwm-flair-nsfw,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-nsfw-post .nsfw-stamp {
+        display: none !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thumbnail img {
@@ -1687,6 +1719,11 @@
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .child .thing,
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .child:before {
         border-left: 0 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment.rwm-depth-capped {
+        margin-left: -38px !important;
+        max-width: calc(100% + 38px) !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment.rwm-depth-0 { --rwm-rail: #46a2ff; border-color: color-mix(in srgb, #46a2ff, #2c3a47 74%) !important; }
@@ -3097,6 +3134,11 @@
         border-left: 0 !important;
       }
 
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-capped {
+        margin-left: -48px !important;
+        max-width: calc(100% + 48px) !important;
+      }
+
       html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-0 { --rwm-rail: #46a2ff; border-color: color-mix(in srgb, #46a2ff, #2c3a47 74%) !important; }
       html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-1 { --rwm-rail: #56d68c; border-color: color-mix(in srgb, #56d68c, #2c3a47 74%) !important; }
       html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-2 { --rwm-rail: #f0c64f; border-color: color-mix(in srgb, #f0c64f, #2c3a47 74%) !important; }
@@ -3903,13 +3945,17 @@
 
   function enhanceCommentTree(root) {
     const railColors = ["#46a2ff", "#56d68c", "#f0c64f", "#ef8a4c", "#e86fa2", "#a98cff", "#63d5d7"];
+    const depthClasses = railColors.map((_, index) => `rwm-depth-${index}`);
 
     root.querySelectorAll(".comment").forEach((comment) => {
       const parent = comment.parentElement?.closest(".comment");
-      const depth = Math.min(6, parent ? Number(parent.dataset.rwmDepth || 0) + 1 : 0);
-      comment.dataset.rwmDepth = String(depth);
-      comment.classList.add(`rwm-depth-${depth}`);
-      comment.style.setProperty("--rwm-rail", railColors[depth]);
+      const actualDepth = parent ? Number(parent.dataset.rwmDepth || 0) + 1 : 0;
+      const displayDepth = actualDepth % railColors.length;
+      comment.dataset.rwmDepth = String(actualDepth);
+      comment.classList.remove(...depthClasses, "rwm-depth-capped");
+      comment.classList.add(`rwm-depth-${displayDepth}`);
+      comment.classList.toggle("rwm-depth-capped", actualDepth >= 5);
+      comment.style.setProperty("--rwm-rail", railColors[displayDepth]);
 
       const entry = comment.querySelector(":scope > .entry");
       if (!entry) return;
@@ -3927,7 +3973,7 @@
       rail.className = "rwm-comment-rail";
       rail.setAttribute("role", "button");
       rail.tabIndex = 0;
-      rail.style.setProperty("--rwm-rail", railColors[depth]);
+      rail.style.setProperty("--rwm-rail", railColors[displayDepth]);
       rail.title = "Collapse replies";
       rail.setAttribute("aria-label", "Collapse replies");
 
@@ -4165,12 +4211,44 @@
     return items;
   }
 
+  function thumbnailUrlFromPostData(post) {
+    if (!post) return "";
+    const candidates = [
+      post.thumbnail,
+      post.preview?.images?.[0]?.source?.url,
+      post.preview?.images?.[0]?.resolutions?.at(-1)?.url,
+    ];
+    const url = candidates.find((candidate) => /^https?:\/\//i.test(candidate || ""));
+    return url ? url.replace(/&amp;/g, "&") : "";
+  }
+
+  function applyPostThumbnail(thing, post) {
+    const src = thumbnailUrlFromPostData(post);
+    if (!src) return;
+
+    const thumbnail = thing.querySelector(".thumbnail");
+    if (!thumbnail) return;
+
+    thumbnail.classList.add("rwm-has-thumb");
+    thumbnail.textContent = "";
+    thumbnail.style.removeProperty("background-image");
+
+    const existing = thumbnail.querySelector("img");
+    const img = existing || document.createElement("img");
+    img.loading = "lazy";
+    img.decoding = "async";
+    img.src = src;
+    img.alt = post?.title || "";
+    if (!existing) thumbnail.appendChild(img);
+  }
+
   async function renderFetchedMedia(thing, container) {
     container.hidden = false;
     container.appendChild(makeStatus("Loading media..."));
 
     try {
       const post = await fetchPostJson(thing);
+      applyPostThumbnail(thing, post);
       const items = mediaItemsFromPostData(post);
       container.textContent = "";
 
@@ -4208,7 +4286,7 @@
   function decorateFlairs(thing) {
     thing.querySelectorAll(".linkflairlabel").forEach((label) => {
       const text = (label.textContent || label.getAttribute("title") || "").trim().toLowerCase();
-      label.classList.remove("rwm-flair-question", "rwm-flair-fun", "rwm-flair-news", "rwm-flair-warning");
+      label.classList.remove("rwm-flair-question", "rwm-flair-fun", "rwm-flair-news", "rwm-flair-warning", "rwm-flair-nsfw");
 
       if (/question|help|support|advice/.test(text)) {
         label.classList.add("rwm-flair-question");
@@ -4218,6 +4296,7 @@
         label.classList.add("rwm-flair-news");
       } else if (/nsfw|spoiler|warning|serious/.test(text)) {
         label.classList.add("rwm-flair-warning");
+        if (/^nsfw$|not safe/i.test(text)) label.classList.add("rwm-flair-nsfw");
       }
     });
   }
