@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.43
+// @version      0.3.44
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -2292,13 +2292,17 @@
 
       html.${SCRIPT_CLASS}.rwm-wide .message-page .message .flat-list form.toggle .option:not(.active),
       html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .flat-list form.toggle .option:not(.active),
-      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .flat-list form.toggle .option:not(.active) {
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .flat-list form.toggle .option:not(.active),
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list form.toggle .option:not(.active),
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .flat-list form.toggle .option:not(.active) {
         display: none !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .message-page .message .flat-list form.toggle .option.active,
       html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .flat-list form.toggle .option.active,
-      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .flat-list form.toggle .option.active {
+      html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .flat-list form.toggle .option.active,
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list form.toggle .option.active,
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment .flat-list form.toggle .option.active {
         display: inline-flex !important;
         align-items: center !important;
         gap: 4px !important;
@@ -2479,9 +2483,6 @@
         display: none !important;
       }
 
-      html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media .rwm-preserve-expando > *:not(.usertext-body):not(.usertext) {
-        display: none !important;
-      }
 
       html.${SCRIPT_CLASS} .expando-button:before {
         content: "";
