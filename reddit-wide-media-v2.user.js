@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.45
+// @version      0.3.46
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -2483,9 +2483,6 @@
         display: none !important;
       }
 
-      html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media .rwm-preserve-expando > :not(.usertext-body):not(.usertext):not(:has(.usertext-body)) {
-        display: none !important;
-      }
 
 
       html.${SCRIPT_CLASS} .expando-button:before {
@@ -4515,18 +4512,28 @@
         node.classList.add("rwm-preserve-expando");
         node.hidden = false;
         node.style.removeProperty("display");
-        // Hide native gallery/media children within the preserved expando;
-        // keep only the usertext wrapper and its descendants.
-        Array.from(node.children).forEach((child) => {
+
+        const hideNonText = (child) => {
           if (
-            !child.classList.contains("usertext-body") &&
-            !child.classList.contains("usertext") &&
-            !child.querySelector(".usertext-body, .md")
-          ) {
-            child.hidden = true;
-            child.style.setProperty("display", "none", "important");
-          }
+            child.classList.contains("usertext-body") ||
+            child.classList.contains("usertext") ||
+            child.querySelector(".usertext-body, .md")
+          ) return;
+          child.hidden = true;
+          child.style.setProperty("display", "none", "important");
+        };
+
+        // Hide any existing non-text children now.
+        Array.from(node.children).forEach(hideNonText);
+
+        // Watch for children injected later (old Reddit loads gallery async).
+        const obs = new MutationObserver((records) => {
+          records.forEach((r) => r.addedNodes.forEach((n) => {
+            if (n.nodeType === 1) hideNonText(n);
+          }));
         });
+        obs.observe(node, { childList: true });
+
         return;
       }
 
