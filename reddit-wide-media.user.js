@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.33
+// @version      0.3.34
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -299,7 +299,8 @@
 
       html.${SCRIPT_CLASS} #header-bottom-right #mail,
       html.${SCRIPT_CLASS} #header-bottom-right .mail {
-        min-width: 74px !important;
+        min-width: 112px !important;
+        padding: 0 12px !important;
         background: #f4bd52 !important;
         border-color: #ffd989 !important;
         color: #14100a !important;
@@ -320,8 +321,8 @@
         content: "" !important;
         display: inline-block !important;
         flex: 0 0 auto !important;
-        width: 24px !important;
-        height: 24px !important;
+        width: 22px !important;
+        height: 22px !important;
         margin-right: 8px !important;
         background: currentColor !important;
         -webkit-mask: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 5h18v14H3V5Zm2.4 2 6.6 5.1L18.6 7H5.4ZM5 9.1V17h14V9.1l-7 5.4-7-5.4Z'/%3E%3C/svg%3E") !important;
@@ -615,6 +616,10 @@
         background: transparent !important;
       }
 
+      html.${SCRIPT_CLASS}.rwm-wide :is(.listing-chooser, .listing-chooser-collapsed, .grippy, #listing-chooser, #listing-chooser-collapsed) {
+        display: none !important;
+      }
+
       html.${SCRIPT_CLASS}.rwm-wide .side,
       html.${SCRIPT_CLASS}.rwm-wide .side * {
         background-image: none !important;
@@ -867,6 +872,12 @@
         line-height: 1 !important;
         text-decoration: none !important;
         vertical-align: middle !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .subreddit:visited,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .subreddit:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .subreddit:focus-visible {
+        color: #14100a !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .fancy-toggle-button.subscribe-button,
@@ -2235,25 +2246,29 @@
         font-size: 14px !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .content {
+      html.${SCRIPT_CLASS}.rwm-subreddits-page .side {
+        display: none !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content {
         max-width: min(1680px, calc(100vw - 80px)) !important;
         margin: 0 auto !important;
         padding: 18px 22px 60px !important;
         box-sizing: border-box !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .content > h1,
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .content > .spacer > h1 {
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content > h1,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content > .spacer > h1 {
         color: #e3edf7 !important;
         font-size: 22px !important;
         font-weight: 900 !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit-search,
-      html.${SCRIPT_CLASS}.rwm-subreddits-page #sr-autocomplete-area,
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .searchpane,
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .search-result-listing,
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .raisedbox {
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit-search,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content #sr-autocomplete-area,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .searchpane,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .search-result-listing,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .raisedbox {
         background: #171d24 !important;
         border: 1px solid #334252 !important;
         border-radius: 8px !important;
@@ -2261,14 +2276,14 @@
         box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22) !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit-search,
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .searchpane {
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit-search,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .searchpane {
         margin: 0 0 12px !important;
         padding: 18px 22px !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit-search input[type="text"],
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .searchpane input[type="text"] {
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit-search input[type="text"],
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .searchpane input[type="text"] {
         min-width: min(520px, 70vw) !important;
         height: 36px !important;
         padding: 7px 11px !important;
@@ -2278,7 +2293,7 @@
         color: #e7edf4 !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .infobar {
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .infobar {
         margin: 12px 0 !important;
         padding: 10px 14px !important;
         border: 1px solid #6e5a22 !important;
@@ -2288,10 +2303,12 @@
         font-size: 14px !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .infobar button,
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .infobar .option,
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .infobar input[type="button"],
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .infobar input[type="submit"] {
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .infobar a,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .infobar button,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .infobar .option,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .infobar .subscribe-button,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .infobar input[type="button"],
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .infobar input[type="submit"] {
         appearance: none !important;
         display: inline-flex !important;
         align-items: center !important;
@@ -2306,7 +2323,7 @@
         line-height: 1 !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit {
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit {
         display: grid !important;
         grid-template-columns: minmax(0, 1fr) auto !important;
         grid-template-areas:
@@ -2325,12 +2342,12 @@
         box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18) !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit > * {
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit > * {
         min-width: 0 !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .fancy-toggle-button,
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .subscribe-button {
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit .fancy-toggle-button,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit .subscribe-button {
         grid-area: action !important;
         align-self: center !important;
         display: inline-flex !important;
@@ -2341,9 +2358,9 @@
         margin: 0 !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .fancy-toggle-button .option,
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .subscribe-button .option,
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .report {
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit .fancy-toggle-button .option,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit .subscribe-button .option,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit .report {
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -2360,35 +2377,35 @@
         box-sizing: border-box !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .fancy-toggle-button .add,
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .subscribe-button .add {
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit .fancy-toggle-button .add,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit .subscribe-button .add {
         background: #1e5a34 !important;
         border-color: #58d58d !important;
         color: #eafff2 !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .fancy-toggle-button .remove,
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .subscribe-button .remove {
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit .fancy-toggle-button .remove,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit .subscribe-button .remove {
         background: #5b2a35 !important;
         border-color: #e17386 !important;
         color: #ffecef !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .fancy-toggle-button .option:not(.active),
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .subscribe-button .option:not(.active) {
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit .fancy-toggle-button .option:not(.active),
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit .subscribe-button .option:not(.active) {
         display: none !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .fancy-toggle-button .option:hover,
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .subscribe-button .option:hover,
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .report:hover,
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .rwm-subreddit-tools button:hover {
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit .fancy-toggle-button .option:hover,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit .subscribe-button .option:hover,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit .report:hover,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .rwm-subreddit-tools button:hover {
         box-shadow: 0 0 16px color-mix(in srgb, currentColor, transparent 58%), 0 1px 0 rgba(255, 255, 255, 0.05) inset !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit a.title,
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .title a,
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit > a[href^="/r/"] {
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit a.title,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit .title a,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit > a[href^="/r/"] {
         grid-area: title !important;
         color: #8fc7ff !important;
         font-size: 16px !important;
@@ -2399,27 +2416,27 @@
         white-space: nowrap !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .usertext-body,
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .md,
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .description {
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit .usertext-body,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit .md,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit .description {
         display: none !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .tagline,
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .age,
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .users {
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit .tagline,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit .age,
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit .users {
         grid-area: meta !important;
         color: #9da8b5 !important;
         font-size: 12px !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .subreddit .report {
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit .report {
         grid-column: 1 !important;
         justify-self: start !important;
         margin-top: 2px !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .rwm-subreddit-tools {
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .rwm-subreddit-tools {
         display: flex !important;
         align-items: center !important;
         flex-wrap: wrap !important;
@@ -2433,26 +2450,26 @@
         box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18) !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .rwm-subreddit-tools button {
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .rwm-subreddit-tools button {
         min-height: 36px !important;
         padding: 0 13px !important;
         border-radius: 7px !important;
         font-weight: 850 !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .rwm-subreddit-tools .rwm-export-subs {
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .rwm-subreddit-tools .rwm-export-subs {
         background: #203f5f !important;
         border-color: #6aa8e6 !important;
         color: #e9f5ff !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .rwm-subreddit-tools .rwm-import-subs {
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .rwm-subreddit-tools .rwm-import-subs {
         background: #49346b !important;
         border-color: #a885e6 !important;
         color: #f3ebff !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-subreddits-page .rwm-subreddit-status {
+      html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .rwm-subreddit-status {
         color: #b8c4d0 !important;
         font-size: 13px !important;
       }
