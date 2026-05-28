@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.50
+// @version      0.3.51
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -157,12 +157,12 @@
       html.${SCRIPT_CLASS} #header .dropdown.srdrop:not(.drop-choices) {
         display: inline-flex !important;
         align-items: center !important;
-        height: 32px !important;
+        height: 30px !important;
         margin: 0 !important;
-        padding: 0 9px !important;
-        border: 1px solid #40566c !important;
+        padding: 0 12px !important;
+        border: 1px solid #35485a !important;
         border-radius: 8px !important;
-        background: #1d2b38 !important;
+        background: #1c2631 !important;
         color: #dce7f3 !important;
         font-size: 13px !important;
         font-weight: 900 !important;
@@ -732,17 +732,24 @@
 
       html.${SCRIPT_CLASS} .tabmenu li a,
       html.${SCRIPT_CLASS} .tabmenu li.selected a {
-        padding: 8px 14px !important;
-        background: #26313d !important;
-        border: 1px solid #3b4856 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        height: 30px !important;
+        padding: 0 12px !important;
+        border: 1px solid #35485a !important;
+        border-radius: 8px !important;
+        background: #1c2631 !important;
         color: #dce7f3 !important;
-        font-size: 15px !important;
-        font-weight: 700 !important;
-        line-height: 1.2 !important;
+        font-size: 13px !important;
+        font-weight: 900 !important;
+        line-height: 1 !important;
+        box-sizing: border-box !important;
       }
 
       html.${SCRIPT_CLASS} .tabmenu li.selected a {
-        background: #3b638a !important;
+        border-color: #5b86ad !important;
+        background: #254767 !important;
         color: #ffffff !important;
       }
 
