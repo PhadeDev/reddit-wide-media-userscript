@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.52
+// @version      0.3.53
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -4808,7 +4808,10 @@
 
     if (!existing) {
       const srdrop = header?.querySelector(".srdrop:not(.drop-choices), .dropdown.srdrop:not(.drop-choices)");
+      const dropChoices = header?.querySelector(".drop-choices.srdrop");
       if (bottomLeft) {
+        // Move dropdown list too so it isn't hidden inside .width-clip
+        if (dropChoices) bottomLeft.appendChild(dropChoices);
         // Prepend srdrop first so nav ends up before it: [nav][srdrop][...]
         if (srdrop) bottomLeft.prepend(srdrop);
         bottomLeft.prepend(nav);
