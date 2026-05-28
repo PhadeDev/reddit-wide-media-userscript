@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.27
+// @version      0.3.28
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -3175,6 +3175,31 @@
     if (countEl) countEl.hidden = true;
   }
 
+  function restoreHiddenPostFromUndo(control) {
+    const label = (control?.innerText || control?.textContent || control?.getAttribute?.("title") || "").trim().toLowerCase();
+    if (!/\b(undo|unhide)\b/.test(label)) return;
+
+    const hiddenPosts = [];
+    let node = control.closest(".spacer, .organic-listing, .linklisting, .content") || control.parentElement;
+
+    for (let depth = 0; node && depth < 4; depth += 1, node = node.parentElement) {
+      let previous = node.previousElementSibling;
+      for (let steps = 0; previous && steps < 6; steps += 1, previous = previous.previousElementSibling) {
+        if (previous.matches?.(".thing.link.hidden")) hiddenPosts.push(previous);
+        previous.querySelectorAll?.(".thing.link.hidden").forEach((thing) => hiddenPosts.push(thing));
+      }
+    }
+
+    if (!hiddenPosts.length) return;
+    window.setTimeout(() => {
+      hiddenPosts.forEach((thing) => {
+        thing.classList.remove("hidden");
+        thing.style.removeProperty("display");
+        scan(thing);
+      });
+    }, 350);
+  }
+
   function start() {
     document.documentElement.classList.add(SCRIPT_CLASS);
     if (settings.wideMode) document.documentElement.classList.add("rwm-wide");
@@ -3217,6 +3242,11 @@
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape") closeCommentsOverlay();
     });
+
+    document.addEventListener("click", (event) => {
+      const control = event.target?.closest?.("a, button");
+      if (control) restoreHiddenPostFromUndo(control);
+    }, true);
   }
 
   start();
