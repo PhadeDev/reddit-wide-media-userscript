@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.48
+// @version      0.3.49
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -135,25 +135,7 @@
       }
 
       html.${SCRIPT_CLASS} #sr-header-area {
-        display: flex !important;
-        align-items: center !important;
-        height: auto !important;
-        min-height: 42px !important;
-        background: #11151a !important;
-        border-bottom: 1px solid #303842 !important;
-        line-height: 1 !important;
-        overflow: visible !important;
-      }
-
-      html.${SCRIPT_CLASS} #sr-header-area .width-clip {
-        display: flex !important;
-        align-items: center !important;
-        gap: 8px !important;
-        width: 100% !important;
-        height: auto !important;
-        padding: 5px 10px !important;
-        box-sizing: border-box !important;
-        overflow: visible !important;
+        display: none !important;
       }
 
       html.${SCRIPT_CLASS} #sr-header-area .redesign-beta-optin,
@@ -163,8 +145,8 @@
         display: none !important;
       }
 
-      html.${SCRIPT_CLASS} #sr-header-area .srdrop:not(.drop-choices),
-      html.${SCRIPT_CLASS} #sr-header-area .dropdown.srdrop:not(.drop-choices) {
+      html.${SCRIPT_CLASS} #header .srdrop:not(.drop-choices),
+      html.${SCRIPT_CLASS} #header .dropdown.srdrop:not(.drop-choices) {
         display: inline-flex !important;
         align-items: center !important;
         height: 32px !important;
@@ -184,8 +166,8 @@
         cursor: pointer !important;
       }
 
-      html.${SCRIPT_CLASS} #sr-header-area .srdrop:not(.drop-choices) .selected,
-      html.${SCRIPT_CLASS} #sr-header-area .dropdown.srdrop:not(.drop-choices) .selected {
+      html.${SCRIPT_CLASS} #header .srdrop:not(.drop-choices) .selected,
+      html.${SCRIPT_CLASS} #header .dropdown.srdrop:not(.drop-choices) .selected {
         display: inline-flex !important;
         align-items: center !important;
         width: 100% !important;
@@ -198,8 +180,8 @@
         text-transform: none !important;
       }
 
-      html.${SCRIPT_CLASS} #sr-header-area .srdrop:not(.drop-choices) .selected:before,
-      html.${SCRIPT_CLASS} #sr-header-area .dropdown.srdrop:not(.drop-choices) .selected:before {
+      html.${SCRIPT_CLASS} #header .srdrop:not(.drop-choices) .selected:before,
+      html.${SCRIPT_CLASS} #header .dropdown.srdrop:not(.drop-choices) .selected:before {
         content: "" !important;
         display: inline-block !important;
         width: 16px !important;
@@ -209,8 +191,8 @@
         mask: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 5h7l2 2h7v12H4V5Zm2 4v8h12V9h-5.8l-2-2H6v2Z'/%3E%3C/svg%3E") !important;
       }
 
-      html.${SCRIPT_CLASS} #sr-header-area .srdrop:not(.drop-choices) .selected:after,
-      html.${SCRIPT_CLASS} #sr-header-area .dropdown.srdrop:not(.drop-choices) .selected:after {
+      html.${SCRIPT_CLASS} #header .srdrop:not(.drop-choices) .selected:after,
+      html.${SCRIPT_CLASS} #header .dropdown.srdrop:not(.drop-choices) .selected:after {
         content: "▼" !important;
         display: inline-flex !important;
         align-items: center !important;
@@ -313,14 +295,14 @@
         color: #ffffff !important;
       }
 
-      html.${SCRIPT_CLASS} #sr-header-area .rwm-sr-nav {
+      html.${SCRIPT_CLASS} #header .rwm-sr-nav {
         display: inline-flex !important;
         align-items: center !important;
         gap: 6px !important;
-        margin-left: auto !important;
+        margin-left: 0 !important;
       }
 
-      html.${SCRIPT_CLASS} #sr-header-area .rwm-sr-nav a {
+      html.${SCRIPT_CLASS} #header .rwm-sr-nav a {
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -338,20 +320,20 @@
         box-sizing: border-box !important;
       }
 
-      html.${SCRIPT_CLASS} #sr-header-area .rwm-sr-nav a.rwm-active {
+      html.${SCRIPT_CLASS} #header .rwm-sr-nav a.rwm-active {
         border-color: #5b86ad !important;
         background: #254767 !important;
         color: #ffffff !important;
       }
 
-      html.${SCRIPT_CLASS} #sr-header-area .rwm-sr-nav a.rwm-sr-manage {
+      html.${SCRIPT_CLASS} #header .rwm-sr-nav a.rwm-sr-manage {
         border-color: #5d507a !important;
         background: #342d49 !important;
         color: #eadfff !important;
       }
 
-      html.${SCRIPT_CLASS} #sr-header-area .rwm-sr-nav a:hover,
-      html.${SCRIPT_CLASS} #sr-header-area .rwm-sr-nav a:focus-visible {
+      html.${SCRIPT_CLASS} #header .rwm-sr-nav a:hover,
+      html.${SCRIPT_CLASS} #header .rwm-sr-nav a:focus-visible {
         filter: saturate(1.2) brightness(1.12) !important;
         box-shadow: 0 0 14px rgba(70, 162, 255, 0.28), 0 1px 0 rgba(255, 255, 255, 0.05) inset !important;
       }
@@ -366,12 +348,12 @@
 
       html.${SCRIPT_CLASS} #header-bottom-left {
         position: relative !important;
-        min-height: 78px !important;
+        min-height: 52px !important;
         background: #18202a !important;
         display: flex !important;
         align-items: center !important;
-        gap: 12px !important;
-        padding: 12px 0 10px 14px !important;
+        gap: 10px !important;
+        padding: 5px 0 5px 14px !important;
         box-sizing: border-box !important;
       }
 
@@ -384,14 +366,14 @@
         display: flex !important;
         align-items: center !important;
         gap: 8px !important;
-        top: 36px !important;
+        top: 0 !important;
         background: #17202a !important;
         border-radius: 0 0 0 4px !important;
         color: #cbd5df !important;
-        padding: 8px 12px !important;
+        padding: 5px 12px !important;
         font-size: 16px !important;
         line-height: 1 !important;
-        min-height: 54px !important;
+        min-height: 52px !important;
         overflow: visible !important;
       }
 
@@ -733,8 +715,8 @@
       html.${SCRIPT_CLASS} .tabmenu {
         position: absolute !important;
         left: 50% !important;
-        bottom: 14px !important;
-        transform: translateX(-50%) !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%) !important;
         margin: 0 !important;
         display: flex !important;
         align-items: center !important;
@@ -743,11 +725,11 @@
 
       html.${SCRIPT_CLASS} .tabmenu li a,
       html.${SCRIPT_CLASS} .tabmenu li.selected a {
-        padding: 12px 17px !important;
+        padding: 8px 14px !important;
         background: #26313d !important;
         border: 1px solid #3b4856 !important;
         color: #dce7f3 !important;
-        font-size: 17px !important;
+        font-size: 15px !important;
         font-weight: 700 !important;
         line-height: 1.2 !important;
       }
@@ -4810,9 +4792,19 @@
     }).join("");
     if (nav.innerHTML !== markup) nav.innerHTML = markup;
 
-    if (!existing) container.appendChild(nav);
+    if (!existing) {
+      const bottomLeft = document.querySelector("#header-bottom-left");
+      const srdrop = header?.querySelector(".srdrop:not(.drop-choices), .dropdown.srdrop:not(.drop-choices)");
+      if (bottomLeft) {
+        // Prepend srdrop first so nav ends up before it: [nav][srdrop][...]
+        if (srdrop) bottomLeft.prepend(srdrop);
+        bottomLeft.prepend(nav);
+      } else {
+        container.appendChild(nav);
+      }
+    }
 
-    const selected = header.querySelector(".srdrop .selected, .dropdown.srdrop .selected");
+    const selected = (document.querySelector("#header-bottom-left") || header).querySelector(".srdrop .selected, .dropdown.srdrop .selected");
     if (selected && /^my subreddits$/i.test((selected.textContent || "").trim())) {
       selected.textContent = "My subreddits";
     }
