@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.47
+// @version      0.3.48
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -1316,10 +1316,6 @@
         line-height: 1.2 !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .score.dislikes,
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .score.likes {
-        display: none !important;
-      }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .arrow {
         display: flex !important;
