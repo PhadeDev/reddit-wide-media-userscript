@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.29
+// @version      0.3.30
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -214,6 +214,7 @@
         border-color: #4d6c8f !important;
         background: #20384f !important;
         color: #e5f3ff !important;
+        cursor: pointer !important;
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right .user a {
@@ -225,6 +226,16 @@
       html.${SCRIPT_CLASS} #header-bottom-right .userkarma {
         color: #9fb4c9 !important;
         font-weight: 800 !important;
+      }
+
+      html.${SCRIPT_CLASS} #header-bottom-right .user .rwm-user-chevron {
+        display: inline-block !important;
+        width: 14px !important;
+        height: 14px !important;
+        margin-left: 2px !important;
+        background: currentColor !important;
+        -webkit-mask: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m7 9 5 5 5-5H7Z'/%3E%3C/svg%3E") !important;
+        mask: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m7 9 5 5 5-5H7Z'/%3E%3C/svg%3E") !important;
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right .user.rwm-user-menu-open {
@@ -303,9 +314,9 @@
       html.${SCRIPT_CLASS} #header-bottom-right #mail:before,
       html.${SCRIPT_CLASS} #header-bottom-right .mail:before {
         content: "" !important;
-        width: 17px !important;
-        height: 17px !important;
-        margin-right: 6px !important;
+        width: 21px !important;
+        height: 21px !important;
+        margin-right: 7px !important;
         background: currentColor !important;
         -webkit-mask: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 5h18v14H3V5Zm2.4 2 6.6 5.1L18.6 7H5.4ZM5 9.1V17h14V9.1l-7 5.4-7-5.4Z'/%3E%3C/svg%3E") !important;
         mask: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 5h18v14H3V5Zm2.4 2 6.6 5.1L18.6 7H5.4ZM5 9.1V17h14V9.1l-7 5.4-7-5.4Z'/%3E%3C/svg%3E") !important;
@@ -372,7 +383,10 @@
       html.${SCRIPT_CLASS} #header-bottom-right .modmail,
       html.${SCRIPT_CLASS} #header-bottom-right .chat,
       html.${SCRIPT_CLASS} #header-bottom-right .chat-link,
-      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/chat"] {
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/chat"],
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="chat.reddit.com"],
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/notifications"],
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/message/"] {
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -397,7 +411,10 @@
       html.${SCRIPT_CLASS} #header-bottom-right .modmail:before,
       html.${SCRIPT_CLASS} #header-bottom-right .chat:before,
       html.${SCRIPT_CLASS} #header-bottom-right .chat-link:before,
-      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/chat"]:before {
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/chat"]:before,
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="chat.reddit.com"]:before,
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/notifications"]:before,
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/message/"]:before {
         content: "" !important;
         display: block !important;
         width: 20px !important;
@@ -415,7 +432,8 @@
 
       html.${SCRIPT_CLASS} #header-bottom-right .chat:before,
       html.${SCRIPT_CLASS} #header-bottom-right .chat-link:before,
-      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/chat"]:before {
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/chat"]:before,
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="chat.reddit.com"]:before {
         -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 4h16v11H8.4L4 19.2V4Zm2 2v8.5l1.6-1.5H18V6H6Z'/%3E%3C/svg%3E") !important;
         mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 4h16v11H8.4L4 19.2V4Zm2 2v8.5l1.6-1.5H18V6H6Z'/%3E%3C/svg%3E") !important;
       }
@@ -424,7 +442,10 @@
       html.${SCRIPT_CLASS} #header-bottom-right .modmail:hover,
       html.${SCRIPT_CLASS} #header-bottom-right .chat:hover,
       html.${SCRIPT_CLASS} #header-bottom-right .chat-link:hover,
-      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/chat"]:hover {
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/chat"]:hover,
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="chat.reddit.com"]:hover,
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/notifications"]:hover,
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/message/"]:hover {
         background: #26394c !important;
         border-color: #5d7a99 !important;
         color: #ffffff !important;
@@ -522,6 +543,9 @@
         #header-bottom-right .chat,
         #header-bottom-right .chat-link,
         #header-bottom-right a[href*="/chat"],
+        #header-bottom-right a[href*="chat.reddit.com"],
+        #header-bottom-right a[href*="/notifications"],
+        #header-bottom-right a[href*="/message/"],
         .thing.link .flat-list.buttons li a,
         .thing.link .flat-list.buttons li span.option,
         .thing.link .flat-list.buttons li form.toggle button,
@@ -548,6 +572,9 @@
         #header-bottom-right .chat,
         #header-bottom-right .chat-link,
         #header-bottom-right a[href*="/chat"],
+        #header-bottom-right a[href*="chat.reddit.com"],
+        #header-bottom-right a[href*="/notifications"],
+        #header-bottom-right a[href*="/message/"],
         .thing.link .flat-list.buttons li a,
         .thing.link .flat-list.buttons li span.option,
         .thing.link .flat-list.buttons li form.toggle button,
@@ -829,8 +856,8 @@
         padding: 2px 8px !important;
         border: 1px solid #476a8d !important;
         border-radius: 7px !important;
-        background: #20384f !important;
-        color: #d8edff !important;
+        background: #f4bd52 !important;
+        color: #14100a !important;
         font-size: 13px !important;
         font-weight: 800 !important;
         line-height: 1 !important;
@@ -1380,8 +1407,8 @@
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .midcol {
-        width: 42px !important;
-        margin-left: 16px !important;
+        width: 48px !important;
+        margin-left: 28px !important;
         margin-right: 14px !important;
         overflow: visible !important;
         position: relative !important;
@@ -3520,10 +3547,16 @@
     user.classList.add("rwm-user-pill");
     if (!user.querySelector(".rwm-user-menu")) {
       const encoded = encodeURIComponent(username);
+      const chevron = document.createElement("span");
+      chevron.className = "rwm-user-chevron";
+      chevron.setAttribute("aria-hidden", "true");
+      user.appendChild(chevron);
+
       const menu = document.createElement("div");
       menu.className = "rwm-user-menu";
       menu.setAttribute("role", "menu");
       menu.innerHTML = [
+        ["Profile", `https://old.reddit.com/user/${encoded}/`],
         ["Saved", `https://old.reddit.com/user/${encoded}/saved/`],
         ["Submitted", `https://old.reddit.com/user/${encoded}/submitted/`],
         ["Upvoted", `https://old.reddit.com/user/${encoded}/upvoted/`],
@@ -3536,17 +3569,29 @@
     userLink.dataset.rwmMenuReady = "1";
     userLink.setAttribute("aria-haspopup", "menu");
     userLink.setAttribute("aria-expanded", "false");
+    user.setAttribute("role", "button");
+    user.setAttribute("tabindex", "0");
 
     const close = () => {
       user.classList.remove("rwm-user-menu-open");
       userLink.setAttribute("aria-expanded", "false");
     };
 
-    userLink.addEventListener("click", (event) => {
+    const toggle = (event) => {
       event.preventDefault();
       event.stopPropagation();
       const isOpen = user.classList.toggle("rwm-user-menu-open");
       userLink.setAttribute("aria-expanded", String(isOpen));
+    };
+
+    user.addEventListener("click", (event) => {
+      if (event.target?.closest?.(".rwm-user-menu")) return;
+      toggle(event);
+    });
+
+    user.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      toggle(event);
     });
 
     document.addEventListener("click", (event) => {
