@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.37
+// @version      0.3.38
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -203,17 +203,20 @@
 
       html.${SCRIPT_CLASS} #sr-header-area .srdrop:not(.drop-choices) .selected:after,
       html.${SCRIPT_CLASS} #sr-header-area .dropdown.srdrop:not(.drop-choices) .selected:after {
-        content: "" !important;
-        display: inline-block !important;
-        width: 0 !important;
-        height: 0 !important;
+        content: "▼" !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 18px !important;
+        height: 18px !important;
         margin-left: auto !important;
-        border-left: 5px solid transparent !important;
-        border-right: 5px solid transparent !important;
-        border-top: 6px solid currentColor !important;
+        border: 0 !important;
         background: transparent !important;
         -webkit-mask: none !important;
         mask: none !important;
+        color: currentColor !important;
+        font-size: 13px !important;
+        line-height: 1 !important;
       }
 
       html.${SCRIPT_CLASS} #sr-header-area .drop-choices.srdrop,
@@ -384,6 +387,14 @@
         overflow: visible !important;
       }
 
+      html.${SCRIPT_CLASS} #header-bottom-right > * {
+        align-self: center !important;
+        top: auto !important;
+        bottom: auto !important;
+        transform: none !important;
+        vertical-align: middle !important;
+      }
+
       html.${SCRIPT_CLASS} #header-bottom-right .user,
       html.${SCRIPT_CLASS} #header-bottom-right .user a,
       html.${SCRIPT_CLASS} #header-bottom-right .userkarma,
@@ -424,6 +435,29 @@
         box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset !important;
       }
 
+      html.${SCRIPT_CLASS} #header-bottom-right > .user,
+      html.${SCRIPT_CLASS} #header-bottom-right > #mail,
+      html.${SCRIPT_CLASS} #header-bottom-right > .mail,
+      html.${SCRIPT_CLASS} #header-bottom-right > .pref-lang,
+      html.${SCRIPT_CLASS} #header-bottom-right > a[href*="/prefs"],
+      html.${SCRIPT_CLASS} #header-bottom-right > .logout,
+      html.${SCRIPT_CLASS} #header-bottom-right > a[href*="/logout"],
+      html.${SCRIPT_CLASS} #header-bottom-right > #modmail,
+      html.${SCRIPT_CLASS} #header-bottom-right > .modmail,
+      html.${SCRIPT_CLASS} #header-bottom-right > .chat,
+      html.${SCRIPT_CLASS} #header-bottom-right > .chat-link,
+      html.${SCRIPT_CLASS} #header-bottom-right > a[href*="/chat"],
+      html.${SCRIPT_CLASS} #header-bottom-right > a[href*="chat.reddit.com"],
+      html.${SCRIPT_CLASS} #header-bottom-right > a[href*="/notifications"],
+      html.${SCRIPT_CLASS} #header-bottom-right > a[href*="/message/"] {
+        height: 38px !important;
+        min-height: 38px !important;
+        max-height: 38px !important;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        line-height: 1 !important;
+      }
+
       html.${SCRIPT_CLASS} #header-bottom-right .user {
         position: relative !important;
         gap: 7px !important;
@@ -452,17 +486,20 @@
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right .user .rwm-user-chevron {
-        display: inline-block !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
         flex: 0 0 auto !important;
-        width: 0 !important;
-        height: 0 !important;
+        width: 18px !important;
+        height: 18px !important;
         margin-left: auto !important;
-        border-left: 5px solid transparent !important;
-        border-right: 5px solid transparent !important;
-        border-top: 6px solid currentColor !important;
+        border: 0 !important;
         background: transparent !important;
         -webkit-mask: none !important;
         mask: none !important;
+        color: currentColor !important;
+        font-size: 13px !important;
+        line-height: 1 !important;
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right .user.rwm-user-menu-open {
@@ -615,7 +652,8 @@
       html.${SCRIPT_CLASS} #header-bottom-right .chat-link,
       html.${SCRIPT_CLASS} #header-bottom-right a[href*="/chat"],
       html.${SCRIPT_CLASS} #header-bottom-right a[href*="chat.reddit.com"],
-      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/notifications"] {
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/notifications"],
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/message/"] {
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -644,7 +682,8 @@
       html.${SCRIPT_CLASS} #header-bottom-right .chat-link:before,
       html.${SCRIPT_CLASS} #header-bottom-right a[href*="/chat"]:before,
       html.${SCRIPT_CLASS} #header-bottom-right a[href*="chat.reddit.com"]:before,
-      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/notifications"]:before {
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/notifications"]:before,
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/message/"]:before {
         content: "" !important;
         display: block !important;
         width: 20px !important;
@@ -664,7 +703,8 @@
       html.${SCRIPT_CLASS} #header-bottom-right .chat:before,
       html.${SCRIPT_CLASS} #header-bottom-right .chat-link:before,
       html.${SCRIPT_CLASS} #header-bottom-right a[href*="/chat"]:before,
-      html.${SCRIPT_CLASS} #header-bottom-right a[href*="chat.reddit.com"]:before {
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="chat.reddit.com"]:before,
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/message/"]:before {
         -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 4h16v11H8.4L4 19.2V4Zm2 2v8.5l1.6-1.5H18V6H6Z'/%3E%3C/svg%3E") !important;
         mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 4h16v11H8.4L4 19.2V4Zm2 2v8.5l1.6-1.5H18V6H6Z'/%3E%3C/svg%3E") !important;
       }
@@ -675,7 +715,8 @@
       html.${SCRIPT_CLASS} #header-bottom-right .chat-link:hover,
       html.${SCRIPT_CLASS} #header-bottom-right a[href*="/chat"]:hover,
       html.${SCRIPT_CLASS} #header-bottom-right a[href*="chat.reddit.com"]:hover,
-      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/notifications"]:hover {
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/notifications"]:hover,
+      html.${SCRIPT_CLASS} #header-bottom-right a[href*="/message/"]:hover {
         background: #26394c !important;
         border-color: #5d7a99 !important;
         color: #ffffff !important;
@@ -4262,6 +4303,7 @@
       const chevron = document.createElement("span");
       chevron.className = "rwm-user-chevron";
       chevron.setAttribute("aria-hidden", "true");
+      chevron.textContent = "▼";
       user.appendChild(chevron);
 
       const menu = document.createElement("div");
@@ -4371,8 +4413,8 @@
   }
 
   function setupSubredditDropdownSearch() {
-    document.querySelectorAll(".drop-choices.srdrop").forEach((dropdown) => {
-      const choices = Array.from(dropdown.querySelectorAll("a.choice"));
+    document.querySelectorAll(".drop-choices.srdrop, #sr-header-area .drop-choices, .drop-choices").forEach((dropdown) => {
+      const choices = Array.from(dropdown.querySelectorAll("a.choice, a[href*='/r/']"));
       if (!choices.length || dropdown.querySelector(".rwm-sr-search")) return;
 
       const wrap = document.createElement("div");
@@ -4395,7 +4437,9 @@
         const query = input.value.trim().toLowerCase();
         choices.forEach((choice) => {
           const text = (choice.textContent || "").trim().toLowerCase();
-          choice.hidden = Boolean(query && !text.includes(query));
+          const hidden = Boolean(query && !text.includes(query));
+          choice.hidden = hidden;
+          choice.style.setProperty("display", hidden ? "none" : "", hidden ? "important" : "");
         });
       });
 
@@ -4438,6 +4482,7 @@
     rewriteMailLabel();
     setupUserHeaderMenu();
     setupSubredditHeaderBar();
+    setupSubredditDropdownSearch();
     setupSubredditPageTools();
 
     if (document.body) scan();
@@ -4445,6 +4490,7 @@
       rewriteMailLabel();
       setupUserHeaderMenu();
       setupSubredditHeaderBar();
+      setupSubredditDropdownSearch();
       setupSubredditPageTools();
       scan();
     }, { once: true });
@@ -4471,6 +4517,7 @@
         setupUserHeaderMenu();
       }
       if (pendingSubredditHeaderRefresh) setupSubredditHeaderBar();
+      if (pendingSubredditHeaderRefresh) setupSubredditDropdownSearch();
       if (pendingSubredditToolsRefresh) setupSubredditPageTools();
 
       pendingActionRefresh = false;
@@ -4516,6 +4563,7 @@
       rewriteMailLabel();
       setupUserHeaderMenu();
       setupSubredditHeaderBar();
+      setupSubredditDropdownSearch();
       setupSubredditPageTools();
       scan();
     };
