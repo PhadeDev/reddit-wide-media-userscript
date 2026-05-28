@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.49
+// @version      0.3.50
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -135,6 +135,14 @@
       }
 
       html.${SCRIPT_CLASS} #sr-header-area {
+        height: 0 !important;
+        min-height: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        overflow: visible !important;
+      }
+
+      html.${SCRIPT_CLASS} #sr-header-area .width-clip {
         display: none !important;
       }
 
@@ -150,7 +158,6 @@
         display: inline-flex !important;
         align-items: center !important;
         height: 32px !important;
-        min-width: 168px !important;
         margin: 0 !important;
         padding: 0 9px !important;
         border: 1px solid #40566c !important;
@@ -187,8 +194,8 @@
         width: 16px !important;
         height: 16px !important;
         background: currentColor !important;
-        -webkit-mask: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 5h7l2 2h7v12H4V5Zm2 4v8h12V9h-5.8l-2-2H6v2Z'/%3E%3C/svg%3E") !important;
-        mask: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 5h7l2 2h7v12H4V5Zm2 4v8h12V9h-5.8l-2-2H6v2Z'/%3E%3C/svg%3E") !important;
+        -webkit-mask: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 7h2v2H3V7zm4 0h14v2H7V7zm-4 5h2v2H3v-2zm4 0h14v2H7v-2zm-4 5h2v2H3v-2zm4 0h14v2H7v-2z'/%3E%3C/svg%3E") !important;
+        mask: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 7h2v2H3V7zm4 0h14v2H7V7zm-4 5h2v2H3v-2zm4 0h14v2H7v-2zm-4 5h2v2H3v-2zm4 0h14v2H7v-2z'/%3E%3C/svg%3E") !important;
       }
 
       html.${SCRIPT_CLASS} #header .srdrop:not(.drop-choices) .selected:after,
@@ -4774,7 +4781,8 @@
     if (!header) return;
 
     const container = header.querySelector(".width-clip") || header;
-    const existing = container.querySelector(".rwm-sr-nav");
+    const bottomLeft = document.querySelector("#header-bottom-left");
+    const existing = (bottomLeft || container).querySelector(".rwm-sr-nav");
     const path = location.pathname.replace(/\/+$/, "").toLowerCase() || "/";
     const links = [
       ["Home", "https://old.reddit.com/", path === "/"],
@@ -4793,7 +4801,6 @@
     if (nav.innerHTML !== markup) nav.innerHTML = markup;
 
     if (!existing) {
-      const bottomLeft = document.querySelector("#header-bottom-left");
       const srdrop = header?.querySelector(".srdrop:not(.drop-choices), .dropdown.srdrop:not(.drop-choices)");
       if (bottomLeft) {
         // Prepend srdrop first so nav ends up before it: [nav][srdrop][...]
