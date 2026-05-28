@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.35
+// @version      0.3.36
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -25,6 +25,7 @@
   const SCRIPT_CLASS = "rwm-enabled";
   const MEDIA_CLASS = "rwm-media";
   const PROCESSED_ATTR = "data-rwm-processed";
+  let userHeaderGlobalListenersReady = false;
 
   const defaults = {
     redirect: true,
@@ -4227,41 +4228,63 @@
       user.appendChild(menu);
     }
 
-    if (userLink.dataset.rwmMenuReady === "1") return;
-    userLink.dataset.rwmMenuReady = "1";
     userLink.setAttribute("aria-haspopup", "menu");
-    userLink.setAttribute("aria-expanded", "false");
+    userLink.setAttribute("aria-expanded", String(user.classList.contains("rwm-user-menu-open")));
     user.setAttribute("role", "button");
     user.setAttribute("tabindex", "0");
 
-    const close = () => {
-      user.classList.remove("rwm-user-menu-open");
-      userLink.setAttribute("aria-expanded", "false");
+    if (user.dataset.rwmMenuReady !== "1") {
+      user.dataset.rwmMenuReady = "1";
+
+      const close = (targetUser = user) => {
+        const targetLink = targetUser.querySelector("a[href*='/user/']");
+        targetUser.classList.remove("rwm-user-menu-open");
+        targetLink?.setAttribute("aria-expanded", "false");
+      };
+
+      const openOnlyThisUser = () => {
+        document.querySelectorAll("#header-bottom-right .user.rwm-user-menu-open").forEach((openUser) => {
+          if (openUser !== user) close(openUser);
+        });
+      };
+
+      const toggle = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        openOnlyThisUser();
+        const isOpen = user.classList.toggle("rwm-user-menu-open");
+        userLink.setAttribute("aria-expanded", String(isOpen));
+      };
+
+      user.addEventListener("click", (event) => {
+        if (event.target?.closest?.(".rwm-user-menu")) return;
+        toggle(event);
+      });
+
+      user.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        toggle(event);
+      });
+    }
+
+    if (userHeaderGlobalListenersReady) return;
+    userHeaderGlobalListenersReady = true;
+
+    const closeAll = () => {
+      document.querySelectorAll("#header-bottom-right .user.rwm-user-menu-open").forEach((openUser) => {
+        const openLink = openUser.querySelector("a[href*='/user/']");
+        openUser.classList.remove("rwm-user-menu-open");
+        openLink?.setAttribute("aria-expanded", "false");
+      });
     };
-
-    const toggle = (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      const isOpen = user.classList.toggle("rwm-user-menu-open");
-      userLink.setAttribute("aria-expanded", String(isOpen));
-    };
-
-    user.addEventListener("click", (event) => {
-      if (event.target?.closest?.(".rwm-user-menu")) return;
-      toggle(event);
-    });
-
-    user.addEventListener("keydown", (event) => {
-      if (event.key !== "Enter" && event.key !== " ") return;
-      toggle(event);
-    });
 
     document.addEventListener("click", (event) => {
-      if (!user.contains(event.target)) close();
+      if (event.target?.closest?.("#header-bottom-right .user")) return;
+      closeAll();
     });
 
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") close();
+      if (event.key === "Escape") closeAll();
     });
   }
 
@@ -4341,41 +4364,80 @@
       scan();
     }, { once: true });
 
-    const observer = new MutationObserver((mutations) => {
-      let needsActionRefresh = false;
-      let needsMailRefresh = false;
-      let needsSubredditHeaderRefresh = false;
-      for (const mutation of mutations) {
-        const target = mutation.target;
-        const targetElement = target?.nodeType === Node.ELEMENT_NODE ? target : target?.parentElement;
-        if (targetElement?.closest?.(".flat-list.buttons")) needsActionRefresh = true;
-        if (targetElement?.closest?.("#header-bottom-right")) needsMailRefresh = true;
-        if (targetElement?.closest?.("#sr-header-area")) needsSubredditHeaderRefresh = true;
-        for (const node of mutation.addedNodes) {
-          if (node.nodeType !== Node.ELEMENT_NODE) continue;
-          scan(node);
-          if (node.matches?.("#header-bottom-right, #header-bottom-right *")) needsMailRefresh = true;
-          if (node.matches?.("#sr-header-area, #sr-header-area *")) needsSubredditHeaderRefresh = true;
-          if (node.matches?.(".flat-list.buttons, .flat-list.buttons *")) needsActionRefresh = true;
-        }
+    const pendingScanRoots = new Set();
+    let pendingActionRefresh = false;
+    let pendingMailRefresh = false;
+    let pendingSubredditHeaderRefresh = false;
+    let pendingSubredditToolsRefresh = false;
+    let mutationRefreshScheduled = false;
+
+    const flushMutationRefresh = () => {
+      mutationRefreshScheduled = false;
+
+      const roots = Array.from(pendingScanRoots);
+      pendingScanRoots.clear();
+      for (const root of roots) {
+        if (root.isConnected) scan(root);
       }
-      if (needsActionRefresh) refreshActionButtonStates();
-      if (needsMailRefresh) {
+
+      if (pendingActionRefresh) refreshActionButtonStates();
+      if (pendingMailRefresh) {
         rewriteMailLabel();
         setupUserHeaderMenu();
       }
-      if (needsSubredditHeaderRefresh) setupSubredditHeaderBar();
-      setupSubredditPageTools();
+      if (pendingSubredditHeaderRefresh) setupSubredditHeaderBar();
+      if (pendingSubredditToolsRefresh) setupSubredditPageTools();
+
+      pendingActionRefresh = false;
+      pendingMailRefresh = false;
+      pendingSubredditHeaderRefresh = false;
+      pendingSubredditToolsRefresh = false;
+    };
+
+    const scheduleMutationRefresh = () => {
+      if (mutationRefreshScheduled) return;
+      mutationRefreshScheduled = true;
+      const schedule = window.requestAnimationFrame || ((callback) => window.setTimeout(callback, 50));
+      schedule(flushMutationRefresh);
+    };
+
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        const target = mutation.target;
+        const targetElement = target?.nodeType === Node.ELEMENT_NODE ? target : target?.parentElement;
+        if (targetElement?.closest?.(".flat-list.buttons")) pendingActionRefresh = true;
+        if (targetElement?.closest?.("#header-bottom-right")) pendingMailRefresh = true;
+        if (targetElement?.closest?.("#sr-header-area")) pendingSubredditHeaderRefresh = true;
+        if (targetElement?.closest?.(".content, .side")) pendingSubredditToolsRefresh = true;
+
+        for (const node of mutation.addedNodes) {
+          if (node.nodeType !== Node.ELEMENT_NODE) continue;
+          pendingScanRoots.add(node);
+          if (node.matches?.("#header-bottom-right, #header-bottom-right *")) pendingMailRefresh = true;
+          if (node.matches?.("#sr-header-area, #sr-header-area *")) pendingSubredditHeaderRefresh = true;
+          if (node.matches?.(".flat-list.buttons, .flat-list.buttons *")) pendingActionRefresh = true;
+          if (node.matches?.(".content, .content *, .side, .side *")) pendingSubredditToolsRefresh = true;
+        }
+      }
+
+      scheduleMutationRefresh();
     });
 
-    document.addEventListener("DOMContentLoaded", () => {
+    const observeBody = () => {
+      if (!document.body) return;
       observer.observe(document.body, { childList: true, characterData: true, subtree: true });
       rewriteMailLabel();
       setupUserHeaderMenu();
       setupSubredditHeaderBar();
       setupSubredditPageTools();
       scan();
-    }, { once: true });
+    };
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", observeBody, { once: true });
+    } else {
+      observeBody();
+    }
 
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape") closeCommentsOverlay();
