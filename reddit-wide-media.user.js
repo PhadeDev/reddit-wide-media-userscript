@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.42
+// @version      0.3.43
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -2479,6 +2479,10 @@
         display: none !important;
       }
 
+      html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media .rwm-preserve-expando > *:not(.usertext-body):not(.usertext) {
+        display: none !important;
+      }
+
       html.${SCRIPT_CLASS} .expando-button:before {
         content: "";
         width: 16px;
@@ -4515,6 +4519,7 @@
             !child.querySelector(".usertext-body, .md")
           ) {
             child.hidden = true;
+            child.style.setProperty("display", "none", "important");
           }
         });
         return;
