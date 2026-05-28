@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.38
+// @version      0.3.39
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -110,10 +110,16 @@
         --rwm-link: #8fc7ff;
         --rwm-link-visited: #c3b6ff;
         --rwm-accent: #45a3ff;
+        --rwm-subreddit-accent: #45a3ff;
+        --rwm-subreddit-accent-soft: rgba(69, 163, 255, 0.16);
+        max-width: 100vw !important;
+        overflow-x: hidden !important;
       }
 
       html.${SCRIPT_CLASS} body {
         min-width: 0 !important;
+        max-width: 100vw !important;
+        overflow-x: hidden !important;
         background: #101214 !important;
         color: #d7dde3 !important;
         font-size: 15px !important;
@@ -122,6 +128,8 @@
 
       html.${SCRIPT_CLASS} #header {
         min-width: 0 !important;
+        max-width: 100vw !important;
+        overflow-x: clip !important;
         background: #171b20 !important;
         border-bottom: 1px solid #303842 !important;
       }
@@ -872,6 +880,8 @@
         max-width: ${width}px !important;
         margin-left: var(--rwm-content-left) !important;
         margin-right: var(--rwm-sidebar-width) !important;
+        box-sizing: border-box !important;
+        overflow-x: clip !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .listing-page .content,
@@ -901,6 +911,7 @@
 
       html.${SCRIPT_CLASS}.rwm-wide .linklisting {
         max-width: none !important;
+        overflow-x: clip !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link {
@@ -909,10 +920,32 @@
         height: auto !important;
         margin: 0 0 14px 0 !important;
         padding: 16px 18px 18px 12px !important;
-        border: 1px solid rgba(139, 157, 177, 0.24) !important;
+        border: 1px solid color-mix(in srgb, var(--rwm-subreddit-accent), #344252 76%) !important;
         border-radius: 8px !important;
+        background:
+          linear-gradient(90deg, var(--rwm-subreddit-accent-soft) 0, rgba(26, 32, 39, 0) 74px),
+          linear-gradient(180deg, #1a2027 0%, #161b21 100%) !important;
+        box-shadow:
+          0 0 0 1px color-mix(in srgb, var(--rwm-subreddit-accent), transparent 86%) inset,
+          0 0 22px color-mix(in srgb, var(--rwm-subreddit-accent), transparent 84%),
+          0 10px 26px rgba(0, 0, 0, 0.22) !important;
+      }
+
+      html.${SCRIPT_CLASS}:not(.rwm-has-subreddit-accent) .thing.link {
+        border-color: rgba(139, 157, 177, 0.24) !important;
         background: linear-gradient(180deg, #1a2027 0%, #161b21 100%) !important;
         box-shadow: 0 10px 26px rgba(0, 0, 0, 0.22) !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-nsfw-post {
+        border-color: rgba(224, 85, 102, 0.58) !important;
+        background:
+          linear-gradient(90deg, rgba(120, 28, 38, 0.32) 0, rgba(26, 32, 39, 0) 96px),
+          linear-gradient(180deg, #21171b 0%, #171316 100%) !important;
+        box-shadow:
+          0 0 0 1px rgba(224, 85, 102, 0.24) inset,
+          0 0 24px rgba(224, 85, 102, 0.16),
+          0 10px 26px rgba(0, 0, 0, 0.24) !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link.hidden {
@@ -1344,6 +1377,25 @@
         overflow: hidden !important;
       }
 
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-nsfw-post .thumbnail,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-nsfw-post .thumbnail.nsfw {
+        background: #2c1217 !important;
+        border-color: #d75a6d !important;
+        color: #ffd7dd !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-nsfw-post .thumbnail.nsfw:before,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-nsfw-post .thumbnail.nsfw:after {
+        content: none !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-nsfw-post .thumbnail.nsfw {
+        font-size: 12px !important;
+        font-weight: 900 !important;
+        letter-spacing: 0.08em !important;
+        text-transform: uppercase !important;
+      }
+
       html.${SCRIPT_CLASS}.rwm-wide .thumbnail img {
         max-width: 88px !important;
         max-height: 70px !important;
@@ -1437,7 +1489,8 @@
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .linkflairlabel.rwm-flair-warning,
-      html.${SCRIPT_CLASS}.rwm-wide .thumbnail.nsfw + .entry .linkflairlabel {
+      html.${SCRIPT_CLASS}.rwm-wide .thumbnail.nsfw + .entry .linkflairlabel,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-nsfw-post .linkflairlabel {
         background: #4b202b !important;
         border-color: #c7667a !important;
         color: #ffd3dc !important;
@@ -2769,6 +2822,49 @@
         border: 1px solid rgba(158, 177, 198, 0.18);
         border-radius: 10px;
         box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35);
+      }
+
+      html.${SCRIPT_CLASS} .thing.link.rwm-nsfw-post .${MEDIA_CLASS} {
+        position: relative;
+      }
+
+      html.${SCRIPT_CLASS} .thing.link.rwm-nsfw-post .${MEDIA_CLASS} img,
+      html.${SCRIPT_CLASS} .thing.link.rwm-nsfw-post .${MEDIA_CLASS} video,
+      html.${SCRIPT_CLASS} .thing.link.rwm-nsfw-post .${MEDIA_CLASS} iframe {
+        filter: blur(18px) brightness(0.64) saturate(0.8);
+        transition: filter 140ms ease;
+      }
+
+      html.${SCRIPT_CLASS} .thing.link.rwm-nsfw-post .${MEDIA_CLASS}:before {
+        content: "NSFW";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        z-index: 2;
+        transform: translate(-50%, -50%);
+        padding: 8px 12px;
+        border: 1px solid rgba(255, 177, 188, 0.6);
+        border-radius: 8px;
+        background: rgba(47, 13, 18, 0.86);
+        color: #ffd9de;
+        font-size: 13px;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+        pointer-events: none;
+      }
+
+      html.${SCRIPT_CLASS} .thing.link.rwm-nsfw-post:hover .${MEDIA_CLASS} img,
+      html.${SCRIPT_CLASS} .thing.link.rwm-nsfw-post:hover .${MEDIA_CLASS} video,
+      html.${SCRIPT_CLASS} .thing.link.rwm-nsfw-post:hover .${MEDIA_CLASS} iframe,
+      html.${SCRIPT_CLASS} .thing.link.rwm-nsfw-post:focus-within .${MEDIA_CLASS} img,
+      html.${SCRIPT_CLASS} .thing.link.rwm-nsfw-post:focus-within .${MEDIA_CLASS} video,
+      html.${SCRIPT_CLASS} .thing.link.rwm-nsfw-post:focus-within .${MEDIA_CLASS} iframe {
+        filter: none;
+      }
+
+      html.${SCRIPT_CLASS} .thing.link.rwm-nsfw-post:hover .${MEDIA_CLASS}:before,
+      html.${SCRIPT_CLASS} .thing.link.rwm-nsfw-post:focus-within .${MEDIA_CLASS}:before {
+        opacity: 0;
       }
 
       html.${SCRIPT_CLASS} .${MEDIA_CLASS} img,
@@ -4126,6 +4222,13 @@
     });
   }
 
+  function markNsfwPost(thing) {
+    const isNsfw = thing.classList.contains("over18")
+      || thing.querySelector(".thumbnail.nsfw, .nsfw-stamp")
+      || /\bnsfw\b/i.test(thing.getAttribute("data-domain") || "");
+    thing.classList.toggle("rwm-nsfw-post", Boolean(isNsfw));
+  }
+
   function suppressNativeMediaExpando(thing) {
     thing.classList.add("rwm-has-own-media");
     thing.querySelectorAll(
@@ -4176,6 +4279,7 @@
   function prepareThing(thing) {
     if (thing.getAttribute(PROCESSED_ATTR) === "1") return;
     thing.setAttribute(PROCESSED_ATTR, "1");
+    markNsfwPost(thing);
     decorateFlairs(thing);
     setupCommentsModal(thing);
 
@@ -4448,6 +4552,50 @@
     });
   }
 
+  function getCurrentSubredditName() {
+    const match = location.pathname.match(/^\/r\/([^/]+)/i);
+    if (!match) return "";
+    const name = decodeURIComponent(match[1] || "").trim();
+    if (!name || /^(all|popular)$/i.test(name)) return "";
+    return name;
+  }
+
+  function hashString(value) {
+    let hash = 2166136261;
+    for (let index = 0; index < value.length; index += 1) {
+      hash ^= value.charCodeAt(index);
+      hash = Math.imul(hash, 16777619);
+    }
+    return hash >>> 0;
+  }
+
+  function setupSubredditAccent() {
+    const name = getCurrentSubredditName();
+    const root = document.documentElement;
+    if (!name) {
+      root.classList.remove("rwm-has-subreddit-accent");
+      root.style.removeProperty("--rwm-subreddit-accent");
+      root.style.removeProperty("--rwm-subreddit-accent-soft");
+      return;
+    }
+
+    const palette = [
+      ["#d75f6a", "rgba(215, 95, 106, 0.16)"],
+      ["#d8894d", "rgba(216, 137, 77, 0.16)"],
+      ["#d2b855", "rgba(210, 184, 85, 0.15)"],
+      ["#72bd69", "rgba(114, 189, 105, 0.15)"],
+      ["#4fc0a4", "rgba(79, 192, 164, 0.15)"],
+      ["#55a8db", "rgba(85, 168, 219, 0.16)"],
+      ["#7b95e6", "rgba(123, 149, 230, 0.16)"],
+      ["#b07be2", "rgba(176, 123, 226, 0.16)"],
+      ["#d477ba", "rgba(212, 119, 186, 0.15)"],
+    ];
+    const [accent, soft] = palette[hashString(name.toLowerCase()) % palette.length];
+    root.classList.add("rwm-has-subreddit-accent");
+    root.style.setProperty("--rwm-subreddit-accent", accent);
+    root.style.setProperty("--rwm-subreddit-accent-soft", soft);
+  }
+
   function restoreHiddenPostFromUndo(control) {
     const label = (control?.innerText || control?.textContent || control?.getAttribute?.("title") || "").trim().toLowerCase();
     if (!/\b(undo|unhide)\b/.test(label)) return;
@@ -4477,6 +4625,7 @@
     document.documentElement.classList.add(SCRIPT_CLASS);
     if (settings.wideMode) document.documentElement.classList.add("rwm-wide");
 
+    setupSubredditAccent();
     addStyles();
     registerMenu();
     rewriteMailLabel();
