@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.26
+// @version      0.3.27
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -407,6 +407,10 @@
         box-shadow: 0 10px 26px rgba(0, 0, 0, 0.22) !important;
       }
 
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link.hidden {
+        display: none !important;
+      }
+
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .entry {
         overflow: visible !important;
         margin-left: 8px !important;
@@ -571,7 +575,8 @@
         align-items: center !important;
         align-self: center !important;
         position: relative !important;
-        top: 2px !important;
+        top: 0 !important;
+        transform: translateY(4px) !important;
         min-height: 21px !important;
         padding: 2px 8px !important;
         border: 1px solid #476a8d !important;
