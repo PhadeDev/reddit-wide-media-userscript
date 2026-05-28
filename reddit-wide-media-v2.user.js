@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.34
+// @version      0.3.35
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -126,11 +126,176 @@
       }
 
       html.${SCRIPT_CLASS} #sr-header-area {
+        display: flex !important;
+        align-items: center !important;
         height: auto !important;
-        min-height: 34px !important;
+        min-height: 42px !important;
         background: #11151a !important;
         border-bottom: 1px solid #303842 !important;
-        line-height: 34px !important;
+        line-height: 1 !important;
+        overflow: visible !important;
+      }
+
+      html.${SCRIPT_CLASS} #sr-header-area .width-clip {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        width: 100% !important;
+        height: auto !important;
+        padding: 5px 10px !important;
+        box-sizing: border-box !important;
+        overflow: visible !important;
+      }
+
+      html.${SCRIPT_CLASS} #sr-header-area .redesign-beta-optin,
+      html.${SCRIPT_CLASS} #sr-header-area .redesign-beta-optin-link,
+      html.${SCRIPT_CLASS} #sr-header-area .sr-list,
+      html.${SCRIPT_CLASS} #sr-more-link {
+        display: none !important;
+      }
+
+      html.${SCRIPT_CLASS} #sr-header-area .srdrop:not(.drop-choices),
+      html.${SCRIPT_CLASS} #sr-header-area .dropdown.srdrop:not(.drop-choices) {
+        display: inline-flex !important;
+        align-items: center !important;
+        height: 30px !important;
+        min-width: 168px !important;
+        margin: 0 !important;
+        padding: 0 9px !important;
+        border: 1px solid #40566c !important;
+        border-radius: 8px !important;
+        background: #1d2b38 !important;
+        color: #dce7f3 !important;
+        font-size: 13px !important;
+        font-weight: 900 !important;
+        line-height: 1 !important;
+        text-decoration: none !important;
+        text-transform: none !important;
+        box-sizing: border-box !important;
+        cursor: pointer !important;
+      }
+
+      html.${SCRIPT_CLASS} #sr-header-area .srdrop:not(.drop-choices) .selected,
+      html.${SCRIPT_CLASS} #sr-header-area .dropdown.srdrop:not(.drop-choices) .selected {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 7px !important;
+        color: #dce7f3 !important;
+        font-size: 13px !important;
+        font-weight: 900 !important;
+        line-height: 1 !important;
+        background: transparent !important;
+        text-transform: none !important;
+      }
+
+      html.${SCRIPT_CLASS} #sr-header-area .srdrop:not(.drop-choices) .selected:before,
+      html.${SCRIPT_CLASS} #sr-header-area .dropdown.srdrop:not(.drop-choices) .selected:before {
+        content: "" !important;
+        display: inline-block !important;
+        width: 16px !important;
+        height: 16px !important;
+        background: currentColor !important;
+        -webkit-mask: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 5h7l2 2h7v12H4V5Zm2 4v8h12V9h-5.8l-2-2H6v2Z'/%3E%3C/svg%3E") !important;
+        mask: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 5h7l2 2h7v12H4V5Zm2 4v8h12V9h-5.8l-2-2H6v2Z'/%3E%3C/svg%3E") !important;
+      }
+
+      html.${SCRIPT_CLASS} #sr-header-area .srdrop:not(.drop-choices) .selected:after,
+      html.${SCRIPT_CLASS} #sr-header-area .dropdown.srdrop:not(.drop-choices) .selected:after {
+        content: "" !important;
+        display: inline-block !important;
+        width: 15px !important;
+        height: 15px !important;
+        margin-left: auto !important;
+        background: currentColor !important;
+        -webkit-mask: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m7 9 5 5 5-5H7Z'/%3E%3C/svg%3E") !important;
+        mask: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m7 9 5 5 5-5H7Z'/%3E%3C/svg%3E") !important;
+      }
+
+      html.${SCRIPT_CLASS} #sr-header-area .drop-choices.srdrop,
+      html.${SCRIPT_CLASS} .drop-choices.srdrop {
+        z-index: 10001 !important;
+        min-width: 212px !important;
+        max-height: min(70vh, 520px) !important;
+        margin-top: 7px !important;
+        padding: 7px !important;
+        border: 1px solid #42576c !important;
+        border-radius: 9px !important;
+        background: #111820 !important;
+        box-shadow: 0 14px 32px rgba(0, 0, 0, 0.42) !important;
+        overflow: auto !important;
+      }
+
+      html.${SCRIPT_CLASS} #sr-header-area .drop-choices.srdrop a.choice,
+      html.${SCRIPT_CLASS} .drop-choices.srdrop a.choice {
+        display: flex !important;
+        align-items: center !important;
+        min-height: 30px !important;
+        padding: 0 9px !important;
+        border: 1px solid #304253 !important;
+        border-radius: 7px !important;
+        background: #1c2631 !important;
+        color: #dce7f3 !important;
+        font-size: 13px !important;
+        font-weight: 900 !important;
+        line-height: 1 !important;
+        text-decoration: none !important;
+      }
+
+      html.${SCRIPT_CLASS} #sr-header-area .drop-choices.srdrop a.choice + a.choice,
+      html.${SCRIPT_CLASS} .drop-choices.srdrop a.choice + a.choice {
+        margin-top: 5px !important;
+      }
+
+      html.${SCRIPT_CLASS} #sr-header-area .drop-choices.srdrop a.choice:hover,
+      html.${SCRIPT_CLASS} #sr-header-area .drop-choices.srdrop a.choice:focus-visible,
+      html.${SCRIPT_CLASS} .drop-choices.srdrop a.choice:hover,
+      html.${SCRIPT_CLASS} .drop-choices.srdrop a.choice:focus-visible {
+        background: #26394c !important;
+        border-color: #5d7a99 !important;
+        color: #ffffff !important;
+      }
+
+      html.${SCRIPT_CLASS} #sr-header-area .rwm-sr-nav {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        margin-left: auto !important;
+      }
+
+      html.${SCRIPT_CLASS} #sr-header-area .rwm-sr-nav a {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        height: 30px !important;
+        padding: 0 11px !important;
+        border: 1px solid #35485a !important;
+        border-radius: 8px !important;
+        background: #1c2631 !important;
+        color: #dce7f3 !important;
+        font-size: 13px !important;
+        font-weight: 900 !important;
+        line-height: 1 !important;
+        text-decoration: none !important;
+        text-transform: none !important;
+        box-sizing: border-box !important;
+      }
+
+      html.${SCRIPT_CLASS} #sr-header-area .rwm-sr-nav a.rwm-active {
+        border-color: #5b86ad !important;
+        background: #254767 !important;
+        color: #ffffff !important;
+      }
+
+      html.${SCRIPT_CLASS} #sr-header-area .rwm-sr-nav a.rwm-sr-manage {
+        border-color: #5d507a !important;
+        background: #342d49 !important;
+        color: #eadfff !important;
+      }
+
+      html.${SCRIPT_CLASS} #sr-header-area .rwm-sr-nav a:hover,
+      html.${SCRIPT_CLASS} #sr-header-area .rwm-sr-nav a:focus-visible {
+        filter: saturate(1.2) brightness(1.12) !important;
+        box-shadow: 0 0 14px rgba(70, 162, 255, 0.28), 0 1px 0 rgba(255, 255, 255, 0.05) inset !important;
       }
 
       html.${SCRIPT_CLASS} #sr-header-area a,
@@ -214,7 +379,8 @@
 
       html.${SCRIPT_CLASS} #header-bottom-right .user {
         position: relative !important;
-        gap: 4px !important;
+        gap: 7px !important;
+        min-width: 168px !important;
         border-color: #4d6c8f !important;
         background: #20384f !important;
         color: #e5f3ff !important;
@@ -222,21 +388,28 @@
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right .user a {
+        display: inline-flex !important;
+        align-items: center !important;
+        height: 100% !important;
         color: inherit !important;
         font-weight: 900 !important;
         text-decoration: none !important;
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right .userkarma {
+        display: inline-flex !important;
+        align-items: center !important;
+        height: 100% !important;
         color: #9fb4c9 !important;
         font-weight: 800 !important;
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right .user .rwm-user-chevron {
         display: inline-block !important;
-        width: 14px !important;
-        height: 14px !important;
-        margin-left: 2px !important;
+        flex: 0 0 auto !important;
+        width: 20px !important;
+        height: 20px !important;
+        margin-left: auto !important;
         background: currentColor !important;
         -webkit-mask: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m7 9 5 5 5-5H7Z'/%3E%3C/svg%3E") !important;
         mask: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m7 9 5 5 5-5H7Z'/%3E%3C/svg%3E") !important;
@@ -516,6 +689,14 @@
 
       html.${SCRIPT_CLASS} a:visited {
         color: #b6a7ff !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline a.subreddit,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline a.subreddit:link,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline a.subreddit:visited,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline a.subreddit:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline a.subreddit:focus-visible {
+        color: #14100a !important;
       }
 
       html.${SCRIPT_CLASS} input,
@@ -4084,6 +4265,37 @@
     });
   }
 
+  function setupSubredditHeaderBar() {
+    const header = document.querySelector("#sr-header-area");
+    if (!header) return;
+
+    const container = header.querySelector(".width-clip") || header;
+    const existing = container.querySelector(".rwm-sr-nav");
+    const path = location.pathname.replace(/\/+$/, "").toLowerCase() || "/";
+    const links = [
+      ["Home", "https://old.reddit.com/", path === "/"],
+      ["Popular", "https://old.reddit.com/r/popular/", path === "/r/popular"],
+      ["All", "https://old.reddit.com/r/all/", path === "/r/all"],
+      ["Subreddits", "https://old.reddit.com/subreddits/", path.startsWith("/subreddits"), "rwm-sr-manage"],
+    ];
+
+    const nav = existing || document.createElement("nav");
+    nav.className = "rwm-sr-nav";
+    nav.setAttribute("aria-label", "Reddit sections");
+    const markup = links.map(([label, href, active, extraClass]) => {
+      const classes = [active ? "rwm-active" : "", extraClass || ""].filter(Boolean).join(" ");
+      return `<a href="${href}"${classes ? ` class="${classes}"` : ""}>${label}</a>`;
+    }).join("");
+    if (nav.innerHTML !== markup) nav.innerHTML = markup;
+
+    if (!existing) container.appendChild(nav);
+
+    const selected = header.querySelector(".srdrop .selected, .dropdown.srdrop .selected");
+    if (selected && /^my subreddits$/i.test((selected.textContent || "").trim())) {
+      selected.textContent = "My subreddits";
+    }
+  }
+
   function restoreHiddenPostFromUndo(control) {
     const label = (control?.innerText || control?.textContent || control?.getAttribute?.("title") || "").trim().toLowerCase();
     if (!/\b(undo|unhide)\b/.test(label)) return;
@@ -4117,12 +4329,14 @@
     registerMenu();
     rewriteMailLabel();
     setupUserHeaderMenu();
+    setupSubredditHeaderBar();
     setupSubredditPageTools();
 
     if (document.body) scan();
     else document.addEventListener("DOMContentLoaded", () => {
       rewriteMailLabel();
       setupUserHeaderMenu();
+      setupSubredditHeaderBar();
       setupSubredditPageTools();
       scan();
     }, { once: true });
@@ -4130,15 +4344,18 @@
     const observer = new MutationObserver((mutations) => {
       let needsActionRefresh = false;
       let needsMailRefresh = false;
+      let needsSubredditHeaderRefresh = false;
       for (const mutation of mutations) {
         const target = mutation.target;
         const targetElement = target?.nodeType === Node.ELEMENT_NODE ? target : target?.parentElement;
         if (targetElement?.closest?.(".flat-list.buttons")) needsActionRefresh = true;
         if (targetElement?.closest?.("#header-bottom-right")) needsMailRefresh = true;
+        if (targetElement?.closest?.("#sr-header-area")) needsSubredditHeaderRefresh = true;
         for (const node of mutation.addedNodes) {
           if (node.nodeType !== Node.ELEMENT_NODE) continue;
           scan(node);
           if (node.matches?.("#header-bottom-right, #header-bottom-right *")) needsMailRefresh = true;
+          if (node.matches?.("#sr-header-area, #sr-header-area *")) needsSubredditHeaderRefresh = true;
           if (node.matches?.(".flat-list.buttons, .flat-list.buttons *")) needsActionRefresh = true;
         }
       }
@@ -4147,6 +4364,7 @@
         rewriteMailLabel();
         setupUserHeaderMenu();
       }
+      if (needsSubredditHeaderRefresh) setupSubredditHeaderBar();
       setupSubredditPageTools();
     });
 
@@ -4154,6 +4372,7 @@
       observer.observe(document.body, { childList: true, characterData: true, subtree: true });
       rewriteMailLabel();
       setupUserHeaderMenu();
+      setupSubredditHeaderBar();
       setupSubredditPageTools();
       scan();
     }, { once: true });
