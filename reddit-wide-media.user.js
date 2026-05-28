@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.40
+// @version      0.3.41
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -2468,7 +2468,7 @@
       html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media .expando-button.collapsed,
       html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media .expando-button.video,
       html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media .expando-button.image,
-      html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media .entry > .expando:not(.${MEDIA_CLASS}),
+      html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media .entry > .expando:not(.${MEDIA_CLASS}):not(.rwm-preserve-expando),
       html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media .entry > .media-preview,
       html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media .entry > .media-preview-content,
       html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media .entry > .reddit-video-player-root {
@@ -2926,6 +2926,90 @@
       html.${SCRIPT_CLASS} .${MEDIA_CLASS}.rwm-gallery img {
         width: 100%;
         max-height: ${mediaMaxHeight};
+      }
+
+      html.${SCRIPT_CLASS} #rwm-media-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 2147483646;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 26px;
+        background: rgba(4, 7, 10, 0.86);
+        backdrop-filter: blur(8px);
+      }
+
+      html.${SCRIPT_CLASS} #rwm-media-overlay.rwm-open {
+        display: flex;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-media-shell {
+        position: relative;
+        display: grid;
+        grid-template-rows: minmax(0, 1fr) auto;
+        gap: 12px;
+        width: min(96vw, 1800px);
+        height: min(94vh, 1200px);
+      }
+
+      html.${SCRIPT_CLASS} .rwm-media-stage {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 0;
+        min-height: 0;
+        border: 1px solid #32465b;
+        border-radius: 8px;
+        background: #080b0f;
+        box-shadow: 0 24px 90px rgba(0, 0, 0, 0.5);
+        overflow: hidden;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-media-stage img {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-media-bar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-media-bar button,
+      html.${SCRIPT_CLASS} .rwm-media-close {
+        min-height: 36px;
+        border: 1px solid #3f5570;
+        border-radius: 6px;
+        background: #1a2430;
+        color: #e2ebf5;
+        font: 800 13px/1 system-ui, sans-serif;
+        cursor: pointer;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-media-bar button {
+        min-width: 44px;
+        padding: 0 14px;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-media-close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 38px;
+        padding: 0;
+        z-index: 2;
+      }
+
+      html.${SCRIPT_CLASS} .rwm-media-count {
+        min-width: 74px;
+        color: #aebdca;
+        text-align: center;
+        font: 800 13px/1 system-ui, sans-serif;
       }
 
       html.${SCRIPT_CLASS} .rwm-status {
@@ -4101,11 +4185,104 @@
     }
   }
 
+  function mediaLinksFromContainer(container) {
+    return Array.from(container.querySelectorAll("a.rwm-image-link[href]"))
+      .map((link) => ({
+        url: link.href,
+        alt: link.querySelector("img")?.alt || "",
+      }))
+      .filter((item) => item.url);
+  }
+
+  function closeMediaOverlay() {
+    const overlay = document.getElementById("rwm-media-overlay");
+    if (!overlay) return;
+    overlay.classList.remove("rwm-open");
+    document.documentElement.classList.remove("rwm-modal-open");
+  }
+
+  function getMediaOverlay() {
+    let overlay = document.getElementById("rwm-media-overlay");
+    if (overlay) return overlay;
+
+    overlay = document.createElement("div");
+    overlay.id = "rwm-media-overlay";
+    overlay.innerHTML = `
+      <div class="rwm-media-shell" role="dialog" aria-modal="true" aria-label="Image viewer">
+        <button class="rwm-media-close" type="button" aria-label="Close">x</button>
+        <div class="rwm-media-stage">
+          <img alt="">
+        </div>
+        <div class="rwm-media-bar">
+          <button class="rwm-media-prev" type="button" aria-label="Previous image">Prev</button>
+          <span class="rwm-media-count"></span>
+          <button class="rwm-media-next" type="button" aria-label="Next image">Next</button>
+        </div>
+      </div>
+    `;
+
+    const move = (direction) => {
+      const items = JSON.parse(overlay.dataset.rwmItems || "[]");
+      if (items.length < 2) return;
+      const current = Number(overlay.dataset.rwmIndex || 0);
+      showMediaOverlayItem(overlay, items, (current + direction + items.length) % items.length);
+    };
+
+    overlay.addEventListener("click", (event) => {
+      if (event.target === overlay) closeMediaOverlay();
+    });
+    overlay.querySelector(".rwm-media-close").addEventListener("click", closeMediaOverlay);
+    overlay.querySelector(".rwm-media-prev").addEventListener("click", () => move(-1));
+    overlay.querySelector(".rwm-media-next").addEventListener("click", () => move(1));
+    document.addEventListener("keydown", (event) => {
+      if (!overlay.classList.contains("rwm-open")) return;
+      if (event.key === "Escape") closeMediaOverlay();
+      else if (event.key === "ArrowLeft") move(-1);
+      else if (event.key === "ArrowRight") move(1);
+    });
+
+    document.body.appendChild(overlay);
+    return overlay;
+  }
+
+  function showMediaOverlayItem(overlay, items, index) {
+    const item = items[index];
+    if (!item) return;
+
+    overlay.dataset.rwmItems = JSON.stringify(items);
+    overlay.dataset.rwmIndex = String(index);
+
+    const image = overlay.querySelector(".rwm-media-stage img");
+    image.src = item.url;
+    image.alt = item.alt || "";
+
+    overlay.querySelector(".rwm-media-count").textContent = `${index + 1} / ${items.length}`;
+    overlay.querySelector(".rwm-media-prev").hidden = items.length < 2;
+    overlay.querySelector(".rwm-media-next").hidden = items.length < 2;
+  }
+
+  function openMediaOverlay(container, src) {
+    const items = mediaLinksFromContainer(container);
+    if (!items.length) return;
+
+    const index = Math.max(0, items.findIndex((item) => item.url === src));
+    const overlay = getMediaOverlay();
+    showMediaOverlayItem(overlay, items, index);
+    overlay.classList.add("rwm-open");
+    document.documentElement.classList.add("rwm-modal-open");
+  }
+
   function renderImage(container, src, alt = "") {
     const link = document.createElement("a");
+    link.className = "rwm-image-link";
     link.href = src;
     link.target = "_blank";
     link.rel = "noopener noreferrer";
+    link.addEventListener("click", (event) => {
+      if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || event.button !== 0) return;
+      event.preventDefault();
+      openMediaOverlay(container, src);
+    });
 
     const img = document.createElement("img");
     img.loading = "lazy";
@@ -4308,11 +4485,24 @@
     thing.classList.toggle("rwm-nsfw-post", Boolean(isNsfw));
   }
 
+  function shouldPreserveExpando(node) {
+    if (!node || node.classList.contains(MEDIA_CLASS)) return false;
+    const textRoot = node.querySelector(".usertext-body .md, .usertext-body, .md");
+    return Boolean((textRoot?.textContent || "").trim());
+  }
+
   function suppressNativeMediaExpando(thing) {
     thing.classList.add("rwm-has-own-media");
     thing.querySelectorAll(
       ".expando-button:not(.selftext):not(.selftext-muted), .entry > .expando:not(.rwm-media), .entry > .media-preview, .entry > .media-preview-content, .entry > .reddit-video-player-root",
     ).forEach((node) => {
+      if (shouldPreserveExpando(node)) {
+        node.classList.add("rwm-preserve-expando");
+        node.hidden = false;
+        node.style.removeProperty("display");
+        return;
+      }
+
       node.hidden = true;
       node.style.setProperty("display", "none", "important");
     });
@@ -4378,6 +4568,7 @@
     if (youtubeEmbed) thing.classList.add("rwm-youtube");
 
     suppressNativeMediaExpando(thing);
+    autoExpandText(thing);
     const container = placeMediaContainer(thing);
     const load = () => {
       if (container.getAttribute("data-rwm-loaded") === "1") return;
