@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.44
+// @version      0.3.45
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -2480,6 +2480,10 @@
       html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media .entry > .media-preview,
       html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media .entry > .media-preview-content,
       html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media .entry > .reddit-video-player-root {
+        display: none !important;
+      }
+
+      html.${SCRIPT_CLASS} .thing.link.rwm-has-own-media .rwm-preserve-expando > :not(.usertext-body):not(.usertext):not(:has(.usertext-body)) {
         display: none !important;
       }
 
