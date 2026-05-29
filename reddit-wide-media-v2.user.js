@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.60
+// @version      0.3.61
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -657,22 +657,23 @@
         align-items: center !important;
         justify-content: center !important;
         box-sizing: border-box !important;
-        width: 38px !important;
-        height: 38px !important;
-        min-width: 38px !important;
-        min-height: 38px !important;
-        max-height: 38px !important;
+        width: 30px !important;
+        height: 30px !important;
+        min-width: 30px !important;
+        min-height: 30px !important;
+        max-height: 30px !important;
         margin: 0 !important;
         padding: 0 !important;
         border: 1px solid #3a4049 !important;
         border-radius: 8px !important;
         background: #1c1f24 !important;
-        color: #e6e8ec !important;
+        color: #aab1bb !important;
         background-image: none !important;
         overflow: hidden !important;
         text-indent: -9999px !important;
         font-size: 0 !important;
         transform: none !important;
+        transition: background 120ms ease, border-color 120ms ease, color 120ms ease !important;
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right #modmail:before,
@@ -947,9 +948,7 @@
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link {
-        display: flex !important;
-        align-items: flex-start !important;
-        gap: 0 12px !important;
+        display: flow-root !important;
         min-height: 0 !important;
         height: auto !important;
         margin: 0 0 12px 0 !important;
@@ -1018,9 +1017,8 @@
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .entry {
         overflow: visible !important;
-        margin: 0 !important;
+        margin-left: 8px !important;
         max-width: none !important;
-        min-width: 0 !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link:after {
@@ -1168,14 +1166,33 @@
         color: #ffffff !important;
       }
 
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-hide-button a,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-hide-button span.option,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-hide-button form.toggle button {
+        background: rgba(240,181,74,0.09) !important;
+        border-color: rgba(240,181,74,0.35) !important;
+        color: #d4a040 !important;
+      }
+
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-hide-button a:hover,
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-hide-button span.option:hover,
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-hide-button form.toggle button:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-hide-button form.toggle button:hover {
+        background: rgba(240,181,74,0.18) !important;
+        border-color: #f0b54a !important;
+        color: #ffe0a0 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-report-button a,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-report-button span.option,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-report-button form.toggle button {
+        background: rgba(239,95,107,0.09) !important;
+        border-color: rgba(239,95,107,0.35) !important;
+        color: #c06070 !important;
+      }
+
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-report-button a:hover,
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-report-button span.option:hover,
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-report-button form.toggle button:hover {
-        background: rgba(239,95,107,0.12) !important;
-        border-color: rgba(239,95,107,0.5) !important;
+        background: rgba(239,95,107,0.18) !important;
+        border-color: rgba(239,95,107,0.6) !important;
         color: #ffc4c9 !important;
       }
 
@@ -1310,21 +1327,9 @@
         display: none !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .rank {
-        flex-shrink: 0 !important;
-        align-self: center !important;
-      }
-
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .midcol {
-        flex-shrink: 0 !important;
-        width: 46px !important;
-        margin: 0 !important;
-        overflow: visible !important;
-      }
-
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .entry {
-        flex: 1 !important;
-        min-width: 0 !important;
+        width: 54px !important;
+        margin-right: 10px !important;
         overflow: visible !important;
       }
 
@@ -1410,13 +1415,10 @@
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
-        float: none !important;
-        flex-shrink: 0 !important;
-        order: 99 !important;
-        width: 100px !important;
-        height: 72px !important;
-        min-height: 0 !important;
-        margin: 0 !important;
+        float: right !important;
+        width: 96px !important;
+        min-height: 68px !important;
+        margin: 0 0 10px 12px !important;
         background-color: #1a1e24 !important;
         background-image: none !important;
         border: 1px solid #454f5e !important;
