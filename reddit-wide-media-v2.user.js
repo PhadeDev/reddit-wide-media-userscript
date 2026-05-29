@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.56
+// @version      0.3.57
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -559,6 +559,7 @@
 
       html.${SCRIPT_CLASS} #header-bottom-right #mail,
       html.${SCRIPT_CLASS} #header-bottom-right .mail {
+        min-width: 100px !important;
         overflow: visible !important;
         text-indent: 0 !important;
         background-image: none !important;
@@ -938,21 +939,15 @@
         height: auto !important;
         margin: 0 0 14px 0 !important;
         padding: 16px 18px 18px 12px !important;
-        border: 1px solid color-mix(in srgb, var(--rwm-subreddit-accent), #344252 76%) !important;
-        border-radius: 8px !important;
-        background:
-          linear-gradient(90deg, var(--rwm-subreddit-accent-soft) 0, rgba(26, 32, 39, 0) 74px),
-          linear-gradient(180deg, #1a2027 0%, #161b21 100%) !important;
-        box-shadow:
-          0 0 0 1px color-mix(in srgb, var(--rwm-subreddit-accent), transparent 86%) inset,
-          0 0 22px color-mix(in srgb, var(--rwm-subreddit-accent), transparent 84%),
-          0 10px 26px rgba(0, 0, 0, 0.22) !important;
+        border: 1px solid #2a2e35 !important;
+        border-top: 2px solid color-mix(in srgb, var(--rwm-subreddit-accent), #2a2e35 72%) !important;
+        border-radius: 10px !important;
+        background: #1c1f24 !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
       }
 
       html.${SCRIPT_CLASS}:not(.rwm-has-subreddit-accent) .thing.link {
-        border-color: rgba(139, 157, 177, 0.24) !important;
-        background: linear-gradient(180deg, #1a2027 0%, #161b21 100%) !important;
-        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.22) !important;
+        border-top-color: #2a2e35 !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-nsfw-post {
@@ -1114,23 +1109,23 @@
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.first a.comments {
-        background: #244263 !important;
-        border-color: #4d86bd !important;
+        background: rgba(76,141,255,0.12) !important;
+        border-color: rgba(76,141,255,0.45) !important;
         color: #e6e8ec !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.first a.comments:hover,
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.first a.comments:focus-visible {
-        background: #2f5680 !important;
-        border-color: #73afe4 !important;
+        background: rgba(76,141,255,0.2) !important;
+        border-color: #4c8dff !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-unsave-button a,
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-unsave-button span.option,
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-unsave-button form.toggle button {
-        background: #173d2a !important;
-        border-color: #3fa86d !important;
-        color: #dbffe9 !important;
+        background: rgba(70,201,138,0.1) !important;
+        border-color: rgba(70,201,138,0.4) !important;
+        color: #46c98a !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-unsave-button a:hover,
@@ -1138,57 +1133,20 @@
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-unsave-button form.toggle button:hover,
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-unsave-button a:focus-visible,
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-unsave-button form.toggle button:focus-visible {
-        background: #1f5639 !important;
-        border-color: #66d992 !important;
+        background: rgba(70,201,138,0.18) !important;
+        border-color: #46c98a !important;
         color: #ffffff !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-share-button a,
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-share-button span.option,
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-share-button form.toggle button {
-        background: #253146 !important;
-        border-color: #506a9d !important;
-        color: #dce8ff !important;
-      }
-
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-save-button a,
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-save-button span.option,
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-save-button form.toggle button {
-        background: #2c3340 !important;
-        border-color: #657588 !important;
-        color: #e1e9f3 !important;
-      }
-
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-hide-button a,
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-hide-button span.option,
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-hide-button form.toggle button {
-        background: #332e22 !important;
-        border-color: #8e7441 !important;
-        color: #ffe7b2 !important;
-      }
-
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-report-button a,
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-report-button span.option,
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-report-button form.toggle button {
-        background: #3a2228 !important;
-        border-color: #a45666 !important;
-        color: #ffdbe3 !important;
-      }
-
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-crosspost-button a,
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-crosspost-button span.option,
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-crosspost-button form.toggle button {
-        background: #2d2842 !important;
-        border-color: #6f60ad !important;
-        color: #e9e1ff !important;
-      }
-
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li:is(.rwm-share-button, .rwm-save-button, .rwm-hide-button, .rwm-report-button, .rwm-crosspost-button, .rwm-unsave-button) a:hover,
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li:is(.rwm-share-button, .rwm-save-button, .rwm-hide-button, .rwm-report-button, .rwm-crosspost-button, .rwm-unsave-button) span.option:hover,
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li:is(.rwm-share-button, .rwm-save-button, .rwm-hide-button, .rwm-report-button, .rwm-crosspost-button, .rwm-unsave-button) form.toggle button:hover,
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li:is(.rwm-share-button, .rwm-save-button, .rwm-hide-button, .rwm-report-button, .rwm-crosspost-button, .rwm-unsave-button) a:focus-visible,
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li:is(.rwm-share-button, .rwm-save-button, .rwm-hide-button, .rwm-report-button, .rwm-crosspost-button, .rwm-unsave-button) form.toggle button:focus-visible {
-        box-shadow: 0 0 16px color-mix(in srgb, currentColor, transparent 58%), 0 1px 0 rgba(255, 255, 255, 0.05) inset !important;
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-hide-button a:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-hide-button span.option:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-hide-button form.toggle button:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-report-button a:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-report-button span.option:hover,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.rwm-report-button form.toggle button:hover {
+        background: rgba(239,95,107,0.12) !important;
+        border-color: rgba(239,95,107,0.5) !important;
+        color: #ffc4c9 !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons form.toggle,
