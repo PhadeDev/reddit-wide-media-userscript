@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.58
+// @version      0.3.59
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -4338,17 +4338,53 @@
     return true;
   }
 
+  // Rate-limited fetch queue — max 1 in-flight at a time, 350ms minimum gap,
+  // 10s backoff on 429 so we never hammer Reddit into rate-limiting the page.
+  const jsonFetchQueue = (() => {
+    const queue = [];
+    let busy = false;
+    let lastFetch = 0;
+    let backoffUntil = 0;
+    const MIN_GAP = 350;
+
+    async function drain() {
+      if (busy || !queue.length) return;
+      busy = true;
+      const delay = Math.max(0, backoffUntil - Date.now(), lastFetch + MIN_GAP - Date.now());
+      if (delay > 0) await new Promise((r) => setTimeout(r, delay));
+      const { fn, resolve, reject } = queue.shift();
+      lastFetch = Date.now();
+      try { resolve(await fn()); }
+      catch (err) { reject(err); }
+      finally { busy = false; setTimeout(drain, 0); }
+    }
+
+    return {
+      enqueue(fn) {
+        return new Promise((resolve, reject) => { queue.push({ fn, resolve, reject }); drain(); });
+      },
+      backoff(ms = 10000) { backoffUntil = Date.now() + ms; },
+    };
+  })();
+
   async function fetchPostJson(thing) {
     const permalink = getPermalink(thing);
     if (!permalink) return null;
     const jsonUrl = permalink.replace(/\/?$/, ".json");
-    const response = await fetch(jsonUrl, {
-      credentials: "include",
-      headers: { Accept: "application/json" },
+
+    return jsonFetchQueue.enqueue(async () => {
+      const response = await fetch(jsonUrl, {
+        credentials: "include",
+        headers: { Accept: "application/json" },
+      });
+      if (response.status === 429) {
+        jsonFetchQueue.backoff(10000);
+        throw new Error("HTTP 429 — rate limited, backing off 10s");
+      }
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const json = await response.json();
+      return json?.[0]?.data?.children?.[0]?.data || null;
     });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const json = await response.json();
-    return json?.[0]?.data?.children?.[0]?.data || null;
   }
 
   function mediaItemsFromPostData(post) {
@@ -4643,7 +4679,7 @@
     }
   }, {
     root: null,
-    rootMargin: "900px 0px",
+    rootMargin: "400px 0px",
     threshold: 0.01,
   });
 
