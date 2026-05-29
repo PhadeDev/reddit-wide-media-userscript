@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.55
+// @version      0.3.56
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -97,17 +97,17 @@
 
     GM_addStyle(`
       html.${SCRIPT_CLASS} {
-        background: #101214 !important;
+        background: #0e0f12 !important;
         color-scheme: dark;
         --rwm-sidebar-width: 304px;
         --rwm-content-width: min(calc(100vw - 380px), ${width}px);
         --rwm-content-left: max(18px, calc((100vw - var(--rwm-sidebar-width) - var(--rwm-content-width)) / 2));
-        --rwm-card: #171b20;
+        --rwm-card: #16181c;
         --rwm-card-2: #1d232b;
         --rwm-border: #344252;
         --rwm-text: #d7dde3;
         --rwm-muted: #aeb8c4;
-        --rwm-link: #8fc7ff;
+        --rwm-link: #79b0ff;
         --rwm-link-visited: #c3b6ff;
         --rwm-accent: #45a3ff;
         --rwm-subreddit-accent: #45a3ff;
@@ -120,7 +120,7 @@
         min-width: 0 !important;
         max-width: 100vw !important;
         overflow-x: hidden !important;
-        background: #101214 !important;
+        background: #0e0f12 !important;
         color: #d7dde3 !important;
         font-size: 15px !important;
         line-height: 1.45 !important;
@@ -130,8 +130,8 @@
         min-width: 0 !important;
         max-width: 100vw !important;
         overflow-x: clip !important;
-        background: #171b20 !important;
-        border-bottom: 1px solid #303842 !important;
+        background: #16181c !important;
+        border-bottom: 1px solid #2a2e35 !important;
       }
 
       html.${SCRIPT_CLASS} #sr-header-area {
@@ -160,10 +160,10 @@
         height: 30px !important;
         margin: 0 !important;
         padding: 0 12px !important;
-        border: 1px solid #35485a !important;
+        border: 1px solid #3a4049 !important;
         border-radius: 8px !important;
-        background: #1c2631 !important;
-        color: #dce7f3 !important;
+        background: #1c1f24 !important;
+        color: #e6e8ec !important;
         font-size: 13px !important;
         font-weight: 900 !important;
         line-height: 1 !important;
@@ -180,7 +180,7 @@
         align-items: center !important;
         width: 100% !important;
         gap: 7px !important;
-        color: #dce7f3 !important;
+        color: #e6e8ec !important;
         font-size: 13px !important;
         font-weight: 900 !important;
         line-height: 1 !important;
@@ -224,9 +224,9 @@
         max-height: min(70vh, 520px) !important;
         margin-top: 7px !important;
         padding: 7px !important;
-        border: 1px solid #42576c !important;
+        border: 1px solid #3a4049 !important;
         border-radius: 9px !important;
-        background: #111820 !important;
+        background: #16181c !important;
         box-shadow: 0 14px 32px rgba(0, 0, 0, 0.42) !important;
         overflow: auto !important;
       }
@@ -239,8 +239,8 @@
         display: block !important;
         margin: 0 0 7px !important;
         padding: 0 0 7px !important;
-        border-bottom: 1px solid #2a3a49 !important;
-        background: #111820 !important;
+        border-bottom: 1px solid #2a2e35 !important;
+        background: #16181c !important;
       }
 
       html.${SCRIPT_CLASS} #sr-header-area .drop-choices.srdrop .rwm-sr-search,
@@ -251,10 +251,10 @@
         height: 32px !important;
         margin: 0 !important;
         padding: 0 10px !important;
-        border: 1px solid #40566c !important;
+        border: 1px solid #3a4049 !important;
         border-radius: 7px !important;
-        background: #19222c !important;
-        color: #e8f0f8 !important;
+        background: #1c1f24 !important;
+        color: #e6e8ec !important;
         font-size: 13px !important;
         font-weight: 800 !important;
         line-height: 1 !important;
@@ -263,7 +263,7 @@
 
       html.${SCRIPT_CLASS} #sr-header-area .drop-choices.srdrop .rwm-sr-search::placeholder,
       html.${SCRIPT_CLASS} .drop-choices.srdrop .rwm-sr-search::placeholder {
-        color: #8da0b4 !important;
+        color: #828a96 !important;
         opacity: 1 !important;
       }
 
@@ -279,10 +279,10 @@
         align-items: center !important;
         min-height: 30px !important;
         padding: 0 9px !important;
-        border: 1px solid #304253 !important;
+        border: 1px solid #2a2e35 !important;
         border-radius: 7px !important;
-        background: #1c2631 !important;
-        color: #dce7f3 !important;
+        background: #1c1f24 !important;
+        color: #e6e8ec !important;
         font-size: 13px !important;
         font-weight: 900 !important;
         line-height: 1 !important;
@@ -298,8 +298,8 @@
       html.${SCRIPT_CLASS} #sr-header-area .drop-choices.srdrop a.choice:focus-visible,
       html.${SCRIPT_CLASS} .drop-choices.srdrop a.choice:hover,
       html.${SCRIPT_CLASS} .drop-choices.srdrop a.choice:focus-visible {
-        background: #26394c !important;
-        border-color: #5d7a99 !important;
+        background: #23272e !important;
+        border-color: #4c8dff !important;
         color: #ffffff !important;
       }
 
@@ -316,10 +316,10 @@
         justify-content: center !important;
         height: 30px !important;
         padding: 0 11px !important;
-        border: 1px solid #35485a !important;
+        border: 1px solid #3a4049 !important;
         border-radius: 8px !important;
-        background: #1c2631 !important;
-        color: #dce7f3 !important;
+        background: #1c1f24 !important;
+        color: #e6e8ec !important;
         font-size: 13px !important;
         font-weight: 900 !important;
         line-height: 1 !important;
@@ -330,35 +330,36 @@
       }
 
       html.${SCRIPT_CLASS} #header .rwm-sr-nav a.rwm-active {
-        border-color: #5b86ad !important;
-        background: #254767 !important;
+        border-color: #4c8dff !important;
+        background: #203a6e !important;
         color: #ffffff !important;
       }
 
       html.${SCRIPT_CLASS} #header .rwm-sr-nav a.rwm-sr-manage {
-        border-color: #5d507a !important;
+        border-color: #5d4e8a !important;
         background: #342d49 !important;
         color: #eadfff !important;
       }
 
       html.${SCRIPT_CLASS} #header .rwm-sr-nav a:hover,
       html.${SCRIPT_CLASS} #header .rwm-sr-nav a:focus-visible {
-        filter: saturate(1.2) brightness(1.12) !important;
-        box-shadow: 0 0 14px rgba(70, 162, 255, 0.28), 0 1px 0 rgba(255, 255, 255, 0.05) inset !important;
+        background: #23272e !important;
+        border-color: #4c8dff !important;
+        color: #e6e8ec !important;
       }
 
       html.${SCRIPT_CLASS} #sr-header-area a,
       html.${SCRIPT_CLASS} #sr-more-link,
       html.${SCRIPT_CLASS} #header-bottom-left a,
       html.${SCRIPT_CLASS} #header-bottom-right a {
-        color: #d2dae4 !important;
+        color: #aab1bb !important;
         font-size: 15px !important;
       }
 
       html.${SCRIPT_CLASS} #header-bottom-left {
         position: relative !important;
         min-height: 52px !important;
-        background: #18202a !important;
+        background: #16181c !important;
         display: flex !important;
         align-items: center !important;
         gap: 10px !important;
@@ -378,7 +379,7 @@
         top: 0 !important;
         background: transparent !important;
         border-radius: 0 !important;
-        color: #cbd5df !important;
+        color: #aab1bb !important;
         padding: 0 12px !important;
         font-size: 13px !important;
         line-height: 1 !important;
@@ -422,10 +423,10 @@
         max-height: 30px !important;
         margin: 0 !important;
         padding: 0 10px !important;
-        border: 1px solid #35485a !important;
+        border: 1px solid #3a4049 !important;
         border-radius: 8px !important;
-        background: #1c2631 !important;
-        color: #dce7f3 !important;
+        background: #1c1f24 !important;
+        color: #e6e8ec !important;
         font-size: 13px !important;
         font-weight: 900 !important;
         line-height: 1 !important;
@@ -461,9 +462,9 @@
         position: relative !important;
         gap: 7px !important;
         min-width: 168px !important;
-        border-color: #4d6c8f !important;
+        border-color: #3a4049 !important;
         background: #20384f !important;
-        color: #e5f3ff !important;
+        color: #e6e8ec !important;
         cursor: pointer !important;
       }
 
@@ -514,9 +515,9 @@
         display: none !important;
         min-width: 178px !important;
         padding: 7px !important;
-        border: 1px solid #42576c !important;
+        border: 1px solid #3a4049 !important;
         border-radius: 9px !important;
-        background: #111820 !important;
+        background: #16181c !important;
         box-shadow: 0 14px 32px rgba(0, 0, 0, 0.42) !important;
       }
 
@@ -530,10 +531,10 @@
         align-items: center !important;
         min-height: 30px !important;
         padding: 0 9px !important;
-        border: 1px solid #304253 !important;
+        border: 1px solid #2a2e35 !important;
         border-radius: 7px !important;
-        background: #1c2631 !important;
-        color: #dce7f3 !important;
+        background: #1c1f24 !important;
+        color: #e6e8ec !important;
         font-size: 13px !important;
         font-weight: 900 !important;
         line-height: 1 !important;
@@ -542,8 +543,8 @@
 
       html.${SCRIPT_CLASS} #header-bottom-right .rwm-user-menu a:hover,
       html.${SCRIPT_CLASS} #header-bottom-right .rwm-user-menu a:focus-visible {
-        background: #26394c !important;
-        border-color: #5d7a99 !important;
+        background: #23272e !important;
+        border-color: #4c8dff !important;
         color: #ffffff !important;
       }
 
@@ -558,20 +559,8 @@
 
       html.${SCRIPT_CLASS} #header-bottom-right #mail,
       html.${SCRIPT_CLASS} #header-bottom-right .mail {
-        min-width: 112px !important;
-        padding: 0 12px !important;
-        background: #f4bd52 !important;
-        border-color: #ffd989 !important;
-        color: #14100a !important;
-        font-size: 15px !important;
         overflow: visible !important;
         text-indent: 0 !important;
-      }
-
-      html.${SCRIPT_CLASS} #header-bottom-right #mail.nohavemail,
-      html.${SCRIPT_CLASS} #header-bottom-right #mail.havemail,
-      html.${SCRIPT_CLASS} #header-bottom-right .mail.nohavemail,
-      html.${SCRIPT_CLASS} #header-bottom-right .mail.havemail {
         background-image: none !important;
       }
 
@@ -595,9 +584,8 @@
 
       html.${SCRIPT_CLASS} #header-bottom-right #mail.havemail,
       html.${SCRIPT_CLASS} #header-bottom-right .mail.havemail {
-        background: #f4bd52 !important;
-        border-color: #ffd989 !important;
-        color: #14100a !important;
+        border-color: color-mix(in srgb, #f0b54a, #3a4049 50%) !important;
+        color: #f0b54a !important;
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right #mail + .message-count,
@@ -663,10 +651,10 @@
         max-height: 38px !important;
         margin: 0 !important;
         padding: 0 !important;
-        border: 1px solid #42576c !important;
+        border: 1px solid #3a4049 !important;
         border-radius: 8px !important;
-        background: #1d2b38 !important;
-        color: #dce7f3 !important;
+        background: #1c1f24 !important;
+        color: #e6e8ec !important;
         background-image: none !important;
         overflow: hidden !important;
         text-indent: -9999px !important;
@@ -715,8 +703,8 @@
       html.${SCRIPT_CLASS} #header-bottom-right a[href*="chat.reddit.com"]:hover,
       html.${SCRIPT_CLASS} #header-bottom-right a[href*="/notifications"]:hover,
       html.${SCRIPT_CLASS} #header-bottom-right a[href*="/message/"]:hover {
-        background: #26394c !important;
-        border-color: #5d7a99 !important;
+        background: #23272e !important;
+        border-color: #4c8dff !important;
         color: #ffffff !important;
       }
 
@@ -738,10 +726,10 @@
         justify-content: center !important;
         height: 30px !important;
         padding: 0 12px !important;
-        border: 1px solid #35485a !important;
+        border: 1px solid #3a4049 !important;
         border-radius: 8px !important;
-        background: #1c2631 !important;
-        color: #dce7f3 !important;
+        background: #1c1f24 !important;
+        color: #e6e8ec !important;
         font-size: 13px !important;
         font-weight: 900 !important;
         line-height: 1 !important;
@@ -750,8 +738,8 @@
       }
 
       html.${SCRIPT_CLASS} .tabmenu li.selected a {
-        border-color: #5b86ad !important;
-        background: #254767 !important;
+        border-color: #4c8dff !important;
+        background: #203a6e !important;
         color: #ffffff !important;
       }
 
@@ -760,10 +748,10 @@
         align-items: center !important;
         height: 30px !important;
         padding: 0 12px !important;
-        border: 1px solid #4d6c8f !important;
+        border: 1px solid #3a4049 !important;
         border-radius: 8px !important;
         background: #20384f !important;
-        color: #e5f3ff !important;
+        color: #e6e8ec !important;
         font-size: 13px !important;
         line-height: 1 !important;
         font-weight: 900 !important;
@@ -813,11 +801,11 @@
       }
 
       html.${SCRIPT_CLASS} a {
-        color: #8fc7ff !important;
+        color: #79b0ff !important;
       }
 
       html.${SCRIPT_CLASS} a:visited {
-        color: #b6a7ff !important;
+        color: #b9a3ff !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline a.subreddit,
@@ -841,7 +829,7 @@
       html.${SCRIPT_CLASS} .side .morelink a,
       html.${SCRIPT_CLASS} .side .morelink .nub {
         background: #243241 !important;
-        border-color: #3f5267 !important;
+        border-color: #3a4049 !important;
         color: #f1f6fb !important;
       }
 
@@ -901,8 +889,8 @@
         .usertext.cloneable .usertext-buttons button,
         .usertext.cloneable .usertext-buttons a
       ):focus-visible {
-        filter: saturate(1.25) brightness(1.12) !important;
-        box-shadow: 0 0 16px rgba(70, 162, 255, 0.34), 0 1px 0 rgba(255, 255, 255, 0.05) inset !important;
+        outline: none !important;
+        box-shadow: 0 0 0 2px #0e0f12, 0 0 0 4px #4c8dff !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .content {
@@ -1104,7 +1092,7 @@
         padding: 5px 10px !important;
         border: 1px solid #3a4b5d !important;
         border-radius: 7px !important;
-        background: #202934 !important;
+        background: #23272e !important;
         color: #d6e1ec !important;
         font-size: 13px !important;
         font-weight: 800 !important;
@@ -1119,8 +1107,8 @@
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li form.toggle button:hover,
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li a:focus-visible,
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li form.toggle button:focus-visible {
-        background: #2a3948 !important;
-        border-color: #5d7a99 !important;
+        background: #2b3038 !important;
+        border-color: #4c8dff !important;
         color: #ffffff !important;
         transform: translateY(-1px);
       }
@@ -1128,7 +1116,7 @@
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.first a.comments {
         background: #244263 !important;
         border-color: #4d86bd !important;
-        color: #e5f3ff !important;
+        color: #e6e8ec !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons li.first a.comments:hover,
@@ -1255,7 +1243,7 @@
         border: 1px solid #4d86bd !important;
         border-radius: 6px !important;
         background: #244263 !important;
-        color: #e5f3ff !important;
+        color: #e6e8ec !important;
         line-height: 1 !important;
         overflow: hidden !important;
         vertical-align: middle !important;
@@ -1292,7 +1280,7 @@
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .RESshortcutside:before,
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline .RESDashboardToggle:before {
         content: "+";
-        color: #e5f3ff !important;
+        color: #e6e8ec !important;
         font-size: 20px !important;
         font-weight: 900 !important;
         line-height: 1 !important;
@@ -1320,10 +1308,10 @@
         width: 34px !important;
         height: 28px !important;
         margin: 0 10px 0 0 !important;
-        border: 1px solid #344658 !important;
+        border: 1px solid #3a4049 !important;
         border-radius: 999px !important;
-        background: #17212b !important;
-        color: #c9d6e3 !important;
+        background: #16181c !important;
+        color: #aab1bb !important;
         font-size: 14px !important;
         font-weight: 900 !important;
         line-height: 1 !important;
@@ -1341,7 +1329,7 @@
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .score {
-        color: #d9e1ea !important;
+        color: #e6e8ec !important;
         font-size: 16px !important;
         line-height: 1.2 !important;
       }
@@ -1354,7 +1342,7 @@
         width: 30px !important;
         height: 26px !important;
         margin: 6px auto !important;
-        background: #26313d !important;
+        background: #23272e !important;
         border: 1px solid #3b4a5b !important;
         border-radius: 6px !important;
         color: #d6e0ea !important;
@@ -1570,7 +1558,7 @@
 
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .commentarea {
         padding: 16px 22px 24px !important;
-        background: #101214 !important;
+        background: #0e0f12 !important;
         color: #d7dde3 !important;
       }
 
@@ -1581,7 +1569,7 @@
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .commentarea > .usertext .usertext-buttons,
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .commentarea > .usertext .help-toggle,
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .commentarea > .usertext .markhelp {
-        background: #101214 !important;
+        background: #0e0f12 !important;
         color: #d7dde3 !important;
       }
 
@@ -1647,7 +1635,7 @@
         padding: 10px 12px !important;
         border: 1px solid #3b4b5d !important;
         border-radius: 8px !important;
-        background: #11161c !important;
+        background: #0e0f12 !important;
         color: #dce4ed !important;
         font-size: 15px !important;
         line-height: 1.5 !important;
@@ -1698,7 +1686,7 @@
       html.${SCRIPT_CLASS}.rwm-wide .usertext.cloneable .usertext-buttons .save {
         background: #244263 !important;
         border-color: #4d86bd !important;
-        color: #e5f3ff !important;
+        color: #e6e8ec !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .usertext.cloneable .usertext-buttons input[type="button"],
@@ -1716,8 +1704,8 @@
       html.${SCRIPT_CLASS}.rwm-wide .usertext.cloneable .usertext-buttons button:focus-visible,
       html.${SCRIPT_CLASS}.rwm-wide .usertext.cloneable .usertext-buttons a:hover,
       html.${SCRIPT_CLASS}.rwm-wide .usertext.cloneable .usertext-buttons a:focus-visible {
-        background: #2a3948 !important;
-        border-color: #5d7a99 !important;
+        background: #2b3038 !important;
+        border-color: #4c8dff !important;
         color: #ffffff !important;
       }
 
@@ -1727,7 +1715,7 @@
         max-width: 1280px !important;
         margin: 10px 0 !important;
         padding: 12px 14px 12px 72px !important;
-        border: 1px solid #2c3a47 !important;
+        border: 1px solid #1c1f24 !important;
         border-radius: 8px !important;
         background: linear-gradient(180deg, #171e26 0%, #141a21 100%) !important;
         color: #d7dde3 !important;
@@ -1756,33 +1744,31 @@
         max-width: calc(100% + 38px) !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment.rwm-depth-0 { --rwm-rail: #46a2ff; border-color: color-mix(in srgb, #46a2ff, #2c3a47 74%) !important; }
-      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment.rwm-depth-1 { --rwm-rail: #56d68c; border-color: color-mix(in srgb, #56d68c, #2c3a47 74%) !important; }
-      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment.rwm-depth-2 { --rwm-rail: #f0c64f; border-color: color-mix(in srgb, #f0c64f, #2c3a47 74%) !important; }
-      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment.rwm-depth-3 { --rwm-rail: #ef8a4c; border-color: color-mix(in srgb, #ef8a4c, #2c3a47 74%) !important; }
-      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment.rwm-depth-4 { --rwm-rail: #e86fa2; border-color: color-mix(in srgb, #e86fa2, #2c3a47 74%) !important; }
-      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment.rwm-depth-5 { --rwm-rail: #a98cff; border-color: color-mix(in srgb, #a98cff, #2c3a47 74%) !important; }
-      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment.rwm-depth-6 { --rwm-rail: #63d5d7; border-color: color-mix(in srgb, #63d5d7, #2c3a47 74%) !important; }
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment.rwm-depth-0 { --rwm-rail: #4c8dff; border-color: color-mix(in srgb, #4c8dff, #1c1f24 74%) !important; }
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment.rwm-depth-1 { --rwm-rail: #46c98a; border-color: color-mix(in srgb, #46c98a, #1c1f24 74%) !important; }
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment.rwm-depth-2 { --rwm-rail: #e6c44c; border-color: color-mix(in srgb, #e6c44c, #1c1f24 74%) !important; }
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment.rwm-depth-3 { --rwm-rail: #ee8a4f; border-color: color-mix(in srgb, #ee8a4f, #1c1f24 74%) !important; }
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment.rwm-depth-4 { --rwm-rail: #e87298; border-color: color-mix(in srgb, #e87298, #1c1f24 74%) !important; }
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment.rwm-depth-5 { --rwm-rail: #a98cff; border-color: color-mix(in srgb, #a98cff, #1c1f24 74%) !important; }
+      html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment.rwm-depth-6 { --rwm-rail: #4fc4c9; border-color: color-mix(in srgb, #4fc4c9, #1c1f24 74%) !important; }
 
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .rwm-comment-rail {
         position: absolute;
         inset: 8px auto 8px 0;
-        width: 10px !important;
-        border: 1px solid color-mix(in srgb, var(--rwm-rail), #ffffff 18%) !important;
+        width: 4px !important;
+        border: none !important;
         border-radius: 999px !important;
-        background: linear-gradient(180deg, color-mix(in srgb, var(--rwm-rail), #ffffff 16%), var(--rwm-rail)) !important;
+        background: var(--rwm-rail) !important;
         cursor: pointer !important;
-        opacity: 0.95 !important;
+        opacity: 0.65 !important;
         padding: 0 !important;
-        transition: opacity 120ms ease, filter 120ms ease, transform 120ms ease, box-shadow 120ms ease;
+        transition: opacity 110ms ease, width 110ms ease;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .rwm-comment-rail:hover,
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .rwm-comment-rail:focus-visible {
-        opacity: 1;
-        filter: saturate(1.35) brightness(1.2);
-        transform: scaleX(1.25);
-        box-shadow: 0 0 18px color-mix(in srgb, var(--rwm-rail), transparent 42%);
+        opacity: 1 !important;
+        width: 6px !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment.rwm-collapsed-branch > .child {
@@ -1801,7 +1787,7 @@
         padding: 4px 8px !important;
         border: 1px solid color-mix(in srgb, var(--rwm-rail), #ffffff 18%) !important;
         border-radius: 7px !important;
-        background: color-mix(in srgb, var(--rwm-rail), #11161c 72%) !important;
+        background: color-mix(in srgb, var(--rwm-rail), #0e0f12 72%) !important;
         color: #f3f7fb !important;
         font-size: 12px !important;
         font-weight: 900 !important;
@@ -1904,7 +1890,7 @@
         padding: 2px 7px !important;
         border: 1px solid #415266 !important;
         border-radius: 7px !important;
-        background: #202934 !important;
+        background: #23272e !important;
         color: #dce6f0 !important;
         font-size: 13px !important;
         line-height: 1 !important;
@@ -2017,7 +2003,7 @@
         padding: 4px 8px !important;
         border: 1px solid #334455 !important;
         border-radius: 7px !important;
-        background: #202934 !important;
+        background: #23272e !important;
         color: #d6e1ec !important;
         font-size: 12px !important;
         font-weight: 800 !important;
@@ -2026,8 +2012,8 @@
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list a:hover {
-        background: #2a3948 !important;
-        border-color: #5d7a99 !important;
+        background: #2b3038 !important;
+        border-color: #4c8dff !important;
         color: #ffffff !important;
       }
 
@@ -2148,7 +2134,7 @@
       html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .menuarea a.active {
         background: #244263 !important;
         border-color: #4d86bd !important;
-        color: #e5f3ff !important;
+        color: #e6e8ec !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .message-page .message,
@@ -2171,7 +2157,7 @@
       html.${SCRIPT_CLASS}.rwm-wide .messages-page .message.new,
       html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message.new {
         border-color: #4d86bd !important;
-        background: linear-gradient(180deg, #1b2834 0%, #17202a 100%) !important;
+        background: linear-gradient(180deg, #1b2834 0%, #16181c 100%) !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .message-page .message .midcol,
@@ -2222,7 +2208,7 @@
       html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .parent,
       html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .subject,
       html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .parent {
-        color: #8fc7ff !important;
+        color: #79b0ff !important;
         font-size: 16px !important;
         font-weight: 800 !important;
         text-decoration: none !important;
@@ -2246,7 +2232,7 @@
       html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .tagline .author,
       html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .tagline a,
       html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .tagline .author {
-        color: #8fc7ff !important;
+        color: #79b0ff !important;
         font-weight: 800 !important;
       }
 
@@ -2299,7 +2285,7 @@
         padding: 3px 7px !important;
         border: 1px solid #334455 !important;
         border-radius: 6px !important;
-        background: #202934 !important;
+        background: #23272e !important;
         color: #d6e1ec !important;
         font-size: 12px !important;
         font-weight: 800 !important;
@@ -2337,8 +2323,8 @@
       html.${SCRIPT_CLASS}.rwm-wide .message-page .message .flat-list a:hover,
       html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .flat-list a:hover,
       html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .flat-list a:hover {
-        background: #2a3948 !important;
-        border-color: #5d7a99 !important;
+        background: #2b3038 !important;
+        border-color: #4c8dff !important;
         color: #ffffff !important;
       }
 
@@ -2453,7 +2439,7 @@
         padding: 14px 16px !important;
         border: 1px solid #3a4958 !important;
         border-radius: 8px !important;
-        background: #11161c !important;
+        background: #0e0f12 !important;
         color: #dce4ed !important;
         box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.025) !important;
       }
@@ -2488,7 +2474,7 @@
         width: 30px !important;
         height: 30px !important;
         border-radius: 999px !important;
-        background: #26313d !important;
+        background: #23272e !important;
         border: 1px solid #45566a !important;
         color: #e6edf5 !important;
         text-indent: 0 !important;
@@ -2561,7 +2547,7 @@
       html.${SCRIPT_CLASS} .side .md a,
       html.${SCRIPT_CLASS} .side .titlebox a,
       html.${SCRIPT_CLASS} .sidecontentbox a {
-        color: #8fc7ff !important;
+        color: #79b0ff !important;
       }
 
       html.${SCRIPT_CLASS} .side .md h1,
@@ -2577,7 +2563,7 @@
       html.${SCRIPT_CLASS} .side .md blockquote,
       html.${SCRIPT_CLASS} .side .md table,
       html.${SCRIPT_CLASS} .side .md pre {
-        background: #11161c !important;
+        background: #0e0f12 !important;
         border-color: #344252 !important;
         color: #d4dce5 !important;
       }
@@ -2615,7 +2601,7 @@
         padding: 5px 8px !important;
         border: 1px solid #334455 !important;
         border-radius: 6px !important;
-        background: #202934 !important;
+        background: #23272e !important;
         color: #d6e1ec !important;
         font-size: 12px !important;
         font-weight: 800 !important;
@@ -2626,8 +2612,8 @@
       }
 
       html.${SCRIPT_CLASS} .side .md a[href]:hover {
-        background: #2a3948 !important;
-        border-color: #5d7a99 !important;
+        background: #2b3038 !important;
+        border-color: #4c8dff !important;
         color: #ffffff !important;
       }
 
@@ -2641,7 +2627,7 @@
       html.${SCRIPT_CLASS} .deepthread a,
       html.${SCRIPT_CLASS} .nextprev a {
         background: #243241 !important;
-        border: 1px solid #3f5267 !important;
+        border: 1px solid #3a4049 !important;
         border-radius: 4px !important;
         color: #f1f6fb !important;
         padding: 5px 8px !important;
@@ -2690,7 +2676,7 @@
         height: 36px !important;
         padding: 7px 11px !important;
         border-radius: 6px !important;
-        background: #111820 !important;
+        background: #16181c !important;
         border-color: #43566d !important;
         color: #e7edf4 !important;
       }
@@ -2768,7 +2754,7 @@
         justify-content: center !important;
         min-height: 30px !important;
         padding: 0 11px !important;
-        border: 1px solid #3f5267 !important;
+        border: 1px solid #3a4049 !important;
         border-radius: 6px !important;
         background: #243241 !important;
         color: #f1f6fb !important;
@@ -2809,7 +2795,7 @@
       html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit .title a,
       html.${SCRIPT_CLASS}.rwm-subreddits-page body > .content .subreddit > a[href^="/r/"] {
         grid-area: title !important;
-        color: #8fc7ff !important;
+        color: #79b0ff !important;
         font-size: 16px !important;
         font-weight: 850 !important;
         text-decoration: none !important;
@@ -3098,7 +3084,7 @@
         overflow: hidden;
         border: 1px solid #3b4b5c;
         border-radius: 10px;
-        background: #11161c;
+        background: #0e0f12;
         box-shadow: 0 24px 80px rgba(0, 0, 0, 0.62);
       }
 
@@ -3154,7 +3140,7 @@
       html.${SCRIPT_CLASS} .rwm-comments-body {
         overflow: auto;
         padding: 18px 20px 24px;
-        scrollbar-color: #536779 #11161c;
+        scrollbar-color: #536779 #0e0f12;
       }
 
       html.${SCRIPT_CLASS} .rwm-comments-status {
@@ -3234,7 +3220,7 @@
         max-width: 1280px !important;
         margin: 10px 0 10px 0 !important;
         padding: 12px 14px 12px 72px !important;
-        border: 1px solid #2c3a47 !important;
+        border: 1px solid #1c1f24 !important;
         border-radius: 8px !important;
         background: linear-gradient(180deg, #171e26 0%, #141a21 100%) !important;
         color: #d7dde3 !important;
@@ -3263,33 +3249,31 @@
         max-width: calc(100% + 48px) !important;
       }
 
-      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-0 { --rwm-rail: #46a2ff; border-color: color-mix(in srgb, #46a2ff, #2c3a47 74%) !important; }
-      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-1 { --rwm-rail: #56d68c; border-color: color-mix(in srgb, #56d68c, #2c3a47 74%) !important; }
-      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-2 { --rwm-rail: #f0c64f; border-color: color-mix(in srgb, #f0c64f, #2c3a47 74%) !important; }
-      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-3 { --rwm-rail: #ef8a4c; border-color: color-mix(in srgb, #ef8a4c, #2c3a47 74%) !important; }
-      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-4 { --rwm-rail: #e86fa2; border-color: color-mix(in srgb, #e86fa2, #2c3a47 74%) !important; }
-      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-5 { --rwm-rail: #a98cff; border-color: color-mix(in srgb, #a98cff, #2c3a47 74%) !important; }
-      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-6 { --rwm-rail: #63d5d7; border-color: color-mix(in srgb, #63d5d7, #2c3a47 74%) !important; }
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-0 { --rwm-rail: #4c8dff; border-color: color-mix(in srgb, #4c8dff, #1c1f24 74%) !important; }
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-1 { --rwm-rail: #46c98a; border-color: color-mix(in srgb, #46c98a, #1c1f24 74%) !important; }
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-2 { --rwm-rail: #e6c44c; border-color: color-mix(in srgb, #e6c44c, #1c1f24 74%) !important; }
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-3 { --rwm-rail: #ee8a4f; border-color: color-mix(in srgb, #ee8a4f, #1c1f24 74%) !important; }
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-4 { --rwm-rail: #e87298; border-color: color-mix(in srgb, #e87298, #1c1f24 74%) !important; }
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-5 { --rwm-rail: #a98cff; border-color: color-mix(in srgb, #a98cff, #1c1f24 74%) !important; }
+      html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-depth-6 { --rwm-rail: #4fc4c9; border-color: color-mix(in srgb, #4fc4c9, #1c1f24 74%) !important; }
 
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .rwm-comment-rail {
         position: absolute;
         inset: 8px auto 8px 0;
-        width: 10px !important;
-        border: 1px solid color-mix(in srgb, var(--rwm-rail), #ffffff 18%) !important;
+        width: 4px !important;
+        border: none !important;
         border-radius: 999px !important;
-        background: linear-gradient(180deg, color-mix(in srgb, var(--rwm-rail), #ffffff 16%), var(--rwm-rail)) !important;
+        background: var(--rwm-rail) !important;
         cursor: pointer !important;
-        opacity: 0.95 !important;
+        opacity: 0.65 !important;
         padding: 0 !important;
-        transition: opacity 120ms ease, filter 120ms ease, transform 120ms ease, box-shadow 120ms ease;
+        transition: opacity 110ms ease, width 110ms ease;
       }
 
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .rwm-comment-rail:hover,
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .rwm-comment-rail:focus-visible {
-        opacity: 1;
-        filter: saturate(1.35) brightness(1.2);
-        transform: scaleX(1.25);
-        box-shadow: 0 0 18px color-mix(in srgb, var(--rwm-rail), transparent 42%);
+        opacity: 1 !important;
+        width: 6px !important;
       }
 
       html.${SCRIPT_CLASS} .rwm-comments-body .comment.rwm-collapsed-branch > .child {
@@ -3308,7 +3292,7 @@
         padding: 4px 8px !important;
         border: 1px solid color-mix(in srgb, var(--rwm-rail), #ffffff 18%) !important;
         border-radius: 7px !important;
-        background: color-mix(in srgb, var(--rwm-rail), #11161c 72%) !important;
+        background: color-mix(in srgb, var(--rwm-rail), #0e0f12 72%) !important;
         color: #f3f7fb !important;
         font-size: 12px !important;
         font-weight: 900 !important;
@@ -3421,7 +3405,7 @@
         padding: 2px 7px !important;
         border: 1px solid #415266 !important;
         border-radius: 7px !important;
-        background: #202934 !important;
+        background: #23272e !important;
         color: #dce6f0 !important;
         font-size: 13px !important;
         line-height: 1 !important;
@@ -3534,7 +3518,7 @@
         padding: 4px 8px !important;
         border: 1px solid #334455 !important;
         border-radius: 7px !important;
-        background: #202934 !important;
+        background: #23272e !important;
         color: #d6e1ec !important;
         font-size: 12px !important;
         font-weight: 800 !important;
@@ -3543,8 +3527,8 @@
       }
 
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .flat-list a:hover {
-        background: #2a3948 !important;
-        border-color: #5d7a99 !important;
+        background: #2b3038 !important;
+        border-color: #4c8dff !important;
         color: #ffffff !important;
       }
 
@@ -4070,7 +4054,7 @@
   }
 
   function enhanceCommentTree(root) {
-    const railColors = ["#46a2ff", "#56d68c", "#f0c64f", "#ef8a4c", "#e86fa2", "#a98cff", "#63d5d7"];
+    const railColors = ["#4c8dff", "#46c98a", "#e6c44c", "#ee8a4f", "#e87298", "#a98cff", "#4fc4c9"];
     const depthClasses = railColors.map((_, index) => `rwm-depth-${index}`);
 
     root.querySelectorAll(".comment").forEach((comment) => {
