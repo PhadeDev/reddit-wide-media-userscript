@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.59
+// @version      0.3.60
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -95,6 +95,15 @@
     const mediaMaxHeight = settings.mediaMode === "huge" ? "92vh" : settings.mediaMode === "medium" ? "680px" : "840px";
     const mediaMaxWidth = settings.mediaMode === "huge" ? "1560px" : settings.mediaMode === "medium" ? "980px" : "1280px";
 
+    // Inject IBM Plex Sans + Mono for Carbon typography
+    if (!document.getElementById("rwm-font-link")) {
+      const link = document.createElement("link");
+      link.id = "rwm-font-link";
+      link.rel = "stylesheet";
+      link.href = "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap";
+      (document.head || document.documentElement).appendChild(link);
+    }
+
     GM_addStyle(`
       html.${SCRIPT_CLASS} {
         background: #0e0f12 !important;
@@ -122,8 +131,10 @@
         overflow-x: hidden !important;
         background: #0e0f12 !important;
         color: #d7dde3 !important;
+        font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif !important;
         font-size: 15px !important;
         line-height: 1.45 !important;
+        -webkit-font-smoothing: antialiased !important;
       }
 
       html.${SCRIPT_CLASS} #header {
@@ -936,33 +947,35 @@
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link {
-        display: flow-root !important;
+        display: flex !important;
+        align-items: flex-start !important;
+        gap: 0 12px !important;
         min-height: 0 !important;
         height: auto !important;
-        margin: 0 0 14px 0 !important;
-        padding: 16px 18px 18px 12px !important;
-        border: 1px solid #333844 !important;
-        border-top: 2px solid color-mix(in srgb, var(--rwm-subreddit-accent), #333844 65%) !important;
+        margin: 0 0 12px 0 !important;
+        padding: 14px 16px 14px 12px !important;
+        border: 1px solid #454f5e !important;
+        border-top: 2px solid color-mix(in srgb, var(--rwm-subreddit-accent), #454f5e 62%) !important;
         border-radius: 10px !important;
         background: #1c1f24 !important;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.32),
-                    0 -1px 12px color-mix(in srgb, var(--rwm-subreddit-accent), transparent 82%) !important;
+                    0 -1px 14px color-mix(in srgb, var(--rwm-subreddit-accent), transparent 80%) !important;
         transition: border-color 180ms ease, box-shadow 180ms ease !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link:hover {
-        border-color: #454f5e !important;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.42),
-                    0 -2px 20px color-mix(in srgb, var(--rwm-subreddit-accent), transparent 68%) !important;
+        border-color: #5a6578 !important;
+        box-shadow: 0 4px 22px rgba(0, 0, 0, 0.44),
+                    0 -2px 22px color-mix(in srgb, var(--rwm-subreddit-accent), transparent 64%) !important;
       }
 
       html.${SCRIPT_CLASS}:not(.rwm-has-subreddit-accent) .thing.link {
-        border-top-color: #333844 !important;
+        border-top-color: #454f5e !important;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.32) !important;
       }
 
       html.${SCRIPT_CLASS}:not(.rwm-has-subreddit-accent) .thing.link:hover {
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.42) !important;
+        box-shadow: 0 4px 22px rgba(0, 0, 0, 0.44) !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-nsfw-post {
@@ -1005,8 +1018,9 @@
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .entry {
         overflow: visible !important;
-        margin-left: 8px !important;
+        margin: 0 !important;
         max-width: none !important;
+        min-width: 0 !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link:after {
@@ -1017,9 +1031,11 @@
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .title {
         color: var(--rwm-link) !important;
-        font-size: 21px !important;
-        line-height: 1.42 !important;
-        font-weight: 700 !important;
+        font-family: 'IBM Plex Sans', system-ui, sans-serif !important;
+        font-size: 20px !important;
+        line-height: 1.38 !important;
+        font-weight: 600 !important;
+        letter-spacing: -0.01em !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .title:visited {
@@ -1028,9 +1044,10 @@
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline,
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list {
-        color: #aeb8c4 !important;
-        font-size: 14px !important;
-        line-height: 1.55 !important;
+        color: #aab1bb !important;
+        font-family: 'IBM Plex Mono', ui-monospace, monospace !important;
+        font-size: 12px !important;
+        line-height: 1.5 !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .tagline {
@@ -1293,9 +1310,21 @@
         display: none !important;
       }
 
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .rank {
+        flex-shrink: 0 !important;
+        align-self: center !important;
+      }
+
       html.${SCRIPT_CLASS}.rwm-wide .thing.link .midcol {
-        width: 54px !important;
-        margin-right: 10px !important;
+        flex-shrink: 0 !important;
+        width: 46px !important;
+        margin: 0 !important;
+        overflow: visible !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .entry {
+        flex: 1 !important;
+        min-width: 0 !important;
         overflow: visible !important;
       }
 
@@ -1381,13 +1410,17 @@
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
-        width: 88px !important;
-        min-height: 64px !important;
-        margin-right: 12px !important;
-        background-color: #202833 !important;
+        float: none !important;
+        flex-shrink: 0 !important;
+        order: 99 !important;
+        width: 100px !important;
+        height: 72px !important;
+        min-height: 0 !important;
+        margin: 0 !important;
+        background-color: #1a1e24 !important;
         background-image: none !important;
-        border: 1px solid #354252 !important;
-        border-radius: 4px !important;
+        border: 1px solid #454f5e !important;
+        border-radius: 8px !important;
         overflow: hidden !important;
       }
 
