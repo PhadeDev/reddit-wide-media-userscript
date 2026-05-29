@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.57
+// @version      0.3.58
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -346,6 +346,7 @@
         background: #23272e !important;
         border-color: #4c8dff !important;
         color: #e6e8ec !important;
+        box-shadow: 0 0 10px rgba(76,141,255,0.25) !important;
       }
 
       html.${SCRIPT_CLASS} #sr-header-area a,
@@ -740,8 +741,9 @@
 
       html.${SCRIPT_CLASS} .tabmenu li.selected a {
         border-color: #4c8dff !important;
-        background: #203a6e !important;
+        background: rgba(76,141,255,0.15) !important;
         color: #ffffff !important;
+        box-shadow: 0 0 12px rgba(76,141,255,0.3) !important;
       }
 
       html.${SCRIPT_CLASS} .pagename {
@@ -939,51 +941,62 @@
         height: auto !important;
         margin: 0 0 14px 0 !important;
         padding: 16px 18px 18px 12px !important;
-        border: 1px solid #2a2e35 !important;
-        border-top: 2px solid color-mix(in srgb, var(--rwm-subreddit-accent), #2a2e35 72%) !important;
+        border: 1px solid #333844 !important;
+        border-top: 2px solid color-mix(in srgb, var(--rwm-subreddit-accent), #333844 65%) !important;
         border-radius: 10px !important;
         background: #1c1f24 !important;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.32),
+                    0 -1px 12px color-mix(in srgb, var(--rwm-subreddit-accent), transparent 82%) !important;
+        transition: border-color 180ms ease, box-shadow 180ms ease !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link:hover {
+        border-color: #454f5e !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.42),
+                    0 -2px 20px color-mix(in srgb, var(--rwm-subreddit-accent), transparent 68%) !important;
       }
 
       html.${SCRIPT_CLASS}:not(.rwm-has-subreddit-accent) .thing.link {
-        border-top-color: #2a2e35 !important;
+        border-top-color: #333844 !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.32) !important;
+      }
+
+      html.${SCRIPT_CLASS}:not(.rwm-has-subreddit-accent) .thing.link:hover {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.42) !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-nsfw-post {
         position: relative !important;
-        border-color: rgba(224, 85, 102, 0.58) !important;
-        background:
-          linear-gradient(90deg, rgba(120, 28, 38, 0.32) 0, rgba(26, 32, 39, 0) 96px),
-          linear-gradient(180deg, #21171b 0%, #171316 100%) !important;
-        box-shadow:
-          0 0 0 1px rgba(224, 85, 102, 0.24) inset,
-          0 0 24px rgba(224, 85, 102, 0.16),
-          0 10px 26px rgba(0, 0, 0, 0.24) !important;
+        border-color: rgba(239, 95, 107, 0.48) !important;
+        border-top-color: rgba(239, 95, 107, 0.75) !important;
+        background: color-mix(in srgb, #1c1f24, rgba(239,95,107,0.05) 100%) !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3), 0 -1px 18px rgba(239,95,107,0.22) !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-nsfw-post:before {
-        content: "NSFW" !important;
-        position: absolute !important;
-        top: 12px !important;
-        right: 14px !important;
-        z-index: 3 !important;
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-nsfw-post:hover {
+        border-color: rgba(239, 95, 107, 0.68) !important;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.4), 0 -2px 28px rgba(239,95,107,0.35), 0 0 50px rgba(239,95,107,0.1) !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link.rwm-nsfw-post .rwm-nsfw-banner {
         display: inline-flex !important;
         align-items: center !important;
-        justify-content: center !important;
-        height: 26px !important;
-        padding: 0 10px !important;
-        border: 1px solid rgba(255, 151, 166, 0.64) !important;
+        gap: 6px !important;
+        height: 24px !important;
+        padding: 0 12px !important;
+        margin-bottom: 10px !important;
+        border: 1px solid rgba(239, 95, 107, 0.6) !important;
         border-radius: 999px !important;
-        background: rgba(79, 20, 29, 0.88) !important;
-        color: #ffd7dd !important;
-        font-size: 12px !important;
-        font-weight: 900 !important;
-        letter-spacing: 0.08em !important;
+        background: rgba(239, 95, 107, 0.1) !important;
+        color: #ffc4c9 !important;
+        font-size: 11px !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.1em !important;
         line-height: 1 !important;
-        pointer-events: none !important;
         text-transform: uppercase !important;
-        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.24) !important;
+        box-shadow: 0 0 12px rgba(239,95,107,0.28), inset 0 0 8px rgba(239,95,107,0.06) !important;
+        text-shadow: 0 0 8px rgba(239,95,107,0.6) !important;
+        pointer-events: none !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-wide .thing.link.hidden {
@@ -2874,18 +2887,19 @@
         pointer-events: none;
       }
 
-      html.${SCRIPT_CLASS} .thing.link.rwm-nsfw-post:hover .${MEDIA_CLASS} img,
-      html.${SCRIPT_CLASS} .thing.link.rwm-nsfw-post:hover .${MEDIA_CLASS} video,
-      html.${SCRIPT_CLASS} .thing.link.rwm-nsfw-post:hover .${MEDIA_CLASS} iframe,
-      html.${SCRIPT_CLASS} .thing.link.rwm-nsfw-post:focus-within .${MEDIA_CLASS} img,
-      html.${SCRIPT_CLASS} .thing.link.rwm-nsfw-post:focus-within .${MEDIA_CLASS} video,
-      html.${SCRIPT_CLASS} .thing.link.rwm-nsfw-post:focus-within .${MEDIA_CLASS} iframe {
+      html.${SCRIPT_CLASS} .thing.link.rwm-nsfw-post.rwm-nsfw-revealed .${MEDIA_CLASS} img,
+      html.${SCRIPT_CLASS} .thing.link.rwm-nsfw-post.rwm-nsfw-revealed .${MEDIA_CLASS} video,
+      html.${SCRIPT_CLASS} .thing.link.rwm-nsfw-post.rwm-nsfw-revealed .${MEDIA_CLASS} iframe {
         filter: none;
       }
 
-      html.${SCRIPT_CLASS} .thing.link.rwm-nsfw-post:hover .${MEDIA_CLASS}:before,
-      html.${SCRIPT_CLASS} .thing.link.rwm-nsfw-post:focus-within .${MEDIA_CLASS}:before {
+      html.${SCRIPT_CLASS} .thing.link.rwm-nsfw-post.rwm-nsfw-revealed .${MEDIA_CLASS}:before {
         opacity: 0;
+        pointer-events: none;
+      }
+
+      html.${SCRIPT_CLASS} .thing.link.rwm-nsfw-post .${MEDIA_CLASS}:before {
+        cursor: pointer;
       }
 
       html.${SCRIPT_CLASS} .${MEDIA_CLASS} img,
@@ -4467,6 +4481,20 @@
       || thing.querySelector(".thumbnail.nsfw, .nsfw-stamp")
       || /\bnsfw\b/i.test(thing.getAttribute("data-domain") || "");
     thing.classList.toggle("rwm-nsfw-post", Boolean(isNsfw));
+
+    if (!isNsfw) return;
+
+    // Inject prominent "NOT SAFE FOR WORK" banner into the entry if not already present
+    const entry = thing.querySelector(".entry");
+    if (entry && !entry.querySelector(".rwm-nsfw-banner")) {
+      const banner = document.createElement("div");
+      banner.className = "rwm-nsfw-banner";
+      banner.textContent = "⚠ Not Safe For Work";
+      const tagline = entry.querySelector(".tagline");
+      if (tagline) tagline.insertAdjacentElement("afterend", banner);
+      else entry.prepend(banner);
+    }
+
   }
 
   function shouldPreserveExpando(node) {
@@ -4576,6 +4604,19 @@
     suppressNativeMediaExpando(thing);
     autoExpandText(thing);
     const container = placeMediaContainer(thing);
+
+    // Click-to-reveal for NSFW inline media
+    if (thing.classList.contains("rwm-nsfw-post") && !container.getAttribute("data-rwm-nsfw-click")) {
+      container.setAttribute("data-rwm-nsfw-click", "1");
+      container.addEventListener("click", (e) => {
+        if (!thing.classList.contains("rwm-nsfw-revealed")) {
+          e.preventDefault();
+          e.stopPropagation();
+          thing.classList.add("rwm-nsfw-revealed");
+        }
+      });
+    }
+
     const load = () => {
       if (container.getAttribute("data-rwm-loaded") === "1") return;
       container.setAttribute("data-rwm-loaded", "1");
