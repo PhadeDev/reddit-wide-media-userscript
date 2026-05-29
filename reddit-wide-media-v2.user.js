@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.54
+// @version      0.3.55
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -171,6 +171,7 @@
         text-transform: none !important;
         box-sizing: border-box !important;
         cursor: pointer !important;
+        transition: background-color 120ms ease, border-color 120ms ease, filter 120ms ease !important;
       }
 
       html.${SCRIPT_CLASS} #header .srdrop:not(.drop-choices) .selected,
@@ -325,6 +326,7 @@
         text-decoration: none !important;
         text-transform: none !important;
         box-sizing: border-box !important;
+        transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease, filter 120ms ease !important;
       }
 
       html.${SCRIPT_CLASS} #header .rwm-sr-nav a.rwm-active {
@@ -429,6 +431,7 @@
         line-height: 1 !important;
         text-decoration: none !important;
         white-space: nowrap !important;
+        transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease, filter 120ms ease !important;
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right > .user,
@@ -585,10 +588,9 @@
         mask: center / contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 5h18v14H3V5Zm2.4 2 6.6 5.1L18.6 7H5.4ZM5 9.1V17h14V9.1l-7 5.4-7-5.4Z'/%3E%3C/svg%3E") !important;
       }
 
-      html.${SCRIPT_CLASS} #header-bottom-right #mail {
-        font-size: 17px;
-        font-weight: 900;
-        line-height: 1;
+      html.${SCRIPT_CLASS} #header-bottom-right #mail:hover,
+      html.${SCRIPT_CLASS} #header-bottom-right .mail:hover {
+        filter: brightness(1.12) !important;
       }
 
       html.${SCRIPT_CLASS} #header-bottom-right #mail.havemail,
@@ -744,6 +746,7 @@
         font-weight: 900 !important;
         line-height: 1 !important;
         box-sizing: border-box !important;
+        transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease !important;
       }
 
       html.${SCRIPT_CLASS} .tabmenu li.selected a {
@@ -755,16 +758,16 @@
       html.${SCRIPT_CLASS} .pagename {
         display: inline-flex !important;
         align-items: center !important;
-        min-height: 36px !important;
-        padding: 0 11px !important;
+        height: 30px !important;
+        padding: 0 12px !important;
         border: 1px solid #4d6c8f !important;
-        border-radius: 7px !important;
+        border-radius: 8px !important;
         background: #20384f !important;
         color: #e5f3ff !important;
-        font-size: 20px !important;
+        font-size: 13px !important;
         line-height: 1 !important;
-        font-weight: 800 !important;
-        letter-spacing: 0 !important;
+        font-weight: 900 !important;
+        letter-spacing: 0.04em !important;
         text-decoration: none !important;
         text-transform: uppercase !important;
       }
@@ -3246,7 +3249,7 @@
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .child {
         margin: 12px 0 0 30px !important;
         border-left: 0 !important;
-        padding: 0 0 0 18px !important;
+        padding: 0 0 0 8px !important;
       }
 
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .child .sitetable,
