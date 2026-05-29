@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.61
+// @version      0.3.62
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -759,7 +759,7 @@
       }
 
       html.${SCRIPT_CLASS} .pagename {
-        display: inline-flex !important;
+        display: none !important;
         align-items: center !important;
         height: 30px !important;
         padding: 0 12px !important;
