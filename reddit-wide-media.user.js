@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.62
+// @version      0.3.63
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -2311,6 +2311,7 @@
       html.${SCRIPT_CLASS}.rwm-wide .message-page .message .flat-list form.toggle .option:not(.active),
       html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .flat-list form.toggle .option:not(.active),
       html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .flat-list form.toggle .option:not(.active),
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons form.toggle .option:not(.active),
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list form.toggle .option:not(.active),
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .flat-list form.toggle .option:not(.active) {
         display: none !important;
@@ -2319,6 +2320,7 @@
       html.${SCRIPT_CLASS}.rwm-wide .message-page .message .flat-list form.toggle .option.active,
       html.${SCRIPT_CLASS}.rwm-wide .messages-page .message .flat-list form.toggle .option.active,
       html.${SCRIPT_CLASS}.rwm-wide body[class*="message"] .message .flat-list form.toggle .option.active,
+      html.${SCRIPT_CLASS}.rwm-wide .thing.link .flat-list.buttons form.toggle .option.active,
       html.${SCRIPT_CLASS}.rwm-wide .comments-page .thing.comment .flat-list form.toggle .option.active,
       html.${SCRIPT_CLASS} .rwm-comments-body .comment .flat-list form.toggle .option.active {
         display: inline-flex !important;
@@ -2638,6 +2640,138 @@
         color: #f1f6fb !important;
         padding: 5px 8px !important;
         font-size: 14px !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-submit-page body > .content {
+        max-width: min(980px, calc(100vw - 420px)) !important;
+        margin: 22px auto 60px !important;
+        padding: 0 18px !important;
+        box-sizing: border-box !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-submit-page body > .content > h1,
+      html.${SCRIPT_CLASS}.rwm-submit-page body > .content .submit-title,
+      html.${SCRIPT_CLASS}.rwm-submit-page body > .content .submit-page-title {
+        color: #e3edf7 !important;
+        font-size: 20px !important;
+        font-weight: 900 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-submit-page .formtabs-content,
+      html.${SCRIPT_CLASS}.rwm-submit-page .roundfield,
+      html.${SCRIPT_CLASS}.rwm-submit-page .submit_text,
+      html.${SCRIPT_CLASS}.rwm-submit-page .submit_text .md,
+      html.${SCRIPT_CLASS}.rwm-submit-page .submit_text .usertext-body,
+      html.${SCRIPT_CLASS}.rwm-submit-page .infobar,
+      html.${SCRIPT_CLASS}.rwm-submit-page .content .spacer,
+      html.${SCRIPT_CLASS}.rwm-submit-page .content .roundfield-content {
+        background: #171d24 !important;
+        border-color: #334252 !important;
+        color: #d7dde3 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-submit-page .formtabs-content,
+      html.${SCRIPT_CLASS}.rwm-submit-page .roundfield,
+      html.${SCRIPT_CLASS}.rwm-submit-page .submit_text,
+      html.${SCRIPT_CLASS}.rwm-submit-page .infobar {
+        border: 1px solid #334252 !important;
+        border-radius: 8px !important;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22) !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-submit-page .roundfield {
+        margin: 12px 0 !important;
+        padding: 12px !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-submit-page .roundfield .title,
+      html.${SCRIPT_CLASS}.rwm-submit-page .roundfield label,
+      html.${SCRIPT_CLASS}.rwm-submit-page .roundfield p,
+      html.${SCRIPT_CLASS}.rwm-submit-page .roundfield span,
+      html.${SCRIPT_CLASS}.rwm-submit-page .submit_text,
+      html.${SCRIPT_CLASS}.rwm-submit-page .submit_text p,
+      html.${SCRIPT_CLASS}.rwm-submit-page .gray,
+      html.${SCRIPT_CLASS}.rwm-submit-page .little {
+        color: #cbd6e2 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-submit-page .roundfield input[type="text"],
+      html.${SCRIPT_CLASS}.rwm-submit-page .roundfield input[type="url"],
+      html.${SCRIPT_CLASS}.rwm-submit-page .roundfield textarea,
+      html.${SCRIPT_CLASS}.rwm-submit-page .roundfield select,
+      html.${SCRIPT_CLASS}.rwm-submit-page #url,
+      html.${SCRIPT_CLASS}.rwm-submit-page #title,
+      html.${SCRIPT_CLASS}.rwm-submit-page #sr-autocomplete,
+      html.${SCRIPT_CLASS}.rwm-submit-page .sr-autocomplete {
+        width: 100% !important;
+        min-height: 32px !important;
+        padding: 6px 8px !important;
+        border: 1px solid #3a4b5d !important;
+        border-radius: 4px !important;
+        background: #0f141a !important;
+        color: #e3edf7 !important;
+        box-sizing: border-box !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-submit-page .roundfield textarea {
+        min-height: 120px !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-submit-page .roundfield input::placeholder,
+      html.${SCRIPT_CLASS}.rwm-submit-page .roundfield textarea::placeholder {
+        color: #718093 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-submit-page .image-upload-drop-target,
+      html.${SCRIPT_CLASS}.rwm-submit-page .media-upload,
+      html.${SCRIPT_CLASS}.rwm-submit-page .upload-area,
+      html.${SCRIPT_CLASS}.rwm-submit-page .drop-target {
+        border: 2px dashed #52657a !important;
+        border-radius: 7px !important;
+        background: #111820 !important;
+        color: #cbd6e2 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-submit-page .sr-selector,
+      html.${SCRIPT_CLASS}.rwm-submit-page .sr-name-row,
+      html.${SCRIPT_CLASS}.rwm-submit-page .sr-autocomplete-area {
+        background: transparent !important;
+        color: #cbd6e2 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-submit-page body > .content .sr-list,
+      html.${SCRIPT_CLASS}.rwm-submit-page body > .content .sr-list-container,
+      html.${SCRIPT_CLASS}.rwm-submit-page body > .content .roundfield .sr-list,
+      html.${SCRIPT_CLASS}.rwm-submit-page body > .content .roundfield-content > .sr-list {
+        display: none !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-submit-page .sr-selector a,
+      html.${SCRIPT_CLASS}.rwm-submit-page .sr-name-row a,
+      html.${SCRIPT_CLASS}.rwm-submit-page .submit_text a,
+      html.${SCRIPT_CLASS}.rwm-submit-page .infobar a {
+        color: #79b0ff !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-submit-page .spacer > input[type="submit"],
+      html.${SCRIPT_CLASS}.rwm-submit-page button,
+      html.${SCRIPT_CLASS}.rwm-submit-page input[type="button"],
+      html.${SCRIPT_CLASS}.rwm-submit-page input[type="submit"] {
+        min-height: 30px !important;
+        padding: 6px 11px !important;
+        border: 1px solid #43566d !important;
+        border-radius: 5px !important;
+        background: #243241 !important;
+        color: #f1f6fb !important;
+        font-weight: 800 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-submit-page .footer-parent,
+      html.${SCRIPT_CLASS}.rwm-submit-page .footer,
+      html.${SCRIPT_CLASS}.rwm-submit-page .footer .col {
+        background: #10151b !important;
+        border-color: #3a4654 !important;
+        color: #aeb9c5 !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-subreddits-page .side {
@@ -4014,6 +4148,10 @@
     });
   }
 
+  function setupSubmitPageClass() {
+    document.documentElement.classList.toggle("rwm-submit-page", /^\/submit\/?/i.test(location.pathname));
+  }
+
   async function voteFromModal(arrow, dir) {
     const thing = arrow.closest(".thing");
     const id = thing?.getAttribute("data-fullname");
@@ -5033,6 +5171,7 @@
     document.documentElement.classList.add(SCRIPT_CLASS);
     if (settings.wideMode) document.documentElement.classList.add("rwm-wide");
 
+    setupSubmitPageClass();
     setupSubredditAccent();
     addStyles();
     registerMenu();
@@ -5050,6 +5189,7 @@
       setupSubredditHeaderBar();
       setupSubredditDropdownSearch();
       setupSubredditPageTools();
+      setupSubmitPageClass();
       markTabmenuItems();
       scan();
     }, { once: true });
@@ -5124,6 +5264,7 @@
       setupSubredditHeaderBar();
       setupSubredditDropdownSearch();
       setupSubredditPageTools();
+      setupSubmitPageClass();
       scan();
     };
 
