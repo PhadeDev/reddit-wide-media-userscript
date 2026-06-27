@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.64
+// @version      0.3.65
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -2699,6 +2699,7 @@
 
       html.${SCRIPT_CLASS}.rwm-submit-page .formtabs-content,
       html.${SCRIPT_CLASS}.rwm-submit-page .tabmenu.formtab,
+      html.${SCRIPT_CLASS}.rwm-submit-page .tabmenu,
       html.${SCRIPT_CLASS}.rwm-submit-page .content > .tabmenu,
       html.${SCRIPT_CLASS}.rwm-submit-page .content .submit-tabs,
       html.${SCRIPT_CLASS}.rwm-submit-page .content .submit-page-tabs {
@@ -2717,6 +2718,7 @@
       }
 
       html.${SCRIPT_CLASS}.rwm-submit-page .tabmenu.formtab li,
+      html.${SCRIPT_CLASS}.rwm-submit-page .tabmenu li,
       html.${SCRIPT_CLASS}.rwm-submit-page .content > .tabmenu li,
       html.${SCRIPT_CLASS}.rwm-submit-page .content .submit-tabs li,
       html.${SCRIPT_CLASS}.rwm-submit-page .content .submit-page-tabs li {
@@ -2726,6 +2728,7 @@
       }
 
       html.${SCRIPT_CLASS}.rwm-submit-page .tabmenu.formtab li a,
+      html.${SCRIPT_CLASS}.rwm-submit-page .tabmenu li a,
       html.${SCRIPT_CLASS}.rwm-submit-page .content > .tabmenu li a,
       html.${SCRIPT_CLASS}.rwm-submit-page .content .submit-tabs a,
       html.${SCRIPT_CLASS}.rwm-submit-page .content .submit-page-tabs a {
@@ -2745,6 +2748,7 @@
       }
 
       html.${SCRIPT_CLASS}.rwm-submit-page .tabmenu.formtab li.selected a,
+      html.${SCRIPT_CLASS}.rwm-submit-page .tabmenu li.selected a,
       html.${SCRIPT_CLASS}.rwm-submit-page .content > .tabmenu li.selected a,
       html.${SCRIPT_CLASS}.rwm-submit-page .content .submit-tabs .selected a,
       html.${SCRIPT_CLASS}.rwm-submit-page .content .submit-page-tabs .selected a {
@@ -2782,8 +2786,20 @@
         box-sizing: border-box !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-submit-page .roundfield textarea {
-        min-height: 120px !important;
+      html.${SCRIPT_CLASS}.rwm-submit-page #title,
+      html.${SCRIPT_CLASS}.rwm-submit-page textarea[name="title"],
+      html.${SCRIPT_CLASS}.rwm-submit-page input[name="title"] {
+        height: 40px !important;
+        min-height: 40px !important;
+        max-height: 40px !important;
+        resize: none !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-submit-page #text,
+      html.${SCRIPT_CLASS}.rwm-submit-page textarea[name="text"],
+      html.${SCRIPT_CLASS}.rwm-submit-page .usertext-edit textarea {
+        min-height: 180px !important;
+        resize: vertical !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-submit-page .roundfield input::placeholder,
@@ -2813,6 +2829,7 @@
       html.${SCRIPT_CLASS}.rwm-submit-page .content .sr-list-container,
       html.${SCRIPT_CLASS}.rwm-submit-page .content .roundfield .sr-list,
       html.${SCRIPT_CLASS}.rwm-submit-page .content .roundfield-content > .sr-list,
+      html.${SCRIPT_CLASS}.rwm-submit-page .content .roundfield-content > div:has(> a[href^="/r/"]),
       html.${SCRIPT_CLASS}.rwm-submit-page .content .roundfield-content > p:has(a[href^="/r/"]) {
         display: none !important;
       }
@@ -4220,7 +4237,7 @@
   }
 
   function setupSubmitPageClass() {
-    document.documentElement.classList.toggle("rwm-submit-page", /^\/submit\/?/i.test(location.pathname));
+    document.documentElement.classList.toggle("rwm-submit-page", /^\/(?:r\/[^/]+\/)?submit\/?/i.test(location.pathname));
   }
 
   async function voteFromModal(arrow, dir) {
