@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.65
+// @version      0.3.66
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -2643,15 +2643,27 @@
       }
 
       html.${SCRIPT_CLASS}.rwm-submit-page body > .content {
-        width: min(1180px, calc(100vw - 420px)) !important;
-        max-width: min(1180px, calc(100vw - 420px)) !important;
+        width: min(980px, calc(100vw - 420px)) !important;
+        max-width: min(980px, calc(100vw - 420px)) !important;
         margin: 22px auto 60px !important;
         padding: 0 24px !important;
         box-sizing: border-box !important;
         overflow: visible !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-submit-page .content form,
+      html.${SCRIPT_CLASS}.rwm-submit-page #newlink {
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+        transform: none !important;
+        width: min(860px, 100%) !important;
+        max-width: 860px !important;
+        margin: 0 auto !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+        overflow: visible !important;
+      }
+
       html.${SCRIPT_CLASS}.rwm-submit-page .content form > div,
       html.${SCRIPT_CLASS}.rwm-submit-page .content .submit-page,
       html.${SCRIPT_CLASS}.rwm-submit-page .content .submit.content,
@@ -2697,7 +2709,7 @@
         padding: 12px !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-submit-page .formtabs-content,
+      html.${SCRIPT_CLASS}.rwm-submit-page #newlink > .tabmenu.formtab,
       html.${SCRIPT_CLASS}.rwm-submit-page .tabmenu.formtab,
       html.${SCRIPT_CLASS}.rwm-submit-page .tabmenu,
       html.${SCRIPT_CLASS}.rwm-submit-page .content > .tabmenu,
@@ -2707,10 +2719,11 @@
         display: flex !important;
         flex-wrap: wrap !important;
         align-items: center !important;
+        justify-content: center !important;
         gap: 8px !important;
         width: 100% !important;
         max-width: none !important;
-        margin: 0 0 12px !important;
+        margin: 0 0 14px !important;
         padding: 0 !important;
         background: transparent !important;
         border: 0 !important;
@@ -2745,6 +2758,11 @@
         font-weight: 900 !important;
         line-height: 1 !important;
         text-decoration: none !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-submit-page #newlink .link-button,
+      html.${SCRIPT_CLASS}.rwm-submit-page #newlink .text-button {
+        min-width: 54px !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-submit-page .tabmenu.formtab li.selected a,
@@ -2786,12 +2804,18 @@
         box-sizing: border-box !important;
       }
 
+      html.${SCRIPT_CLASS}.rwm-submit-page #title-field,
+      html.${SCRIPT_CLASS}.rwm-submit-page #text-field {
+        width: 100% !important;
+        max-width: none !important;
+      }
+
       html.${SCRIPT_CLASS}.rwm-submit-page #title,
       html.${SCRIPT_CLASS}.rwm-submit-page textarea[name="title"],
       html.${SCRIPT_CLASS}.rwm-submit-page input[name="title"] {
-        height: 40px !important;
-        min-height: 40px !important;
-        max-height: 40px !important;
+        height: 42px !important;
+        min-height: 42px !important;
+        max-height: 42px !important;
         resize: none !important;
       }
 
@@ -2830,7 +2854,8 @@
       html.${SCRIPT_CLASS}.rwm-submit-page .content .roundfield .sr-list,
       html.${SCRIPT_CLASS}.rwm-submit-page .content .roundfield-content > .sr-list,
       html.${SCRIPT_CLASS}.rwm-submit-page .content .roundfield-content > div:has(> a[href^="/r/"]),
-      html.${SCRIPT_CLASS}.rwm-submit-page .content .roundfield-content > p:has(a[href^="/r/"]) {
+      html.${SCRIPT_CLASS}.rwm-submit-page .content .roundfield-content > p:has(a[href^="/r/"]),
+      html.${SCRIPT_CLASS}.rwm-submit-page #suggested-reddits {
         display: none !important;
       }
 
