@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Reddit Wide Media
 // @namespace    local.reddit.wide-media
-// @version      0.3.63
+// @version      0.3.64
 // @description  Force old Reddit, widen the layout, and lazily expand large inline media for ultrawide browsing.
 // @match        https://reddit.com/*
 // @match        https://www.reddit.com/*
@@ -2643,9 +2643,22 @@
       }
 
       html.${SCRIPT_CLASS}.rwm-submit-page body > .content {
-        max-width: min(980px, calc(100vw - 420px)) !important;
+        width: min(1180px, calc(100vw - 420px)) !important;
+        max-width: min(1180px, calc(100vw - 420px)) !important;
         margin: 22px auto 60px !important;
-        padding: 0 18px !important;
+        padding: 0 24px !important;
+        box-sizing: border-box !important;
+        overflow: visible !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-submit-page .content form,
+      html.${SCRIPT_CLASS}.rwm-submit-page .content form > div,
+      html.${SCRIPT_CLASS}.rwm-submit-page .content .submit-page,
+      html.${SCRIPT_CLASS}.rwm-submit-page .content .submit.content,
+      html.${SCRIPT_CLASS}.rwm-submit-page .content .roundfield,
+      html.${SCRIPT_CLASS}.rwm-submit-page .content .roundfield-content {
+        width: 100% !important;
+        max-width: none !important;
         box-sizing: border-box !important;
       }
 
@@ -2682,6 +2695,62 @@
       html.${SCRIPT_CLASS}.rwm-submit-page .roundfield {
         margin: 12px 0 !important;
         padding: 12px !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-submit-page .formtabs-content,
+      html.${SCRIPT_CLASS}.rwm-submit-page .tabmenu.formtab,
+      html.${SCRIPT_CLASS}.rwm-submit-page .content > .tabmenu,
+      html.${SCRIPT_CLASS}.rwm-submit-page .content .submit-tabs,
+      html.${SCRIPT_CLASS}.rwm-submit-page .content .submit-page-tabs {
+        position: static !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-items: center !important;
+        gap: 8px !important;
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 0 12px !important;
+        padding: 0 !important;
+        background: transparent !important;
+        border: 0 !important;
+        box-shadow: none !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-submit-page .tabmenu.formtab li,
+      html.${SCRIPT_CLASS}.rwm-submit-page .content > .tabmenu li,
+      html.${SCRIPT_CLASS}.rwm-submit-page .content .submit-tabs li,
+      html.${SCRIPT_CLASS}.rwm-submit-page .content .submit-page-tabs li {
+        display: inline-flex !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-submit-page .tabmenu.formtab li a,
+      html.${SCRIPT_CLASS}.rwm-submit-page .content > .tabmenu li a,
+      html.${SCRIPT_CLASS}.rwm-submit-page .content .submit-tabs a,
+      html.${SCRIPT_CLASS}.rwm-submit-page .content .submit-page-tabs a {
+        position: static !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        min-height: 30px !important;
+        padding: 6px 11px !important;
+        border: 1px solid #3a4b5d !important;
+        border-radius: 6px !important;
+        background: #23272e !important;
+        color: #d6e1ec !important;
+        font-size: 13px !important;
+        font-weight: 900 !important;
+        line-height: 1 !important;
+        text-decoration: none !important;
+      }
+
+      html.${SCRIPT_CLASS}.rwm-submit-page .tabmenu.formtab li.selected a,
+      html.${SCRIPT_CLASS}.rwm-submit-page .content > .tabmenu li.selected a,
+      html.${SCRIPT_CLASS}.rwm-submit-page .content .submit-tabs .selected a,
+      html.${SCRIPT_CLASS}.rwm-submit-page .content .submit-page-tabs .selected a {
+        background: rgba(76,141,255,0.18) !important;
+        border-color: #4c8dff !important;
+        color: #ffffff !important;
       }
 
       html.${SCRIPT_CLASS}.rwm-submit-page .roundfield .title,
@@ -2739,10 +2808,12 @@
         color: #cbd6e2 !important;
       }
 
-      html.${SCRIPT_CLASS}.rwm-submit-page body > .content .sr-list,
-      html.${SCRIPT_CLASS}.rwm-submit-page body > .content .sr-list-container,
-      html.${SCRIPT_CLASS}.rwm-submit-page body > .content .roundfield .sr-list,
-      html.${SCRIPT_CLASS}.rwm-submit-page body > .content .roundfield-content > .sr-list {
+      html.${SCRIPT_CLASS}.rwm-submit-page .content .sr-list,
+      html.${SCRIPT_CLASS}.rwm-submit-page .content .sr-list *,
+      html.${SCRIPT_CLASS}.rwm-submit-page .content .sr-list-container,
+      html.${SCRIPT_CLASS}.rwm-submit-page .content .roundfield .sr-list,
+      html.${SCRIPT_CLASS}.rwm-submit-page .content .roundfield-content > .sr-list,
+      html.${SCRIPT_CLASS}.rwm-submit-page .content .roundfield-content > p:has(a[href^="/r/"]) {
         display: none !important;
       }
 
